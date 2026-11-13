@@ -476,6 +476,9 @@
   const STORY_PLAYBACK_STORAGE_KEY = "onepiece-board-story-playback-v1";
   const OPENING_STORY_SESSION_KEY = "onepiece-board-opening-story-session-v1";
   const PREBATTLE_LINE_DATA = window.OnePiecePrebattleLines || { heroLines: {}, enemyLines: {}, pairLines: [] };
+  const PREBATTLE_TEXT = typeof window.installBoardBanterText === "function" && window.OnePieceBanterTextData
+    ? window.installBoardBanterText(window, window.OnePieceBanterTextData, { legacyBaseline: PREBATTLE_LINE_DATA }) : null;
+
   const PREBATTLE_HERO_KEY_BY_ID = {
     luffy: "魯夫",
     zoro: "索隆",
@@ -12895,6 +12898,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       return false;
     }
+    const preserveElbaphPresentation = preserveElbaphGatePresentationForPayload(payload.gameState, options, payload.battleState);
+    const preserveResearchPresentation = preservePostgameResearchPresentationForPayload(payload.gameState, options, payload.battleState);
+    const preserveEndingPresentation = preserveFinalIslandEndingPresentationForPayload(payload.gameState, options, payload.battleState);
     const preserveOpeningStory = options.source === "lan"
       && openingStoryActive
       && String(payload.gameState.seed || "") === String(openingStorySeed || "")
@@ -12919,6 +12925,13 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!restoredGameState?.boardData) return false;
     if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save"
       || incomingGame.seed !== state.gameState?.seed) invalidateOwnedTurnContinuations();
+    if (!preserveResearchPresentation) invalidatePostgameResearchPresentation();
+    if (!preserveEndingPresentation) invalidateFinalIslandEndingPresentation();
+    if ((options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save")
+      && !restoredBattleState && restoredGameState.resolutionLock && restoredGameState.turnStep === "最終之島結局"
+      && restoredGameState.postgameWorld?.unlocked && restoredGameState.postgameWorld.researchLabsActive) {
+      restoredGameState.postgameWorld.researchStoryPlayed = false;
+    }
     clearSeaTrainGoldenTicketAnimation();
     resetShipSailingMotions();
     state.gameState = restoredGameState;
@@ -12957,8 +12970,9 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     if (!preserveOpeningStory) {
       cancelOpeningStorySession();
       clearManualLoadModalSession();
-      if (!preserveRemoteModal) closeModal();
+      if (!preserveRemoteModal && !preserveElbaphPresentation && !preserveResearchPresentation && !preserveEndingPresentation) closeModal();
     }
+    if (preserveElbaphPresentation || preserveResearchPresentation || preserveEndingPresentation) state.gameState.resolutionLock = true;
     state.autoCenterEnabled = true;
     if (!state.battleState) closeBattlePageOverlay();
     if (!options.silent) {
@@ -12994,6 +13008,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       }
       return true;
     }
+    scheduleRecoveredResearchStoryIfNeeded();
     scheduleAutoResumeBattleForCurrentPlayer();
     scheduleAutoResumePendingMoveForCurrentPlayer();
     schedulePendingMoveLearn(600);
@@ -13605,6 +13620,8 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
           }
           flushBoardLanPendingState();
           scheduleBoardCampaignAutoSave();
+          recoverAnyPendingElbaphGateSequence();
+          scheduleRecoveredResearchStoryIfNeeded();
           // Applying a remote CPU handoff rendered the die while authority was suspended.
           syncTurnActionButtons();
         }
@@ -18146,6 +18163,8 @@ const BOARD_STORY_BGM_PROFILES = Object.freeze({
     if (currentPlayer()?.pendingIslandServiceChoice?.requiredEntry === true) {
       scheduleTurnStartIslandServiceChoiceForCurrentPlayer();
     }
+      recoverAnyPendingElbaphGateSequence();
+    scheduleRecoveredResearchStoryIfNeeded();
   }
 
   function waitForItemRevealIdle(callback) {
@@ -28731,6 +28750,28 @@ const BOARD_STORY_BGM_PROFILES = Object.freeze({
     return event;
   }
 
+  let postgameResearchPresentation = null;
+
+  function postgameResearchPresentationIsCurrent(record) {
+    return !!record && record === postgameResearchPresentation && !record.completed && !state.battleState
+      && ownedTurnContinuationIsCurrent(record.context, true) && state.gameState.postgameWorld?.unlocked;
+  }
+
+  function preservePostgameResearchPresentationForPayload(incoming, options = {}, incomingBattle = null) {
+    const record = postgameResearchPresentation;
+    if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save" || incomingBattle) return false;
+    if (!postgameResearchPresentationIsCurrent(record) || !refs.modalBack?.classList.contains("open")) return false;
+    return String(incoming?.seed || "") === record.context.seed && String(incoming?.phase || "") === record.context.phase
+      && Number(incoming?.round || 0) === record.context.round && String(incoming?.players?.[incoming.currentPlayerIndex]?.id || "") === record.context.playerId
+      && incoming.postgameWorld?.unlocked && !incoming.pendingMove && !incoming.routePrompt && !incoming.islandDecision
+      && !incoming.tradePrompt && !incoming.activeTrade && !incoming.coopBattlePrompt && !incoming.activeSpar;
+  }
+
+  function invalidatePostgameResearchPresentation() {
+    if (postgameResearchPresentation) postgameResearchPresentation.completed = true;
+    postgameResearchPresentation = null;
+  }
+
   function clearPostgameWorldCinematicTimers() {
     if (postgameWorldCinematicTimer) {
       window.clearTimeout(postgameWorldCinematicTimer);
@@ -28741,26 +28782,23 @@ const BOARD_STORY_BGM_PROFILES = Object.freeze({
   }
 
   function scheduleRecoveredResearchStoryIfNeeded() {
-    const game = state.gameState;
-    const world = game?.postgameWorld;
+    const game = state.gameState, world = game?.postgameWorld;
     if (researchStoryRecoveryScheduled || !world?.unlocked || !world.researchLabsActive || world.researchStoryPlayed) return;
-    if (!game || game.phase !== "main" || state.battleState || document.getElementById("postgameWorldCinematic")) return;
+    if (postgameResearchPresentationIsCurrent(postgameResearchPresentation) || !game || game.phase !== "main" || game.resolutionLock) return;
+    if (state.battleState || document.getElementById("postgameWorldCinematic")) return;
     const player = currentPlayer();
-    if (!player || !canBoardLanControlCurrentPlayer(player)) return;
+    if (!player || !canBoardLanControlCurrentPlayer(player) || !elbaphGateOrphanCanRecover(player)) return;
+    const context = captureElbaphGatePresentationContext();
     researchStoryRecoveryScheduled = true;
     window.setTimeout(() => {
       researchStoryRecoveryScheduled = false;
-      const activeWorld = state.gameState?.postgameWorld;
-      if (!activeWorld?.unlocked || activeWorld.researchStoryPlayed || state.battleState || document.getElementById("postgameWorldCinematic")) return;
-      activeWorld.researchStoryPlayed = true;
+      if (!ownedTurnContinuationIsCurrent(context, true) || state.battleState) return;
+      const activeWorld = state.gameState?.postgameWorld, owner = currentPlayer();
+      if (!activeWorld?.unlocked || activeWorld.researchStoryPlayed || !owner || !canBoardLanControlCurrentPlayer(owner)
+        || !elbaphGateOrphanCanRecover(owner) || postgameResearchPresentationIsCurrent(postgameResearchPresentation)) return;
       const event = emitBoardUiEvent("postgame-world-unlock", {
-        player,
-        title: "約克的後續布局",
-        subtitle: "正式醫院已改建為研究所。",
-        theme: "final",
-        symbol: "研",
-        duration: POSTGAME_WORLD_CINEMATIC_DURATION_MS,
-        detail: { playerName: activeWorld.unlockedByPlayerName || player.name, recoveredStageTwo: true },
+        player: owner, title: "約克的後續布局", subtitle: "正式醫院已改建為研究所。", theme: "final", symbol: "研", duration: POSTGAME_WORLD_CINEMATIC_DURATION_MS,
+        detail: { playerName: activeWorld.unlockedByPlayerName || owner.name, recoveredStageTwo: true, completeTurnAfterStory: state.gameState.turnStep === "最終之島結局" },
       }, { immediate: true, clearDelay: POSTGAME_WORLD_CINEMATIC_DURATION_MS + 3200 });
       handleBoardUiEvent(event);
       scheduleBoardLanStatePush("research-story-recovered", 80, { force: true });
@@ -28782,27 +28820,43 @@ const BOARD_STORY_BGM_PROFILES = Object.freeze({
   }
 
   function playPostgameWorldUnlockCinematic(event = {}) {
+    if (!state.gameState?.postgameWorld?.unlocked || state.battleState
+      || (event.playerId && String(event.playerId) !== String(currentPlayer()?.id || ""))) return 0;
+    const prior = postgameResearchPresentation;
+    if (postgameResearchPresentationIsCurrent(prior) && prior.eventId === String(event.id || "") && refs.modalBack?.classList.contains("open")) return 0;
     clearPostgameWorldCinematicTimers();
     document.getElementById("postgameWorldCinematic")?.remove();
     const detail = event.detail && typeof event.detail === "object" ? event.detail : {};
-    const storyPlayer = state.gameState?.players?.find((player) => String(player.id || "") === String(event.playerId || ""))
-      || currentPlayer()
-      || { id: event.playerId || "", name: detail.playerName || event.playerName || "玩家" };
+    const storyPlayer = state.gameState?.players?.find((player) => String(player.id || "") === String(event.playerId || "")) || currentPlayer();
+    if (!storyPlayer) return 0;
+    const record = { context: captureElbaphGatePresentationContext(), eventId: String(event.id || ""), playerId: String(storyPlayer.id), completed: false };
+    postgameResearchPresentation = record;
     const completeTurnAfterStory = detail.completeTurnAfterStory === true;
-    startFinalEndingCinematicSession(storyPlayer, POSTGAME_WORLD_UNLOCK_STORY, () => {
-      finishPostgameWorldCinematic({ immediate: true });
-      if (!completeTurnAfterStory) return;
+    const complete = () => {
+      if (!postgameResearchPresentationIsCurrent(record)) return;
       const activePlayer = currentPlayer();
-      const matchesStoryPlayer = String(activePlayer?.id || "") === String(event.playerId || storyPlayer.id || "");
-      if (!matchesStoryPlayer || !canBoardLanControlCurrentPlayer(activePlayer) || !state.gameState?.resolutionLock) return;
-      state.gameState.resolutionLock = false;
-      endTurn({ reason: "postgame-world-unlock-complete", context: "map", subtitle: "新世界航線已開放。" });
-    });
-    const screen = document.querySelector(".final-ending-screen");
-    if (screen) {
-      screen.id = "postgameWorldCinematic";
-      screen.dataset.storyId = POSTGAME_WORLD_UNLOCK_STORY.id;
-      screen.setAttribute("aria-label", "無風帶消失，世界地圖發生變化");
+      const owned = String(activePlayer?.id || "") === record.playerId && elbaphGatePlayerIsLocallyOwned(activePlayer);
+      record.completed = true;
+      postgameResearchPresentation = null;
+      if (owned) state.gameState.postgameWorld.researchStoryPlayed = true;
+      try { finishPostgameWorldCinematic({ immediate: true }); } catch (error) { console.warn("[postgame] optional world reveal failed", error); }
+      if (!completeTurnAfterStory || !owned) return;
+      runOwnedTurnContinuationWhenIdle(record.context, () => {
+        state.gameState.resolutionLock = false;
+        endTurn({ reason: "postgame-world-unlock-complete", context: "map", subtitle: "新世界航線已開放。" });
+      });
+    };
+    try {
+      startFinalEndingCinematicSession(storyPlayer, POSTGAME_WORLD_UNLOCK_STORY, complete, 0, 0, { isCurrentSession: () => postgameResearchPresentationIsCurrent(record) });
+      const screen = document.querySelector(".final-ending-screen");
+      if (screen) {
+        screen.id = "postgameWorldCinematic"; screen.dataset.storyId = POSTGAME_WORLD_UNLOCK_STORY.id;
+        screen.setAttribute("aria-label", "無風帶消失，世界地圖發生變化");
+      }
+      if (!record.completed && !refs.modalBack?.classList.contains("open")) complete();
+    } catch (error) {
+      console.warn("[postgame] research story presentation failed; continuing the original turn", error);
+      complete();
     }
     return 0;
   }
@@ -35491,6 +35545,140 @@ function resolveImpelDownEventPrimary(player, context = null) {
     return restored;
   }
 
+  // Presentation continuations belong to one voyage/turn. No audio or gameplay state is stored here.
+  let elbaphGatePresentation = null;
+  let elbaphGateMapVisualGeneration = 0;
+  let elbaphAftermathCompletedContext = null;
+
+  function captureElbaphGatePresentationContext() {
+    const game = state.gameState;
+    // Read the current generation. Starting a presentation must not revoke the
+    // enclosing battle-finalizer's right to clear its own battleExitLock.
+    return {
+      epoch: ownedTurnContinuationEpoch,
+      scope: JSON.stringify(manualSaveStorageScope()),
+      seed: String(game?.seed || ""), phase: String(game?.phase || ""),
+      round: Number(game?.round || 0), playerId: String(currentPlayer()?.id || ""),
+      battle: null, cleared: true,
+    };
+  }
+
+  function elbaphGatePlayerIsLocallyOwned(player) {
+    if (!player || String(player.id) !== String(currentPlayer()?.id)) return false;
+    if (!boardLan.enabled) return true;
+    return canBoardLanControlCurrentPlayer(player)
+      || (remoteBoardPlaybackBusy() && (boardPlayerMatchesLocalUser(player) || (isCpuPlayer(player) && localPlayerIsLobbyHost())));
+  }
+
+  function elbaphGatePresentationOwner(flow) {
+    if (!flow || flow !== elbaphGatePresentation || flow.completed || state.gameState.elbaphGateContinuationPending !== flow.key || !ownedTurnContinuationIsCurrent(flow.context)) return null;
+    const player = currentPlayer();
+    return String(player?.id || "") === flow.playerId ? player : null;
+  }
+
+  function elbaphGatePresentationIsActive(player) {
+    const flow = elbaphGatePresentation;
+    if (!elbaphGatePresentationOwner(flow) || flow.playerId !== String(player?.id || "")) return false;
+    return flow.phase === "queued" || flow.phase === "visual" || refs.modalBack?.classList.contains("open");
+  }
+
+  function beginElbaphGatePresentation(player, key) {
+    if (!elbaphGatePlayerIsLocallyOwned(player) || state.battleState || player.pendingBattle) return null;
+    if (elbaphGatePresentationIsActive(player)) return null;
+    if (elbaphGatePresentation) {
+      elbaphGatePresentation.completed = true;
+      if (elbaphGatePresentation.timer) window.clearTimeout(elbaphGatePresentation.timer);
+    }
+    const flow = { key, playerId: String(player.id), context: captureElbaphGatePresentationContext(), phase: "queued", completed: false, timer: 0 };
+    elbaphGatePresentation = flow;
+    state.gameState.elbaphGateContinuationPending = key;
+    state.gameState.resolutionLock = true;
+    return flow;
+  }
+
+  function finishElbaphGatePresentation(flow, onComplete) {
+    const owner = elbaphGatePresentationOwner(flow);
+    if (!owner || !elbaphGatePlayerIsLocallyOwned(owner)) return false;
+    flow.completed = true;
+    if (flow.timer) window.clearTimeout(flow.timer);
+    elbaphGatePresentation = null;
+    if (flow.key === "imu-aftermath") elbaphAftermathCompletedContext = flow.context;
+    if (state.gameState.elbaphGateContinuationPending === flow.key) state.gameState.elbaphGateContinuationPending = "";
+    state.gameState.resolutionLock = false;
+    onComplete(owner);
+    return true;
+  }
+
+  function queueElbaphGatePresentation(flow, start) {
+    runOwnedTurnContinuationWhenIdle(flow.context, () => {
+      flow.timer = window.setTimeout(() => {
+        flow.timer = 0;
+        const owner = elbaphGatePresentationOwner(flow);
+        if (owner) start(owner);
+      }, 30);
+    }, () => {
+      flow.completed = true;
+      if (elbaphGatePresentation === flow) elbaphGatePresentation = null;
+    });
+  }
+
+  function finishElbaphGateStoryWhenIdle(flow, onComplete) {
+    if (!elbaphGatePresentationOwner(flow) || flow.completionQueued) return false;
+    flow.completionQueued = true;
+    flow.phase = "queued";
+    closeModal();
+    runOwnedTurnContinuationWhenIdle(flow.context, () => {
+      finishElbaphGatePresentation(flow, onComplete);
+    }, () => {
+      flow.completed = true;
+      if (elbaphGatePresentation === flow) elbaphGatePresentation = null;
+    });
+    return true;
+  }
+
+  function startElbaphGateStory(player, key, ending, onComplete) {
+    const flow = beginElbaphGatePresentation(player, key);
+    if (!flow) return elbaphGatePresentationIsActive(player);
+    closeModal();
+    queueElbaphGatePresentation(flow, (owner) => {
+      flow.phase = "story";
+      const complete = () => finishElbaphGateStoryWhenIdle(flow, onComplete);
+      try {
+        startFinalEndingCinematicSession(owner, ending, complete, 0, 0, { isCurrentSession: () => !!elbaphGatePresentationOwner(flow) });
+        // The renderer opens the modal synchronously. Missing optional markup must not strand the turn.
+        if (!flow.completed && !refs.modalBack?.classList.contains("open")) complete();
+      } catch (error) {
+        console.warn("[elbaph] story presentation failed; continuing the same transition", error);
+        complete();
+      }
+    });
+    return true;
+  }
+
+  function elbaphGateOrphanCanRecover(player) {
+    const game = state.gameState;
+    if (!elbaphGatePlayerIsLocallyOwned(player) || state.battleState || player?.pendingBattle || game.battleExitLock) return false;
+    if (elbaphGatePresentationIsActive(player) || itemRevealIsPending() || remoteBoardPlaybackBusy()) return false;
+    if (refs.modalBack?.classList.contains("open") || boardLan.activeRemoteUiEventId) return false;
+    if (state.finalIslandRevealActive || state.seaTrainAnimation || openingStoryActive || finalEndingAutoTimer || finalEndingAdvanceTimer) return false;
+    if (player.pendingPostgameBossVoyage || player.pendingIslandServiceChoice || game.pendingAokijiCaptureStory) return false;
+    if (game.movementAnimating || game.diceRolling || game.pendingMove || game.routePrompt || game.islandDecision
+      || game.tradePrompt || game.activeTrade || game.coopBattlePrompt || game.activeSpar) return false;
+    if (boardLan.enabled && (boardLan.applying || !boardLan.connected || boardLan.awaitingInitialState)) return false;
+    return true;
+  }
+
+  function preserveElbaphGatePresentationForPayload(incoming, options = {}, incomingBattle = null) {
+    const flow = elbaphGatePresentation;
+    if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save" || incomingBattle) return false;
+    if (!elbaphGatePresentationIsActive(currentPlayer()) || !flow) return false;
+    if (String(incoming?.seed || "") !== flow.context.seed || String(incoming?.phase || "") !== flow.context.phase
+      || Number(incoming?.round || 0) !== flow.context.round || String(incoming?.players?.[incoming.currentPlayerIndex]?.id || "") !== flow.playerId
+      || incoming?.elbaphGateContinuationPending !== flow.key) return false;
+    return !incoming.pendingMove && !incoming.routePrompt && !incoming.islandDecision && !incoming.tradePrompt
+      && !incoming.activeTrade && !incoming.coopBattlePrompt && !incoming.activeSpar;
+  }
+
   function playFinalGateChopperHealAndStartImu(player) {
     if (!player) return false;
     const pendingKey = String(state.gameState.elbaphGateContinuationPending || "");
@@ -35505,23 +35693,35 @@ function resolveImpelDownEventPrimary(player, context = null) {
   }
 
   function playFinalGateImuDescentThenBlackTurn(player) {
-    if (!player) return false;
-    if (player.finalGateBlackTurnCleared) {
-      return startFinalGateBattle(player, { confirmedDescent: true, skipBlackTurn: true });
-    }
-    state.gameState.resolutionLock = true;
+    if (!player || !elbaphGatePlayerIsLocallyOwned(player)) return false;
+    if (player.finalGateBlackTurnCleared) return startFinalGateBattle(player, { confirmedDescent: true, skipBlackTurn: true });
+    const flow = beginElbaphGatePresentation(player, "imu");
+    if (!flow) return elbaphGatePresentationIsActive(player);
     state.gameState.turnStep = "艾爾巴夫：伊姆降臨";
     closeModal();
     renderAll();
-    const delay = playFinalGateMapDescent(player, "black_turn");
-    window.setTimeout(() => {
-      if (state.battleState || player.finalGateBlackTurnCleared || player.finalGateDefeated) return;
-      openFinalGateStoryDescent(player, "black_turn", () => {
-        state.gameState.resolutionLock = false;
-        state.gameState.turnStep = "艾爾巴夫：黑轉支配";
-        startFinalGateBattle(player, { confirmedDescent: true, chopperHealed: true, afterImuDescent: true });
-      });
-    }, delay || 30);
+    queueElbaphGatePresentation(flow, (owner) => {
+      flow.phase = "visual";
+      const delay = Math.max(0, Math.min(7000, Number(playFinalGateMapDescent(owner, "black_turn")) || 0));
+      flow.timer = window.setTimeout(() => {
+        flow.timer = 0;
+        const current = elbaphGatePresentationOwner(flow);
+        if (!current) return;
+        if (current.finalGateDefeated) { finishElbaphGatePresentation(flow, () => {}); return; }
+        flow.phase = "prompt";
+        const complete = () => finishElbaphGateStoryWhenIdle(flow, (nextOwner) => {
+          state.gameState.turnStep = "艾爾巴夫：黑轉支配";
+          startFinalGateBattle(nextOwner, { confirmedDescent: true, chopperHealed: true, afterImuDescent: true });
+        });
+        try {
+          openFinalGateStoryDescent(current, "black_turn", complete, flow);
+          if (!flow.completed && !refs.modalBack?.classList.contains("open")) complete();
+        } catch (error) {
+          console.warn("[elbaph] descent dialogue failed; continuing the same transition", error);
+          complete();
+        }
+      }, delay || 30);
+    });
     return true;
   }
 
@@ -35780,111 +35980,71 @@ function resolveImpelDownEventPrimary(player, context = null) {
   }
 
   function startElbaphGateSequence(player, source = "") {
-    if (!player || state.battleState) return false;
+    if (!player || !elbaphGatePlayerIsLocallyOwned(player) || state.battleState) return false;
     const anchorId = finalGateAnchorIslandId();
     if (!playerNeedsElbaphGateSequence(player, anchorId)) return false;
+    if (elbaphGatePresentationIsActive(player)) return true;
+    const resumeArrival = state.gameState.elbaphGateContinuationPending === "knights-arrival";
     state.gameState.pendingMove = null;
     state.gameState.routePrompt = null;
     state.gameState.islandDecision = null;
     state.gameState.movementAnimating = false;
-    state.gameState.resolutionLock = true;
     state.gameState.turnStep = "艾爾巴夫災變";
     player.location = { kind: "island", islandId: anchorId, entryDirection: player.location?.entryDirection || null };
-    addLog(source === "turn_start"
-      ? `${player.name} 已在艾爾巴夫，神之騎士團的襲擊仍未結束。`
-      : `${player.name} 抵達艾爾巴夫，神之騎士團突然襲擊西村。`);
+    addLog(source === "turn_start" ? `${player.name} 已在艾爾巴夫，神之騎士團的襲擊仍未結束。` : `${player.name} 抵達艾爾巴夫，神之騎士團突然襲擊西村。`);
+    const arrival = (owner) => startElbaphGateStory(owner, "knights-arrival", FINAL_ELBAPH_GOD_KNIGHTS_ARRIVAL_ENDING, (nextOwner) => {
+      recordMainMissionEvent(nextOwner, { type: "elbaph_god_knights_arrived" });
+      closeModal();
+      startElbaphGodKnightBattle(nextOwner, "killingham");
+    });
+    const started = resumeArrival ? arrival(player) : startElbaphGateStory(player, "killingham-intro", FINAL_ELBAPH_INTRO_ENDING, (owner) => {
+      recordMainMissionEvent(owner, { type: "elbaph_rescue_briefing" });
+      closeModal();
+      arrival(owner);
+    });
     renderAll();
-    window.setTimeout(() => {
-      if (state.battleState || !playerNeedsElbaphGateSequence(player, anchorId)) return;
-      startFinalEndingCinematicSession(player, FINAL_ELBAPH_INTRO_ENDING, () => {
-        recordMainMissionEvent(player, { type: "elbaph_rescue_briefing" });
-        closeModal();
-        renderAll();
-        state.gameState.resolutionLock = true;
-        startFinalEndingCinematicSession(player, FINAL_ELBAPH_GOD_KNIGHTS_ARRIVAL_ENDING, () => {
-          recordMainMissionEvent(player, { type: "elbaph_god_knights_arrived" });
-          state.gameState.resolutionLock = false;
-          closeModal();
-          startElbaphGodKnightBattle(player, "killingham");
-        });
-      });
-    }, 30);
-    return true;
+    return started;
   }
 
   function continueElbaphAfterKillingham(player) {
-    if (!player) return false;
-    if (state.gameState.elbaphGateContinuationPending) return true;
-    state.gameState.elbaphGateContinuationPending = "killingham-clear";
-    state.gameState.resolutionLock = true;
+    if (!player || !elbaphGatePlayerIsLocallyOwned(player)) return false;
     state.gameState.turnStep = "艾爾巴夫：麒麟格姆戰後";
-    closeModal();
-    window.setTimeout(() => {
-      if (state.battleState) {
-        state.gameState.elbaphGateContinuationPending = "";
-        return;
-      }
-      try {
-        startFinalEndingCinematicSession(player, FINAL_ELBAPH_KILLINGHAM_WIN_ENDING, () => {
-          state.gameState.elbaphGateContinuationPending = "";
-          state.gameState.resolutionLock = false;
-          closeModal();
-          startElbaphGodKnightBattle(player, "sommers");
-        });
-      } catch (error) {
-        console.error("[elbaph] failed to continue after Killingham", error);
-        addLog("艾爾巴夫救援戰後劇情銜接失敗，已直接進入索瑪茲戰。");
-        state.gameState.elbaphGateContinuationPending = "";
-        state.gameState.resolutionLock = false;
-        closeModal();
-        startElbaphGodKnightBattle(player, "sommers");
-      }
-    }, 30);
-    return true;
+    return startElbaphGateStory(player, "killingham-clear", FINAL_ELBAPH_KILLINGHAM_WIN_ENDING, (owner) => {
+      closeModal();
+      startElbaphGodKnightBattle(owner, "sommers");
+    });
   }
 
   function continueElbaphAfterSommers(player) {
-    if (!player) return false;
-    if (state.gameState.elbaphGateContinuationPending) return true;
-    state.gameState.elbaphGateContinuationPending = "sommers-clear";
-    state.gameState.resolutionLock = true;
+    if (!player || !elbaphGatePlayerIsLocallyOwned(player)) return false;
     state.gameState.turnStep = "艾爾巴夫：切回伊姆戰線";
-    closeModal();
-    window.setTimeout(() => {
-      if (state.battleState) {
-        state.gameState.elbaphGateContinuationPending = "";
-        return;
-      }
-      try {
-        applyFinalGateChopperHealing(player, { force: true });
-        startFinalEndingCinematicSession(player, FINAL_ELBAPH_SOMMERS_RETURN_ENDING, () => {
-          closeModal();
-          state.gameState.elbaphGateContinuationPending = "";
-          state.gameState.resolutionLock = false;
-          state.gameState.turnStep = "艾爾巴夫：伊姆登場";
-          playFinalGateImuDescentThenBlackTurn(player);
-        });
-      } catch (error) {
-        console.error("[elbaph] failed to continue after Sommers", error);
-        addLog("艾爾巴夫切回伊姆戰線劇情銜接失敗，已直接進入伊姆登場。");
-        applyFinalGateChopperHealing(player, { force: true });
-        state.gameState.elbaphGateContinuationPending = "";
-        state.gameState.resolutionLock = false;
-        state.gameState.turnStep = "艾爾巴夫：伊姆登場";
-        closeModal();
-        playFinalGateImuDescentThenBlackTurn(player);
-      }
-    }, 30);
-    return true;
+    const started = startElbaphGateStory(player, "sommers-clear", FINAL_ELBAPH_SOMMERS_RETURN_ENDING, (owner) => {
+      closeModal();
+      state.gameState.turnStep = "艾爾巴夫：伊姆登場";
+      playFinalGateImuDescentThenBlackTurn(owner);
+    });
+    const flow = elbaphGatePresentation;
+    if (started && flow?.key === "sommers-clear" && !flow.chopperHealed) {
+      flow.chopperHealed = true;
+      applyFinalGateChopperHealing(currentPlayer(), { force: true });
+    }
+    return started;
   }
 
   function recoverPendingElbaphGateSequence(player) {
     if (!player || state.battleState) return false;
-    if (state.gameState?.resolutionLock) return false;
+    if (!elbaphGateOrphanCanRecover(player)) return false;
+    const aftermathJustCompleted = elbaphAftermathCompletedContext && ownedTurnContinuationIsCurrent(elbaphAftermathCompletedContext, true);
+    const pendingAftermath = !aftermathJustCompleted && player.finalGateDefeated && (state.gameState.elbaphGateContinuationPending === "imu-aftermath" || state.gameState.turnStep === "伊姆戰後劇情");
+    if (pendingAftermath && String(player.location?.islandId || "") === finalGateAnchorIslandId()) {
+      return startFinalGateAftermath(player);
+    }
     if (state.gameState.movementAnimating || state.gameState.diceRolling) return false;
     if (!playerCanRecoverElbaphGateSequence(player)) return false;
     const pending = String(state.gameState.elbaphGateContinuationPending || "");
     const step = String(player.finalGateElbaphStep || "");
+    if (["killingham-intro", "knights-arrival"].includes(pending) && !player.finalGateElbaphCleared && !playerDefeatedElbaphGodKnight(player, "killingham")) return startElbaphGateSequence(player, "turn_start");
+    if (pending === "imu-prompt") return tryTriggerFinalGateAtIsland(player, player.location?.islandId, "turn_start");
     const defeatedKillingham = playerDefeatedElbaphGodKnight(player, "killingham");
     const defeatedSommers = playerDefeatedElbaphGodKnight(player, "sommers");
     const shouldRestartKillingham = !defeatedKillingham && step === "killingham" && !player.finalGateElbaphCleared;
@@ -36209,7 +36369,9 @@ function resolveImpelDownEventPrimary(player, context = null) {
 
   function confirmFinalGateDescent() {
     const player = currentPlayer();
-    if (!player || !playerNeedsFinalGateBattle(player, player.location?.islandId)) return false;
+    if (!player || state.battleState || !elbaphGatePlayerIsLocallyOwned(player) || !playerNeedsFinalGateBattle(player, player.location?.islandId)) return false;
+    const flow = elbaphGatePresentation;
+    if (flow?.key === "imu-prompt") return finishElbaphGatePresentation(flow, (owner) => { closeModal(); startFinalGateBattle(owner, { confirmedDescent: true }); });
     state.gameState.resolutionLock = false;
     closeModal();
     return startFinalGateBattle(player, { confirmedDescent: true });
@@ -36217,7 +36379,12 @@ function resolveImpelDownEventPrimary(player, context = null) {
 
   function declineFinalGateDescent() {
     const player = currentPlayer();
-    if (!player || !playerNeedsFinalGateBattle(player, player.location?.islandId)) return false;
+    if (!player || state.battleState || !elbaphGatePlayerIsLocallyOwned(player) || !playerNeedsFinalGateBattle(player, player.location?.islandId)) return false;
+    const flow = elbaphGatePresentation;
+    if (flow?.key === "imu-prompt") {
+      if (!elbaphGatePresentationOwner(flow)) return false;
+      finishElbaphGatePresentation(flow, () => {});
+    }
     player.finalGateRetreat = {
       playerId: player.id,
       islandId: finalGateAnchorIslandId(),
@@ -36232,7 +36399,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
     return true;
   }
 
-  function openFinalGateStoryDescent(player, source = "", onComplete) {
+  function openFinalGateStoryDescent(player, source = "", onComplete, flow = null) {
     const sourceText = source === "black_turn"
       ? "喬巴剛替大家包紮完，艾爾巴夫的天空忽然被黑霧壓低。"
       : source === "turn_start"
@@ -36274,7 +36441,9 @@ function resolveImpelDownEventPrimary(player, context = null) {
       </div>
     `, "final-imu-fullscreen-modal no-backdrop-close force-choice");
     document.getElementById("continueElbaphImuStoryBtn")?.addEventListener("click", () => {
-      recordMainMissionEvent(player, { type: "imu_descent_seen" });
+      const owner = flow ? elbaphGatePresentationOwner(flow) : player;
+      if (!owner) return;
+      recordMainMissionEvent(owner, { type: "imu_descent_seen" });
       closeModal();
       if (typeof onComplete === "function") onComplete();
     });
@@ -36314,11 +36483,15 @@ function resolveImpelDownEventPrimary(player, context = null) {
   }
 
   function playFinalGateMapDescent(player, source = "") {
+    let descentLayer = null;
+    try {
     const anchor = getIslandById(finalGateAnchorIslandId());
     if (!anchor || !refs.boardGameMap) return 0;
+    const visualToken = ++elbaphGateMapVisualGeneration;
     const pos = nodeToPx(anchor);
     refs.boardGameMap.querySelectorAll(".final-gate-map-descent").forEach((node) => node.remove());
     const layer = document.createElement("div");
+    descentLayer = layer;
     layer.className = `final-gate-map-descent${source === "turn_start" ? " is-waiting" : " is-arrival"}`;
     layer.style.left = `${pos.x}px`;
     layer.style.top = `${pos.y}px`;
@@ -36334,35 +36507,43 @@ function resolveImpelDownEventPrimary(player, context = null) {
     `;
     refs.boardGameMap.appendChild(layer);
     panToBoardPoint(pos.x, pos.y, { scale: Math.max(state.panZoom.scale, 0.92), immediate: false });
-    window.setTimeout(() => layer.classList.add("is-ending"), 6000);
-    window.setTimeout(() => layer.remove(), 7000);
+    window.setTimeout(() => { if (visualToken === elbaphGateMapVisualGeneration) { try { layer.classList.add("is-ending"); } catch (_) {} } }, 6000);
+    window.setTimeout(() => { if (visualToken === elbaphGateMapVisualGeneration) { try { layer.remove(); } catch (_) {} } }, 7000);
     return 5600;
+  
+    } catch (error) {
+      try { descentLayer?.remove?.(); } catch (_) {}
+      console.warn("[elbaph] optional map descent unavailable; continuing the same story", error);
+      return 0;
+    }
   }
 
   function tryTriggerFinalGateAtIsland(player, islandId, source = "") {
-    if (!playerNeedsFinalGateBattle(player, islandId) || state.battleState) return false;
+    if (!elbaphGatePlayerIsLocallyOwned(player) || !playerNeedsFinalGateBattle(player, islandId) || state.battleState) return false;
+    if (playerNeedsElbaphGateSequence(player, islandId)) return startElbaphGateSequence(player, source);
+    const flow = beginElbaphGatePresentation(player, "imu-prompt");
+    if (!flow) return elbaphGatePresentationIsActive(player);
     state.gameState.pendingMove = null;
     state.gameState.routePrompt = null;
     state.gameState.islandDecision = null;
     state.gameState.movementAnimating = false;
-    if (playerNeedsElbaphGateSequence(player, islandId)) {
-      return startElbaphGateSequence(player, source);
-    }
-    state.gameState.resolutionLock = true;
     state.gameState.turnStep = "伊姆現身";
     player.location = { kind: "island", islandId: finalGateAnchorIslandId(), entryDirection: player.location?.entryDirection || null };
-    addLog(source === "turn_start"
-      ? `${player.name} 已在艾爾巴夫，伊姆降臨形態仍阻擋最後航路。`
-      : `${player.name} 抵達艾爾巴夫，伊姆從黑暗中現身阻擋最後航路。`);
+    addLog(source === "turn_start" ? `${player.name} 已在艾爾巴夫，伊姆降臨形態仍阻擋最後航路。` : `${player.name} 抵達艾爾巴夫，伊姆從黑暗中現身阻擋最後航路。`);
+    closeModal();
     renderAll();
-    const delay = playFinalGateMapDescent(player, source);
-    window.setTimeout(() => {
-      if (!state.battleState && playerNeedsFinalGateBattle(player, player.location?.islandId)) {
-        openFinalGateDescentPrompt(player, source);
-      } else {
-        state.gameState.resolutionLock = false;
-      }
-    }, delay);
+    queueElbaphGatePresentation(flow, (owner) => {
+      flow.phase = "visual";
+      const delay = Math.max(0, Math.min(7000, Number(playFinalGateMapDescent(owner, source)) || 0));
+      flow.timer = window.setTimeout(() => {
+        flow.timer = 0;
+        const current = elbaphGatePresentationOwner(flow);
+        if (!current) return;
+        if (!playerNeedsFinalGateBattle(current, current.location?.islandId)) { finishElbaphGatePresentation(flow, () => {}); return; }
+        flow.phase = "prompt";
+        openFinalGateDescentPrompt(current, source);
+      }, delay || 30);
+    });
     return true;
   }
 
@@ -39985,7 +40166,9 @@ function resolveImpelDownEventPrimary(player, context = null) {
         titleCard.classList.add("is-visible");
       }
     };
+    const sessionIsCurrent = () => typeof sessionOptions.isCurrentSession !== "function" || sessionOptions.isCurrentSession();
     const completeSession = () => {
+      if (!sessionIsCurrent()) return;
       if (sessionCompleted) return;
       sessionCompleted = true;
       if (finalEndingAutoTimer) {
@@ -39996,6 +40179,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       if (typeof onComplete === "function") onComplete();
     };
     const completeInlineChoice = (choice) => {
+      if (!sessionIsCurrent()) return;
       if (sessionCompleted || sessionOptions.choiceReadOnly === true || !currentBeatHasInlineChoices()) return;
       sessionCompleted = true;
       if (finalEndingAutoTimer) {
@@ -40022,6 +40206,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       if (!storyPlaybackSettings.auto || !canAdvance || currentBeatHasInlineChoices()) return;
       const beat = currentBeats[currentBeatIndex] || {};
       finalEndingAdvanceTimer = window.setTimeout(() => {
+        if (!sessionIsCurrent()) return;
         finalEndingAdvanceTimer = null;
         goNext({ auto: true });
       }, finalEndingAutoDelayForBeat(beat));
@@ -40039,6 +40224,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       dialogue?.classList.add("waiting");
       const lockMs = Math.max(180, Math.round(FINAL_ENDING_ADVANCE_LOCK_MS / Math.max(0.5, Number(storyPlaybackSettings.speed || 1))));
       finalEndingAutoTimer = window.setTimeout(() => {
+        if (!sessionIsCurrent()) return;
         canAdvance = true;
         const currentNextButton = document.getElementById("finalEndingNextBtn");
         if (currentNextButton) currentNextButton.disabled = false;
@@ -40084,6 +40270,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
     renderOpeningStoryBeatExtras(currentBeats[currentBeatIndex] || currentBeats[0] || {});
     armAdvanceLock();
     const goPrev = () => {
+      if (!sessionIsCurrent()) return;
       if (currentBeatIndex > 0) {
         currentBeatIndex -= 1;
         renderCurrentBeat();
@@ -40098,6 +40285,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       }
     };
     const goNext = (_options = {}) => {
+      if (!sessionIsCurrent()) return;
       clearFinalEndingAdvanceTimer();
       if (currentBeatHasInlineChoices()) {
         if (!canAdvance) releaseAdvanceLock();
@@ -40125,6 +40313,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       event.stopPropagation();
     });
     document.getElementById("finalEndingAutoBtn")?.addEventListener("click", (event) => {
+      if (!sessionIsCurrent()) return;
       event.stopPropagation();
       storyPlaybackSettings = saveStoryPlaybackSettings({
         ...storyPlaybackSettings,
@@ -40138,6 +40327,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       }
     });
     document.getElementById("finalEndingSpeedSelect")?.addEventListener("change", (event) => {
+      if (!sessionIsCurrent()) return;
       event.stopPropagation();
       storyPlaybackSettings = saveStoryPlaybackSettings({
         ...storyPlaybackSettings,
@@ -40147,6 +40337,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       if (storyPlaybackSettings.auto && canAdvance) scheduleAutoAdvance();
     });
     document.getElementById("finalEndingSkipBtn")?.addEventListener("click", (event) => {
+      if (!sessionIsCurrent()) return;
       event.stopPropagation();
       if (currentBeatHasInlineChoices()) {
         if (!canAdvance) releaseAdvanceLock();
@@ -40155,6 +40346,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       completeSession();
     });
     dialogue?.addEventListener("click", (event) => {
+      if (!sessionIsCurrent()) return;
       event.stopPropagation();
       const inlineChoiceButton = event.target?.closest?.("[data-final-ending-choice]");
       if (inlineChoiceButton) {
@@ -40182,7 +40374,32 @@ function resolveImpelDownEventPrimary(player, context = null) {
     });
   }
 
+  let finalIslandEndingPresentation = null;
+
+  function finalIslandEndingPresentationIsCurrent(record) {
+    return !!record && record === finalIslandEndingPresentation && !record.completed && !state.battleState
+      && ownedTurnContinuationIsCurrent(record.context, true);
+  }
+
+  function preserveFinalIslandEndingPresentationForPayload(incoming, options = {}, incomingBattle = null) {
+    const record = finalIslandEndingPresentation;
+    if (options.source !== "lan" || options.initialLanRestore || options.lanReason === "load-save" || incomingBattle) return false;
+    if (!finalIslandEndingPresentationIsCurrent(record) || !refs.modalBack?.classList.contains("open")) return false;
+    return String(incoming?.seed || "") === record.context.seed && String(incoming?.phase || "") === record.context.phase
+      && Number(incoming?.round || 0) === record.context.round && String(incoming?.players?.[incoming.currentPlayerIndex]?.id || "") === record.context.playerId
+      && String(incoming?.turnStep || "") === record.turnStep && !!incoming?.resolutionLock
+      && JSON.stringify(incoming?.finalEndingRecords || {}) === record.endingRecords
+      && !incoming.pendingMove && !incoming.routePrompt && !incoming.islandDecision
+      && !incoming.tradePrompt && !incoming.activeTrade && !incoming.coopBattlePrompt && !incoming.activeSpar;
+  }
+
+  function invalidateFinalIslandEndingPresentation() {
+    if (finalIslandEndingPresentation) finalIslandEndingPresentation.completed = true;
+    finalIslandEndingPresentation = null;
+  }
+
   function startFinalIslandEnding(player, endingId, chapterIndex = 0, beatIndex = 0) {
+    if (!elbaphGatePlayerIsLocallyOwned(player) || state.battleState) return;
     const ending = FINAL_ENDING_DEFS[endingId];
     const eligibility = finalEndingEligibility(player, endingId);
     if (!ending || !eligibility.ok) {
@@ -40192,25 +40409,38 @@ function resolveImpelDownEventPrimary(player, context = null) {
       endTurn();
       return;
     }
-    startFinalEndingCinematicSession(player, ending, () => finishFinalIslandEnding(player, endingId), chapterIndex, beatIndex);
+    if (finalIslandEndingPresentationIsCurrent(finalIslandEndingPresentation)
+      && finalIslandEndingPresentation.endingId === endingId && refs.modalBack?.classList.contains("open")) return;
+    invalidateFinalIslandEndingPresentation();
+    const record = { context: captureElbaphGatePresentationContext(), endingId, turnStep: String(state.gameState.turnStep || ""), endingRecords: JSON.stringify(state.gameState.finalEndingRecords || {}), completed: false };
+    finalIslandEndingPresentation = record;
+    const complete = () => {
+      if (!finalIslandEndingPresentationIsCurrent(record)) return;
+      const owner = currentPlayer();
+      if (!elbaphGatePlayerIsLocallyOwned(owner)) return;
+      record.completed = true;
+      finalIslandEndingPresentation = null;
+      finishFinalIslandEnding(owner, endingId);
+    };
+    try {
+      startFinalEndingCinematicSession(player, ending, complete, chapterIndex, beatIndex, { isCurrentSession: () => finalIslandEndingPresentationIsCurrent(record) });
+      if (!record.completed && !refs.modalBack?.classList.contains("open")) complete();
+    } catch (error) {
+      console.warn("[postgame] ending presentation failed; completing the original ending", error);
+      complete();
+    }
   }
 
   function startFinalGateAftermath(player, onComplete) {
-    if (!player) {
-      if (typeof onComplete === "function") onComplete();
-      return;
-    }
-    player.finalGateAftermathSeen = true;
-    state.gameState.resolutionLock = true;
+    if (!player || !elbaphGatePlayerIsLocallyOwned(player)) return false;
     state.gameState.turnStep = "伊姆戰後劇情";
-    preloadFinalEndingAssets(FINAL_IMU_AFTERSTORY_ENDING);
-    startFinalEndingCinematicSession(player, FINAL_IMU_AFTERSTORY_ENDING, () => {
-      state.gameState.resolutionLock = false;
-      if (typeof onComplete === "function") {
-        onComplete();
-      } else {
-        closeModal();
+    return startElbaphGateStory(player, "imu-aftermath", FINAL_IMU_AFTERSTORY_ENDING, (owner) => {
+      owner.finalGateAftermathSeen = true;
+      closeModal();
+      if (typeof onComplete === "function") onComplete();
+      else {
         renderAll();
+        endTurn({ context: "battle", subtitle: "伊姆戰後劇情結束，準備切換到下一位玩家。" });
       }
     });
   }
@@ -40247,7 +40477,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
     }
     if (unlockedNow && state.gameState.postgameWorld) {
       state.gameState.postgameWorld.researchLabsActive = true;
-      state.gameState.postgameWorld.researchStoryPlayed = true;
+      state.gameState.postgameWorld.researchStoryPlayed = false;
     }
     closeModal();
     state.gameState.resolutionLock = unlockedNow;
@@ -47009,6 +47239,21 @@ function resolveImpelDownEventPrimary(player, context = null) {
     const data = prebattleData();
     const heroKey = prebattleHeroKey(activeCard);
     const enemyKey = prebattleEnemyKey(enemy);
+    const selected = PREBATTLE_TEXT?.selectPair({
+      hero: PREBATTLE_TEXT.resolveActor(activeCard, { side: "hero", formId: activeCard?.evolutionFormId }),
+      enemy: PREBATTLE_TEXT.resolveActor(enemy, { side: "enemy", formId: enemy.evolutionFormId || enemy.formId, blackSnapshot: battle?.blackTurnCrewSnapshot }),
+      context: "opponent", rng: Math.random, custom: prebattleLineDataOverride(),
+    });
+    if (selected) return {
+      id: prebattleIntroIdFor(player, battle, heroKey, enemyKey),
+      key: prebattleIntroStableKey(player, battle, heroKey, enemyKey),
+      done: false, heroKey, enemyKey,
+      heroName: activeCard?.name || heroKey || player?.name || "夥伴",
+      enemyName: enemy.name || enemyKey || "敵人",
+      heroText: selected.heroText, enemyText: selected.enemyText,
+      firstSpeaker: selected.firstSpeaker, matchedPair: selected.matchedPair,
+      heroType: selected.heroType, enemyType: selected.enemyType, confidence: "原創角色互動",
+    };
     const pair = findPrebattlePairLine(heroKey, enemyKey, enemy);
     const heroFallback = prebattleHeroFallbackText(activeCard, heroKey);
     const enemyFallback = prebattleEnemyFallbackText(enemy, enemyKey);

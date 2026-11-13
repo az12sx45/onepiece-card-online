@@ -2521,3 +2521,11 @@ Native Android raw Stage 與 iOS compiled Stage 在 Windows 實際 NativeGameRun
 驗收界線：上述 Native 是 Windows 執行 Android raw／iOS compiled 程式面的 host 接受，不是實體 Android／iPhone 音訊硬體或舊個人存檔驗收；AudioContext analyser／AudioServer PCM 不是主觀聽感、耳機或系統 loopback 接受。一般解碼／峰值／播放位置不能證明每個音色都好聽。standalone 的 persisted pagehide 是受控事件，不冒稱真 BFCache restore。保留 Native 既有 setup-save 初始 LAN 等待 modal 限制，以 fresh-host 原 setup 真 tap 作新局聲音入口驗證，未為音訊繞過玩法。沒有把自然完整戰役／完整 CPU 策略或原影片手機 decoder 驗收附會到這些受控案例。
 
 最終證據入口：source-candidate/SOURCE_READY.json（16841 B／f0df6bb1598c1dbe664b478d51a650bedb33b65b8cdfffd8c6d67e865332d686）、native-candidate/NATIVE_READY.json（26994 B／d26bcddb35ccab22b0ddee84be925d71c12a8b5179246b1d151dbacf624475be）、ROOT_SOURCE_REVIEW_v4.json／ROOT_SOURCE_REVIEW_v5_DELTA.json、docs-candidate/CATALOG_REVIEW_v2.json、asset-audit/standalone-ui-qa/READY.json。未重新執行任一測試來製作文件。
+
+
+## 2026-11-14 後段流程及文字對話交接
+
+- `public/js/board_game.js` 與手機 `original-core.js`：權威故事／回合續接、已接受同步後恢復、後段故事完成記錄，以及同場純文字嗆聲選擇。
+- `public/js/onepiece_prebattle_lines.js`：角色、形態及具體關係的純文字內容與穩定身分映射，精確最終產物依本次 COMBINED_READY。
+- Board 的可獨立更新原生 Runtime、Stage 與 modal bridge：既有地圖降臨圖層、故事呈現及本 instance 的安全關閉。Android raw 與 iOS compiled 均須有實際產品來源與回歸證據，不改固定 host App。
+- `D:/Codex_QA/board-god-knights-recovery-20261114/`：本次原版失敗重現、舊版戰後存檔、候選、內容索引、完整 Web 及原生程式回歸與最終整合交接。原版失敗證據和必要回復材料保留供追查；未發布的日語配音草稿不屬本次更新。

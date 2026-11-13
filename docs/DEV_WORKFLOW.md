@@ -9568,3 +9568,17 @@ Android與iOS沿用原host71 App，各更新Core、Runtime與平台Stage三檔�
 更新方式為在目前啟動器或App檢查《新世界航海錄》更新，下載套用後完整關閉再重開，帳號與既有存檔沿用；不用重裝APK、重簽IPA或新宿主版本。未改遊戲規則、存檔schema／namespace、既有事件名稱或其他遊戲。
 
 公開 Gate：D:\Codex_QA\board-audio-release-20261114/PUBLIC_VERIFICATION.json；SHA256 69dcbe9a53f2e8939e2db2e00316ec3086916a87af14af477cee4269142bafbb。其餘99則公告全文與順序精確保留；最舊同遊戲已發布原紀錄全文封存於QA與Git。Root最後公告提交只包含newsconfig與本DEV追加，再等待正式Live及保護metadata讀回。
+
+
+## 2026-11-14 神之騎士團戰後銜接與純文字嗆聲
+
+本次候選與驗證集中於 D:/Codex_QA/board-god-knights-recovery-20261114。以已發布 d75d8f1243499339db0dc65c6d41a87299286dc3、Android sequence 13、iOS sequence 18 為基底，保留原 host71 與 launcher 1.2.34。精確修改、候選雜湊、有限測試矩陣、測試邊界與發布依賴以 COMBINED_READY.json 為準；正式發布另依啟動器交接收據，不能把本機 READY 當 RELEASED。
+
+追查需同時保留 Source 玩家／回合狀態與實際原生呈現：兩位神騎戰後的伊姆地圖降臨介面、對話完成回呼、同步套用結束後的恢復入口、戰後退出鎖，以及最終劇情／研究故事的完成記錄。驗證必須區分 Source 受控回合測試、完整 Web DOM、Android raw／iOS compiled 原生程式與實體手機；未執行的真機或帳號驗收不得補寫為通過。
+
+嗆聲改為純文字，不加入語音銀行、較長的配音開場或先前未發布的音樂機制。內容來源、330 句一般台詞、關係變化、穩定 ID 覆蓋及選擇器測試見同目錄 banter-text 與最終 Source 證據。
+
+
+最終島結局的按鈕、定時器與完成回呼須屬於原故事 session 和航海紀錄／回合。普通同回合 LAN 更新保留可讀對話，完成時重取目前玩家物件；明確讀取另一份存檔或切換回合後，舊回呼不得修改新紀錄、關閉新 UI 或取消新 session 的定時器。私有故事快照不遞增共用 owned-turn epoch；否則會使既有戰後 finally 失去清理退出鎖的資格。
+
+自訂嗆聲保留原儲存，將相對舊預設的實際編輯／新增文字加入至少三句 stock 選池；不宣稱舊整池覆蓋／刪除語意完全相同。一般對手入口可用的關係為 70 組；另 18 組 ally 對話僅保留內容及選擇函式資料，未接隊友對話 UI，不得公告成 88 組皆可在普通對戰顯示。

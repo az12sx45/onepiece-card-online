@@ -39091,3 +39091,5744 @@
     });
   });
 })();
+
+(function () {
+function installBoardBanterText(host, data, options) {
+  "use strict";
+  options = options || {};
+  const actors = data?.actors || {};
+  const identity = data?.identity || {};
+  const stableIds = identity.stableIds || {};
+  const baseline = options.legacyBaseline || host?.legacyBaseline || null;
+  const has = (object, key) => Object.prototype.hasOwnProperty.call(object || {}, key);
+  const compact = (value) => String(value || "").trim().replace(/[·・．.]/g, "").replace(/\s+/g, "").toLowerCase();
+  const aliases = Object.assign(Object.create(null), identity.nameAliases || {}, data.legacyNameAliases || {});
+  const compactAliases = Object.create(null);
+  const conflictingCompact = new Set();
+  Object.keys(aliases).forEach((key) => {
+    const normalized = compact(key), actorId = aliases[key];
+    if (has(compactAliases, normalized) && compactAliases[normalized] !== actorId) conflictingCompact.add(normalized);
+    else compactAliases[normalized] = actorId;
+  });
+  conflictingCompact.forEach((key) => { delete compactAliases[key]; });
+  const actorForId = (value) => {
+    const key = String(value || "").trim();
+    const actorId = has(actors, key) ? key : stableIds[key] || data.legacyIdAliases?.[key] || "";
+    return has(actors, actorId) ? actorId : "";
+  };
+  const actorForCustomKey = (value) => actorForId(value) || aliases[String(value || "").trim()] || compactAliases[compact(value)] || "";
+  const compactForms = Object.create(null);
+  Object.keys(data.legacyFormAliases || {}).forEach((key) => {
+    const normalized = compact(key), formId = data.legacyFormAliases[key];
+    if (!has(compactForms, normalized) || compactForms[normalized] === formId) compactForms[normalized] = formId;
+    else compactForms[normalized] = "";
+  });
+  const formForCustomKey = (value) => data.legacyFormAliases?.[String(value || "").trim()] || compactForms[compact(value)] || "";
+  function resolveActor(profile, resolverOptions = {}) {
+    if (!profile || typeof profile !== "object") return null;
+    const snapshot = resolverOptions.blackSnapshot;
+    const source = snapshot && typeof snapshot === "object" ? snapshot : profile;
+    const keys = snapshot
+      ? [source.sourceTemplateId, source.sourceCardId, source.baseId, source.id, source.templateId, source.characterId, source.lineageSourceEnemyKey, source.cultivatedFromEnemyKey, source.key]
+      : resolverOptions.side === "enemy"
+        ? [source.sourceTemplateId, source.sourceCardId, source.key, source.id, source.templateId, source.baseId, source.characterId, source.lineageSourceEnemyKey, source.cultivatedFromEnemyKey, source.actorId]
+        : [source.sourceTemplateId, source.sourceCardId, source.baseId, source.id, source.templateId, source.characterId, source.lineageSourceEnemyKey, source.cultivatedFromEnemyKey, source.key, source.actorId];
+    let actorId = keys.map(actorForId).find(Boolean) || "";
+    const requestedForm = String(resolverOptions.formId || source.formId || source.evolutionFormId || "");
+    const formActor = identity.evolutionFormIds?.[requestedForm] || "";
+    if (!actorId && has(actors, formActor)) actorId = formActor;
+    if (!actorId) return null;
+    return { actorId, formId: formActor === actorId ? requestedForm : "", presentation: actors[actorId].presentation || "speech" };
+  }
+  function stable(value, seen = new Set()) {
+    if (value === null || typeof value !== "object") return JSON.stringify(value);
+    if (seen.has(value)) throw new Error("Cyclic custom dialogue data");
+    seen.add(value);
+    const result = Array.isArray(value)
+      ? "[" + value.map((item) => stable(item, seen)).join(",") + "]"
+      : "{" + Object.keys(value).sort().map((key) => JSON.stringify(key) + ":" + stable(value[key], seen)).join(",") + "}";
+    seen.delete(value);
+    return result;
+  }
+  const textOf = (entry) => typeof entry === "string" ? entry.trim() : typeof entry?.text === "string" ? entry.text.trim() : "";
+  const stockPools = () => {
+    const hero = Object.create(null), enemy = Object.create(null);
+    Object.keys(actors).forEach((actorId) => {
+      const lines = (actors[actorId].general || []).map((line) => ({ id: line.id, text: line.text, custom: false }));
+      hero[actorId] = lines.slice(); enemy[actorId] = lines.slice();
+    });
+    return { hero, enemy };
+  };
+  function mergeCustom(stock, original, rawCustom) {
+    if (stock && stock !== data && stock.actors !== actors) throw new Error("Banter stock identity differs from installed data");
+    const pools = stockPools(), customPairs = [];
+    const coverage = { unchangedPools: 0, changedPools: 0, unchangedPoolRows: 0, changedOrAddedPoolRows: 0, addedSelectablePoolRows: 0, unchangedPairs: 0, changedOrAddedPairs: 0, addedSelectablePairs: 0, unresolvedPoolKeys: [], unresolvedPairKeys: [], invalidRows: 0, storageWritten: false };
+    const custom = rawCustom?.data || rawCustom;
+    if (!custom || typeof custom !== "object") return { pools, customPairs, coverage };
+    try {
+      for (const [side, field] of [["hero", "heroLines"], ["enemy", "enemyLines"]]) {
+        const candidatePools = custom[field];
+        if (!candidatePools || typeof candidatePools !== "object") continue;
+        for (const key of Object.keys(candidatePools)) {
+          const rows = candidatePools[key];
+          if (!Array.isArray(rows)) { coverage.invalidRows += 1; continue; }
+          const prior = Array.isArray(original?.[field]?.[key]) ? original[field][key] : [];
+          if (stable(rows) === stable(prior)) { coverage.unchangedPools += 1; coverage.unchangedPoolRows += rows.length; continue; }
+          coverage.changedPools += 1;
+          const oldRows = new Set(prior.map((row) => stable(row)));
+          const actorId = actorForCustomKey(key);
+          if (!actorId) coverage.unresolvedPoolKeys.push(field + ":" + key);
+          rows.forEach((row, index) => {
+            if (oldRows.has(stable(row))) { coverage.unchangedPoolRows += 1; return; }
+            coverage.changedOrAddedPoolRows += 1;
+            const text = textOf(row);
+            if (!text || text === "—") { coverage.invalidRows += 1; return; }
+            if (!actorId) return;
+            const formId = formForCustomKey(key);
+            if (!pools[side][actorId].some((line) => line.text === text && (!line.formId || line.formId === formId))) {
+              pools[side][actorId].push({ id: "custom." + side + "." + key + "." + index, text, formId, custom: true });
+              coverage.addedSelectablePoolRows += 1;
+            }
+          });
+        }
+      }
+      const oldPairRows = new Set((Array.isArray(original?.pairLines) ? original.pairLines : []).map((row) => stable(row)));
+      for (const [index, row] of (Array.isArray(custom.pairLines) ? custom.pairLines : []).entries()) {
+        if (oldPairRows.has(stable(row))) { coverage.unchangedPairs += 1; continue; }
+        coverage.changedOrAddedPairs += 1;
+        if (!row || typeof row !== "object") { coverage.invalidRows += 1; continue; }
+        const fromActorId = actorForCustomKey(row.hero), toActorId = actorForCustomKey(row.enemy);
+        const category = !toActorId && has(data.legacyCategoryActors, String(row.enemy || "")) ? String(row.enemy) : "";
+        const fromText = typeof row.heroText === "string" ? row.heroText.trim() : "", toText = typeof row.enemyText === "string" ? row.enemyText.trim() : "";
+        if (!fromActorId || (!toActorId && !category)) { coverage.unresolvedPairKeys.push(String(row.hero || "") + " vs " + String(row.enemy || "")); continue; }
+        if (!fromText || !toText || fromText === "—" || toText === "—") { coverage.invalidRows += 1; continue; }
+        const first = String(row.firstSpeaker || row.speakerFirst || row.order || "hero").toLowerCase();
+        customPairs.push({ id: "custom.pair." + index, fromActorId, toActorId, fromFormId: formForCustomKey(row.hero), toFormId: formForCustomKey(row.enemy), category, context: row.context === "ally" ? "ally" : "opponent", variants: [{ id: "custom.pair." + index + ".v1", fromText, toText, firstSpeaker: ["enemy", "enemy-first", "敵方", "敵人", "to"].includes(first) ? "to" : "from" }], custom: true });
+        coverage.addedSelectablePairs += 1;
+      }
+    } catch (_error) {
+      // Storage belongs to its editor. An invalid optional draft must not mutate it
+      // or break the stock battle intro.
+      coverage.invalidRows += 1;
+    }
+    return { pools, customPairs, coverage };
+  }
+  const pick = (pool, rng) => {
+    if (!pool.length) return null;
+    let value = Number(rng()); if (!Number.isFinite(value)) value = 0;
+    return pool[Math.min(pool.length - 1, Math.max(0, Math.floor(value * pool.length)))];
+  };
+  function selectPair(request = {}) {
+    if (request.existingIntro && typeof request.existingIntro === "object") return request.existingIntro;
+    const hero = request.hero, enemy = request.enemy;
+    if (!hero || !enemy || !has(actors, hero.actorId) || !has(actors, enemy.actorId)) return null;
+    const context = request.context === "ally" ? "ally" : "opponent";
+    const rng = typeof request.rng === "function" ? request.rng : typeof host?.rng === "function" ? host.rng : Math.random;
+    const merged = mergeCustom(data, baseline, request.custom);
+    const formMatches = (required, resolved) => !required || required === resolved.formId;
+    const orientation = (relation) => {
+      if (relation.context !== context) return 0;
+      if (relation.fromActorId === hero.actorId && formMatches(relation.fromFormId, hero) && formMatches(relation.toFormId, enemy)
+        && (relation.toActorId === enemy.actorId || relation.category && (data.legacyCategoryActors[relation.category] || []).includes(enemy.actorId))) return 1;
+      if (!relation.category && relation.fromActorId === enemy.actorId && relation.toActorId === hero.actorId
+        && formMatches(relation.fromFormId, enemy) && formMatches(relation.toFormId, hero)) return -1;
+      return 0;
+    };
+    const matches = (relation) => orientation(relation) !== 0;
+    const customMatches = merged.customPairs.filter(matches);
+    const stockMatches = (data.relationships || []).filter(matches);
+    const candidates = customMatches.length ? customMatches : stockMatches;
+    const choices = candidates.flatMap((relation) => relation.variants.map((variant) => ({ relation, variant })));
+    const chosen = pick(choices, rng);
+    if (chosen) {
+      const { relation, variant } = chosen;
+      const forward = orientation(relation) === 1;
+      return { heroText: forward ? variant.fromText : variant.toText, enemyText: forward ? variant.toText : variant.fromText, firstSpeaker: (forward ? variant.firstSpeaker === "from" : variant.firstSpeaker === "to") ? "hero" : "enemy", matchedPair: relation.id, pairVariantId: variant.id, heroLineId: variant.id + (forward ? ".from" : ".to"), enemyLineId: variant.id + (forward ? ".to" : ".from"), heroPresentation: actors[hero.actorId].presentation, enemyPresentation: actors[enemy.actorId].presentation, heroType: "指定互動", enemyType: "指定互動", customEditedCoverage: merged.coverage };
+    }
+    const heroLine = pick(merged.pools.hero[hero.actorId].filter((line) => formMatches(line.formId, hero)), rng), enemyLine = pick(merged.pools.enemy[enemy.actorId].filter((line) => formMatches(line.formId, enemy)), rng);
+    if (!heroLine || !enemyLine) return null;
+    return { heroText: heroLine.text, enemyText: enemyLine.text, firstSpeaker: "hero", matchedPair: "", heroLineId: heroLine.id, enemyLineId: enemyLine.id, heroPresentation: actors[hero.actorId].presentation, enemyPresentation: actors[enemy.actorId].presentation, heroType: actors[hero.actorId].presentation === "action" ? "動作敘述" : "原創嗆聲", enemyType: actors[enemy.actorId].presentation === "action" ? "動作敘述" : "原創嗆聲", customEditedCoverage: merged.coverage };
+  }
+  return Object.freeze({ resolveActor, selectPair, mergeCustom });
+}
+  window.installBoardBanterText = installBoardBanterText;
+  window.OnePieceBanterTextData = {
+  "schemaVersion": 1,
+  "status": "TEXT_CONTENT_CANDIDATE_NOT_RELEASED",
+  "language": "zh-Hant-TW",
+  "textOnly": true,
+  "source": {
+    "rosterFile": "D:\\Codex_QA\\board-authentic-audio-banter-20261114\\source-audit\\ROSTER.json",
+    "rosterSha256": "f1a33e9d17f4ce0ce995d41274914c231d8896c1a38feebc63bb924db840d12a",
+    "sourceCommit": "d75d8f1243499339db0dc65c6d41a87299286dc3"
+  },
+  "authorship": "Original battle wording for this game, not a claim of verbatimanime quotations; no audio/ASR/voice duration requirement.",
+  "actors": {
+    "luffy": {
+      "actorId": "luffy",
+      "displayName": "蒙其·D·魯夫",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "luffy.g1",
+          "text": "這邊交給我！你們先把想做的事做好！"
+        },
+        {
+          "id": "luffy.g2",
+          "text": "站得再高也沒用，我會打到你面前！"
+        },
+        {
+          "id": "luffy.g3",
+          "text": "等這場打完，我要吃三大盤肉！"
+        }
+      ]
+    },
+    "zoro": {
+      "actorId": "zoro",
+      "displayName": "索隆",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "zoro.g1",
+          "text": "站穩了。接下來可沒空讓你重來。"
+        },
+        {
+          "id": "zoro.g2",
+          "text": "眼前就這條路，砍開便是。"
+        },
+        {
+          "id": "zoro.g3",
+          "text": "還能站著就好，省得我再找下一個。"
+        }
+      ]
+    },
+    "nami": {
+      "actorId": "nami",
+      "displayName": "娜美",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "nami.g1",
+          "text": "弄壞的東西全部記帳，先提醒你一聲。"
+        },
+        {
+          "id": "nami.g2",
+          "text": "別亂衝！風向已經替我們選好位置了。"
+        },
+        {
+          "id": "nami.g3",
+          "text": "我可不打算陪你在這種地方耗到天黑。"
+        }
+      ]
+    },
+    "sanji": {
+      "actorId": "sanji",
+      "displayName": "香吉士",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "sanji.g1",
+          "text": "別把戰場弄得那麼難看，收拾起來很費工夫。"
+        },
+        {
+          "id": "sanji.g2",
+          "text": "這雙腳還得回廚房，沒空一直陪你。"
+        },
+        {
+          "id": "sanji.g3",
+          "text": "吃飽了才有力氣挨這一腳，準備好了嗎？"
+        }
+      ]
+    },
+    "law": {
+      "actorId": "law",
+      "displayName": "托拉法爾加·羅",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "law.g1",
+          "text": "站好位置，別讓我連你一起搬走。"
+        },
+        {
+          "id": "law.g2",
+          "text": "你的破綻，比你說的話有用。"
+        },
+        {
+          "id": "law.g3",
+          "text": "手術已經開始了，現在才緊張太晚。"
+        }
+      ]
+    },
+    "robin": {
+      "actorId": "robin",
+      "displayName": "妮可·羅賓",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "robin.g1",
+          "text": "這種表情，待會兒應該會更有意思。"
+        },
+        {
+          "id": "robin.g2",
+          "text": "請別亂動，關節可沒有你想的那麼牢靠。"
+        },
+        {
+          "id": "robin.g3",
+          "text": "你留下的線索，已經足夠我讀懂弱點了。"
+        }
+      ]
+    },
+    "hancock": {
+      "actorId": "hancock",
+      "displayName": "波雅·漢考克",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "hancock.g1",
+          "text": "妾身願意出手，已是你難得的榮幸。"
+        },
+        {
+          "id": "hancock.g2",
+          "text": "把那失禮的態度收回去。"
+        },
+        {
+          "id": "hancock.g3",
+          "text": "既然擋住妾身的路，就要有付出代價的準備。"
+        }
+      ]
+    },
+    "carrot": {
+      "actorId": "carrot",
+      "displayName": "凱洛特",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "carrot.g1",
+          "text": "我看見空隙了！大家跟上！"
+        },
+        {
+          "id": "carrot.g2",
+          "text": "別只盯著前面，頭頂也要小心！"
+        },
+        {
+          "id": "carrot.g3",
+          "text": "這點高度，還攔不住我！"
+        }
+      ]
+    },
+    "ace": {
+      "actorId": "ace",
+      "displayName": "波特卡斯·D·艾斯",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "ace.g1",
+          "text": "火可不會照著你的規矩燒。"
+        },
+        {
+          "id": "ace.g2",
+          "text": "你退一步試試？我正好再往前一步。"
+        },
+        {
+          "id": "ace.g3",
+          "text": "別急著認輸，我還沒把火點旺呢。"
+        }
+      ]
+    },
+    "sabo": {
+      "actorId": "sabo",
+      "displayName": "薩波",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "sabo.g1",
+          "text": "這道火不會替壓迫別人的傢伙照路。"
+        },
+        {
+          "id": "sabo.g2",
+          "text": "抓住機會吧，我會把突破口打開。"
+        },
+        {
+          "id": "sabo.g3",
+          "text": "你守得住一面牆，守不住每個想離開的人。"
+        }
+      ]
+    },
+    "yamato": {
+      "actorId": "yamato",
+      "displayName": "大和",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "yamato.g1",
+          "text": "好！這回換我先衝！"
+        },
+        {
+          "id": "yamato.g2",
+          "text": "別想用一條鎖鏈，決定我能走多遠！"
+        },
+        {
+          "id": "yamato.g3",
+          "text": "把路讓開，我還有想見的海！"
+        }
+      ]
+    },
+    "corazon": {
+      "actorId": "corazon",
+      "displayName": "柯拉松",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "corazon.g1",
+          "text": "別緊張，剛才跌倒只是我自己的問題。"
+        },
+        {
+          "id": "corazon.g2",
+          "text": "有些聲音，沒必要讓壞人聽見。"
+        },
+        {
+          "id": "corazon.g3",
+          "text": "你往前走，我會把身後照顧好。"
+        }
+      ]
+    },
+    "usopp": {
+      "actorId": "usopp",
+      "displayName": "騙人布",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "usopp.g1",
+          "text": "我先說，這招連我自己都覺得可怕！"
+        },
+        {
+          "id": "usopp.g2",
+          "text": "別看我退了兩步，那是狙擊手在選位置！"
+        },
+        {
+          "id": "usopp.g3",
+          "text": "瞄準完畢！現在後悔招惹我還來得及！"
+        }
+      ]
+    },
+    "chopper": {
+      "actorId": "chopper",
+      "displayName": "多尼多尼·喬巴",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "chopper.g1",
+          "text": "不准再拿別人的傷口開玩笑！"
+        },
+        {
+          "id": "chopper.g2",
+          "text": "我也能站在前面，別總把我藏在後面！"
+        },
+        {
+          "id": "chopper.g3",
+          "text": "傷藥留給夥伴，這一拳留給你！"
+        }
+      ]
+    },
+    "jinbe": {
+      "actorId": "jinbe",
+      "displayName": "吉貝爾",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "jinbe.g1",
+          "text": "腳步亂了，拳頭再重也站不穩。"
+        },
+        {
+          "id": "jinbe.g2",
+          "text": "把心定下來，海浪自然會替你讓路。"
+        },
+        {
+          "id": "jinbe.g3",
+          "text": "既然接下這場較量，老夫就會奉陪到底。"
+        }
+      ]
+    },
+    "brook": {
+      "actorId": "brook",
+      "displayName": "布魯克",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "brook.g1",
+          "text": "這段節奏太亂了，讓我替各位重新起拍。"
+        },
+        {
+          "id": "brook.g2",
+          "text": "別看我只剩骨頭，出劍可還俐落。"
+        },
+        {
+          "id": "brook.g3",
+          "text": "請仔細聽，最後一個音落下時就結束了。"
+        }
+      ]
+    },
+    "franky": {
+      "actorId": "franky",
+      "displayName": "佛朗基",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "franky.g1",
+          "text": "站遠點！這次的火力可不適合近看！"
+        },
+        {
+          "id": "franky.g2",
+          "text": "本大爺的改造，可不是擺著好看的！"
+        },
+        {
+          "id": "franky.g3",
+          "text": "接得下這招，我就承認你挺有眼光！"
+        }
+      ]
+    },
+    "oden": {
+      "actorId": "oden",
+      "displayName": "光月御田",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "oden.g1",
+          "text": "好大的陣仗！正合我意！"
+        },
+        {
+          "id": "oden.g2",
+          "text": "不踏出這一步，哪知道海的另一邊有什麼！"
+        },
+        {
+          "id": "oden.g3",
+          "text": "我的刀還沒盡興，可別先倒下！"
+        }
+      ]
+    },
+    "rayleigh": {
+      "actorId": "rayleigh",
+      "displayName": "西爾巴茲·雷利",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "rayleigh.g1",
+          "text": "別急著出手。強敵面前，更要看清楚。"
+        },
+        {
+          "id": "rayleigh.g2",
+          "text": "難得碰上像樣的對手，這回就多活動一下吧。"
+        },
+        {
+          "id": "rayleigh.g3",
+          "text": "別只防眼前那一招，想想接下來會發生什麼。"
+        }
+      ]
+    },
+    "garp": {
+      "actorId": "garp",
+      "displayName": "蒙其·D·卡普",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "garp.g1",
+          "text": "來！讓老夫看看你練得夠不夠！"
+        },
+        {
+          "id": "garp.g2",
+          "text": "別躲得那麼辛苦，正面接一拳吧！"
+        },
+        {
+          "id": "garp.g3",
+          "text": "哈哈哈！這點氣勢，可還推不動老夫！"
+        }
+      ]
+    },
+    "vivi": {
+      "actorId": "vivi",
+      "displayName": "薇薇",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "vivi.g1",
+          "text": "只要還有人站在身後，我就不會退開！"
+        },
+        {
+          "id": "vivi.g2",
+          "text": "這場戰鬥，不能再讓無辜的人付出代價！"
+        },
+        {
+          "id": "vivi.g3",
+          "text": "我會害怕，但我還是會走到你面前。"
+        }
+      ]
+    },
+    "koby": {
+      "actorId": "koby",
+      "displayName": "克比",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "koby.g1",
+          "text": "手還在抖也沒關係，我會把這一步踏穩！"
+        },
+        {
+          "id": "koby.g2",
+          "text": "我不是來逞強，是來把該做的事做好！"
+        },
+        {
+          "id": "koby.g3",
+          "text": "請讓開！這次我不會只站著看！"
+        }
+      ]
+    },
+    "smoker": {
+      "actorId": "smoker",
+      "displayName": "斯摩格",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "smoker.g1",
+          "text": "少拿漂亮話遮掩，先把你做的事交代清楚。"
+        },
+        {
+          "id": "smoker.g2",
+          "text": "煙散之前，你最好想好怎麼站穩。"
+        },
+        {
+          "id": "smoker.g3",
+          "text": "我追到這裡，可不是為了聽你討價還價。"
+        }
+      ]
+    },
+    "tashigi": {
+      "actorId": "tashigi",
+      "displayName": "達斯琪",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "tashigi.g1",
+          "text": "我握住這把刀，就不會把該守的地方讓出去。"
+        },
+        {
+          "id": "tashigi.g2",
+          "text": "我會看清楚這一劍，不再讓你從眼前溜走！"
+        },
+        {
+          "id": "tashigi.g3",
+          "text": "這一劍，我會用來守住該守的人。"
+        }
+      ]
+    },
+    "kuzan": {
+      "actorId": "kuzan",
+      "displayName": "庫山",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kuzan.g1",
+          "text": "唉，原本還想找個地方歇一會兒。"
+        },
+        {
+          "id": "kuzan.g2",
+          "text": "地面有點滑，腳步最好放輕。"
+        },
+        {
+          "id": "kuzan.g3",
+          "text": "別讓我為了一件麻煩事，再多繞一圈。"
+        }
+      ]
+    },
+    "fujitora": {
+      "actorId": "fujitora",
+      "displayName": "藤虎",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "fujitora.g1",
+          "text": "老夫看不見臉色，倒是聽得出心虛。"
+        },
+        {
+          "id": "fujitora.g2",
+          "text": "腳下這片土地，可承受不起更多哭聲了。"
+        },
+        {
+          "id": "fujitora.g3",
+          "text": "若閣下仍要往前，就讓老夫量量這份決心。"
+        }
+      ]
+    },
+    "bartolomeo": {
+      "actorId": "bartolomeo",
+      "displayName": "巴托洛米奧",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "bartolomeo.g1",
+          "text": "敢再往前一步，我就讓你撞個夠！"
+        },
+        {
+          "id": "bartolomeo.g2",
+          "text": "這面屏障後面的人，你一根手指也別想碰！"
+        },
+        {
+          "id": "bartolomeo.g3",
+          "text": "嘿嘿，想好用什麼姿勢撞上來了嗎？"
+        }
+      ]
+    },
+    "cavendish": {
+      "actorId": "cavendish",
+      "displayName": "卡文迪許",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "cavendish.g1",
+          "text": "燈光不夠？無妨，我的劍會替舞台添亮。"
+        },
+        {
+          "id": "cavendish.g2",
+          "text": "既然看著我，就別在最精彩的地方倒下。"
+        },
+        {
+          "id": "cavendish.g3",
+          "text": "這場勝利的主角，我可不打算讓人。"
+        }
+      ]
+    },
+    "kinemon": {
+      "actorId": "kinemon",
+      "displayName": "錦衛門",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kinemon.g1",
+          "text": "在下既已拔刀，便不會把背後留給賊人。"
+        },
+        {
+          "id": "kinemon.g2",
+          "text": "這一步，替那些未能同行的人一起踏出！"
+        },
+        {
+          "id": "kinemon.g3",
+          "text": "火勢再盛，也燒不斷武士的志氣！"
+        }
+      ]
+    },
+    "ivankov": {
+      "actorId": "ivankov",
+      "displayName": "安布里歐·伊娃科夫",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "ivankov.g1",
+          "text": "把垂頭喪氣的臉抬起來，表演要開始啦！"
+        },
+        {
+          "id": "ivankov.g2",
+          "text": "命運堵住門，就換個姿勢把門踹開！"
+        },
+        {
+          "id": "ivankov.g3",
+          "text": "想靠那點氣勢壓住我？還嫩得很呢！"
+        }
+      ]
+    },
+    "kuma": {
+      "actorId": "kuma",
+      "displayName": "巴索羅繆·熊",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kuma.g1",
+          "text": "這條路，不能讓你通過。"
+        },
+        {
+          "id": "kuma.g2",
+          "text": "你不必追問，我會承擔自己的選擇。"
+        },
+        {
+          "id": "kuma.g3",
+          "text": "先想清楚，自己還想守住什麼。"
+        }
+      ]
+    },
+    "dragon": {
+      "actorId": "dragon",
+      "displayName": "蒙其·D·龍",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "dragon.g1",
+          "text": "風吹向哪裡，從來不由高牆決定。"
+        },
+        {
+          "id": "dragon.g2",
+          "text": "這一戰不只為了眼前，也為了有人能走下去。"
+        },
+        {
+          "id": "dragon.g3",
+          "text": "把退路留給人民，進路由我們打開。"
+        }
+      ]
+    },
+    "kid": {
+      "actorId": "kid",
+      "displayName": "尤斯塔斯·基德",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kid.g1",
+          "text": "廢鐵都比你的膽子有用！"
+        },
+        {
+          "id": "kid.g2",
+          "text": "別擋路，我要連前面的牆一起拆掉！"
+        },
+        {
+          "id": "kid.g3",
+          "text": "盯緊了！被捲進去可別怪我！"
+        }
+      ]
+    },
+    "killer": {
+      "actorId": "killer",
+      "displayName": "基拉",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "killer.g1",
+          "text": "退半步，便足夠我繞到你的側面。"
+        },
+        {
+          "id": "killer.g2",
+          "text": "把雜音收起來，刀刃會說得更清楚。"
+        },
+        {
+          "id": "killer.g3",
+          "text": "我會把路切開，剩下的照原計畫走。"
+        }
+      ]
+    },
+    "perona": {
+      "actorId": "perona",
+      "displayName": "佩羅娜",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "perona.g1",
+          "text": "別在我面前擺出那麼有精神的樣子，真討厭。"
+        },
+        {
+          "id": "perona.g2",
+          "text": "快點垂頭喪氣吧，我還想早點回去休息。"
+        },
+        {
+          "id": "perona.g3",
+          "text": "嘻嘻，你的勇氣能撐過幾隻幽靈呢？"
+        }
+      ]
+    },
+    "mansherry": {
+      "actorId": "mansherry",
+      "displayName": "曼雪莉",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "mansherry.g1",
+          "text": "不准倒在這裡，大家還在等著一起回去！"
+        },
+        {
+          "id": "mansherry.g2",
+          "text": "我很小，可不是任你欺負的理由！"
+        },
+        {
+          "id": "mansherry.g3",
+          "text": "能救回一個人，我就絕不會少走那一步！"
+        }
+      ]
+    },
+    "whitebeard": {
+      "actorId": "whitebeard",
+      "displayName": "白鬍子",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "whitebeard.g1",
+          "text": "孩子們，站穩了！別被這陣風掀下去！"
+        },
+        {
+          "id": "whitebeard.g2",
+          "text": "海再寬，也容不下欺負我家人的傢伙。"
+        },
+        {
+          "id": "whitebeard.g3",
+          "text": "想從老夫身邊過去，就拿出像樣的膽量。"
+        }
+      ]
+    },
+    "jozu": {
+      "actorId": "jozu",
+      "displayName": "鑽石喬茲",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "jozu.g1",
+          "text": "撞過來。我倒想看看你有多硬。"
+        },
+        {
+          "id": "jozu.g2",
+          "text": "這裡由我擋住，別浪費機會。"
+        },
+        {
+          "id": "jozu.g3",
+          "text": "你那點力道，還不夠讓鑽石出現裂痕。"
+        }
+      ]
+    },
+    "vista": {
+      "actorId": "vista",
+      "displayName": "花劍比斯塔",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "vista.g1",
+          "text": "請把注意力留在劍上，花瓣可不會等人。"
+        },
+        {
+          "id": "vista.g2",
+          "text": "不錯的架勢，值得我好好回敬。"
+        },
+        {
+          "id": "vista.g3",
+          "text": "兩把刀都已出鞘，這場就別草草收場。"
+        }
+      ]
+    },
+    "izo": {
+      "actorId": "izo",
+      "displayName": "以藏",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "izo.g1",
+          "text": "腳步放輕，槍口可不會跟著你猶豫。"
+        },
+        {
+          "id": "izo.g2",
+          "text": "漂亮的決心，也得有本事守到最後。"
+        },
+        {
+          "id": "izo.g3",
+          "text": "別打亂我的節奏，下一發已經準備好了。"
+        }
+      ]
+    },
+    "little_oars_jr": {
+      "actorId": "little_oars_jr",
+      "displayName": "小奧茲 Jr.",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "little_oars_jr.g1",
+          "text": "再窄的路，我也要替大家走出來！"
+        },
+        {
+          "id": "little_oars_jr.g2",
+          "text": "抓緊我身後，別被這一陣風吹散！"
+        },
+        {
+          "id": "little_oars_jr.g3",
+          "text": "我還站得住，不用替我停下來！"
+        }
+      ]
+    },
+    "squard": {
+      "actorId": "squard",
+      "displayName": "大渦蜘蛛・史庫亞德",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "squard.g1",
+          "text": "我的刀還在，輪不到你替我決定退路！"
+        },
+        {
+          "id": "squard.g2",
+          "text": "別以為一句挑撥，就能讓我再把刀指錯方向！"
+        },
+        {
+          "id": "squard.g3",
+          "text": "這次我會看清楚，誰才是真正的敵人！"
+        }
+      ]
+    },
+    "marco": {
+      "actorId": "marco",
+      "displayName": "馬可",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "marco.g1",
+          "text": "別急，傷口還沒你喊得那麼嚴重。"
+        },
+        {
+          "id": "marco.g2",
+          "text": "天空這邊交給我，你們顧好腳下。"
+        },
+        {
+          "id": "marco.g3",
+          "text": "想讓我們倒下，光打一次可不夠啊。"
+        }
+      ]
+    },
+    "prison_buggy": {
+      "actorId": "prison_buggy",
+      "displayName": "囚服巴奇",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "prison_buggy.g1",
+          "text": "都看好了！這才是華麗的出場！"
+        },
+        {
+          "id": "prison_buggy.g2",
+          "text": "喂！誰准你盯著本大爺的鼻子看！"
+        },
+        {
+          "id": "prison_buggy.g3",
+          "text": "先說好，待會兒的勝利一定要算我一份！"
+        }
+      ]
+    },
+    "prison_mr3": {
+      "actorId": "prison_mr3",
+      "displayName": "囚服Mr.3",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "prison_mr3.g1",
+          "text": "先別碰！那是我才剛完成的作品！"
+        },
+        {
+          "id": "prison_mr3.g2",
+          "text": "野蠻人只會出拳，藝術家早就把路封好了。"
+        },
+        {
+          "id": "prison_mr3.g3",
+          "text": "讓我想想……有了，你就站在那裡別動！"
+        }
+      ]
+    },
+    "prison_mr2_bon_clay": {
+      "actorId": "prison_mr2_bon_clay",
+      "displayName": "囚服Mr.2",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "prison_mr2_bon_clay.g1",
+          "text": "來吧！今天也要跳得堂堂正正！"
+        },
+        {
+          "id": "prison_mr2_bon_clay.g2",
+          "text": "這雙腿要往哪裡去，由我的心決定！"
+        },
+        {
+          "id": "prison_mr2_bon_clay.g3",
+          "text": "只要還能轉身，我就能再替朋友撐一下！"
+        }
+      ]
+    },
+    "prison_mr1_daz_bones": {
+      "actorId": "prison_mr1_daz_bones",
+      "displayName": "囚服Mr.1",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "prison_mr1_daz_bones.g1",
+          "text": "廢話留著。能不能斬開，試了就知道。"
+        },
+        {
+          "id": "prison_mr1_daz_bones.g2",
+          "text": "站近一點，你才看得清自己的破綻。"
+        },
+        {
+          "id": "prison_mr1_daz_bones.g3",
+          "text": "你想讓我退，就得先讓鋼鐵彎下來。"
+        }
+      ]
+    },
+    "prison_crocodile": {
+      "actorId": "prison_crocodile",
+      "displayName": "囚服克洛克達爾",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "prison_crocodile.g1",
+          "text": "別急著慶祝，你只是踩進我準備好的地方。"
+        },
+        {
+          "id": "prison_crocodile.g2",
+          "text": "想談條件？先拿出值得我聽的東西。"
+        },
+        {
+          "id": "prison_crocodile.g3",
+          "text": "風沙一過，你那點氣勢還剩多少？"
+        }
+      ]
+    },
+    "custom_mp3l6s8w": {
+      "actorId": "custom_mp3l6s8w",
+      "displayName": "烏塔",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "custom_mp3l6s8w.g1",
+          "text": "聽好了，這次的舞台不會讓你隨便搗亂！"
+        },
+        {
+          "id": "custom_mp3l6s8w.g2",
+          "text": "你的表情太緊繃啦，先跟上我的節拍！"
+        },
+        {
+          "id": "custom_mp3l6s8w.g3",
+          "text": "歌還沒唱完，我可不准你替我收場！"
+        }
+      ]
+    },
+    "custom_mp3l85c1": {
+      "actorId": "custom_mp3l85c1",
+      "displayName": "鷹眼",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "custom_mp3l85c1.g1",
+          "text": "你的站位，已經先告訴我答案了。"
+        },
+        {
+          "id": "custom_mp3l85c1.g2",
+          "text": "別急著證明自己，先接住眼前這一刀。"
+        },
+        {
+          "id": "custom_mp3l85c1.g3",
+          "text": "若只有這種程度，就別讓我再換個站姿。"
+        }
+      ]
+    },
+    "custom_mp3la6fr": {
+      "actorId": "custom_mp3la6fr",
+      "displayName": "哥爾·D·羅傑",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "custom_mp3la6fr.g1",
+          "text": "哈哈！這片海總算又熱鬧起來了！"
+        },
+        {
+          "id": "custom_mp3la6fr.g2",
+          "text": "有本事就再往前一步，讓我看個痛快！"
+        },
+        {
+          "id": "custom_mp3la6fr.g3",
+          "text": "別把好好的冒險，打成一場無聊的爭吵！"
+        }
+      ]
+    },
+    "mohji": {
+      "actorId": "mohji",
+      "displayName": "摩奇",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "mohji.g1",
+          "text": "利基，盯住他！這回可別先去找吃的！"
+        },
+        {
+          "id": "mohji.g2",
+          "text": "對付你，還用不著本馴獸師使出全力！"
+        },
+        {
+          "id": "mohji.g3",
+          "text": "別想從旁邊溜走，利基的鼻子可靈著呢！"
+        }
+      ]
+    },
+    "cabaji": {
+      "actorId": "cabaji",
+      "displayName": "卡巴吉",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "cabaji.g1",
+          "text": "看清楚了！這招可不是街頭雜耍！"
+        },
+        {
+          "id": "cabaji.g2",
+          "text": "別急，我還有更精彩的節目沒端上來！"
+        },
+        {
+          "id": "cabaji.g3",
+          "text": "輪子一轉，你最好已經找到躲的地方！"
+        }
+      ]
+    },
+    "alvida": {
+      "actorId": "alvida",
+      "displayName": "亞爾麗塔",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "alvida.g1",
+          "text": "擋在我面前，可得先掂掂自己的分量。"
+        },
+        {
+          "id": "alvida.g2",
+          "text": "別碰壞我的心情，你可賠不起。"
+        },
+        {
+          "id": "alvida.g3",
+          "text": "想讓我狼狽？先追得上我再說。"
+        }
+      ]
+    },
+    "axe_hand_morgan": {
+      "actorId": "axe_hand_morgan",
+      "displayName": "斧手摩根",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "axe_hand_morgan.g1",
+          "text": "抬頭看清楚，這裡由誰下命令！"
+        },
+        {
+          "id": "axe_hand_morgan.g2",
+          "text": "還敢站著？看來你沒學會服從。"
+        },
+        {
+          "id": "axe_hand_morgan.g3",
+          "text": "我的斧頭落下以前，最好先把嘴閉上！"
+        }
+      ]
+    },
+    "krieg": {
+      "actorId": "krieg",
+      "displayName": "克利克",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "krieg.g1",
+          "text": "把能用的武器全搬上來！贏了才算本事！"
+        },
+        {
+          "id": "krieg.g2",
+          "text": "你看得到的，只是我裝備裡最不起眼的一件！"
+        },
+        {
+          "id": "krieg.g3",
+          "text": "別跟我談公平，戰場可不會替弱者講理！"
+        }
+      ]
+    },
+    "gin": {
+      "actorId": "gin",
+      "displayName": "阿金",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "gin.g1",
+          "text": "我會記得欠下的恩，但這一棍不會偏。"
+        },
+        {
+          "id": "gin.g2",
+          "text": "別把我的沉默，當成不敢出手。"
+        },
+        {
+          "id": "gin.g3",
+          "text": "退開吧，接下來可沒有容易收手的招式。"
+        }
+      ]
+    },
+    "kuro": {
+      "actorId": "kuro",
+      "displayName": "克洛",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kuro.g1",
+          "text": "你注意到時，我通常已經走過去了。"
+        },
+        {
+          "id": "kuro.g2",
+          "text": "多餘的動作，只會讓計畫變得難看。"
+        },
+        {
+          "id": "kuro.g3",
+          "text": "安靜些，我不喜歡收尾時還有雜音。"
+        }
+      ]
+    },
+    "mr5": {
+      "actorId": "mr5",
+      "displayName": "Mr.5",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "mr5.g1",
+          "text": "站得那麼近，是嫌火花不夠清楚嗎？"
+        },
+        {
+          "id": "mr5.g2",
+          "text": "別費心找引線了，危險就在你眼前。"
+        },
+        {
+          "id": "mr5.g3",
+          "text": "這點小場面，一聲爆炸就夠了。"
+        }
+      ]
+    },
+    "miss_valentine": {
+      "actorId": "miss_valentine",
+      "displayName": "Miss Valentine",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "miss_valentine.g1",
+          "text": "抬頭呀，不然你連怎麼輸的都看不見。"
+        },
+        {
+          "id": "miss_valentine.g2",
+          "text": "放心，我落下來的時候可不會輕飄飄的。"
+        },
+        {
+          "id": "miss_valentine.g3",
+          "text": "你那麼著急往前，是想替我接住落點嗎？"
+        }
+      ]
+    },
+    "wapol": {
+      "actorId": "wapol",
+      "displayName": "瓦波爾",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "wapol.g1",
+          "text": "那邊的鐵也搬過來，本王還沒吃飽！"
+        },
+        {
+          "id": "wapol.g2",
+          "text": "敢擋本王的路？連路一起吞了！"
+        },
+        {
+          "id": "wapol.g3",
+          "text": "別拿那點小東西敷衍我，全部交出來！"
+        }
+      ]
+    },
+    "caesar_clown": {
+      "actorId": "caesar_clown",
+      "displayName": "凱薩·庫朗",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "caesar_clown.g1",
+          "text": "咻囉囉囉！你們正好替我的實驗湊齊條件！"
+        },
+        {
+          "id": "caesar_clown.g2",
+          "text": "別亂跑，數據還沒記完呢！"
+        },
+        {
+          "id": "caesar_clown.g3",
+          "text": "什麼危險？這可是天才才懂的成果！"
+        }
+      ]
+    },
+    "arlong": {
+      "actorId": "arlong",
+      "displayName": "阿龍",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "arlong.g1",
+          "text": "在這片海上，你那點力氣能算什麼！"
+        },
+        {
+          "id": "arlong.g2",
+          "text": "把頭抬起來，我要看清楚你害怕的樣子。"
+        },
+        {
+          "id": "arlong.g3",
+          "text": "別急著逃，這筆帳還沒收完！"
+        }
+      ]
+    },
+    "kuroobi": {
+      "actorId": "kuroobi",
+      "displayName": "克羅歐比",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kuroobi.g1",
+          "text": "站姿不穩，再大的力氣也只會白費。"
+        },
+        {
+          "id": "kuroobi.g2",
+          "text": "節奏先亂的人，撐不到最後。"
+        },
+        {
+          "id": "kuroobi.g3",
+          "text": "魚人空手道，可不是靠吼聲分勝負。"
+        }
+      ]
+    },
+    "hatchan": {
+      "actorId": "hatchan",
+      "displayName": "小八",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "hatchan.g1",
+          "text": "紐！六隻手都準備好了，你可別數到一半！"
+        },
+        {
+          "id": "hatchan.g2",
+          "text": "這回我會看清楚再揮刀，不會再弄錯方向！"
+        },
+        {
+          "id": "hatchan.g3",
+          "text": "想從空隙過去？那就試試我另外幾把刀！"
+        }
+      ]
+    },
+    "bellamy": {
+      "actorId": "bellamy",
+      "displayName": "貝拉密",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "bellamy.g1",
+          "text": "踩穩了，下一次可沒那麼容易看清我！"
+        },
+        {
+          "id": "bellamy.g2",
+          "text": "這條路是我自己選的，輪不到你來嘲笑！"
+        },
+        {
+          "id": "bellamy.g3",
+          "text": "我的彈力，可不是拿來陪你熱身的！"
+        }
+      ]
+    },
+    "foxy": {
+      "actorId": "foxy",
+      "displayName": "銀狐弗克西",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "foxy.g1",
+          "text": "看你那麼急，我就好心讓你慢一點！"
+        },
+        {
+          "id": "foxy.g2",
+          "text": "費費費！規則當然要仔細聽我說完！"
+        },
+        {
+          "id": "foxy.g3",
+          "text": "你以為抓到時機了？那正是我留給你的！"
+        }
+      ]
+    },
+    "hody_jones": {
+      "actorId": "hody_jones",
+      "displayName": "霍迪·瓊斯",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "hody_jones.g1",
+          "text": "這點力量，也想從魚人面前闖過去？"
+        },
+        {
+          "id": "hody_jones.g2",
+          "text": "你越急著掙脫，我越有耐心陪你。"
+        },
+        {
+          "id": "hody_jones.g3",
+          "text": "把那點反抗留著，我要一次踩碎！"
+        }
+      ]
+    },
+    "enel": {
+      "actorId": "enel",
+      "displayName": "艾尼路",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "enel.g1",
+          "text": "雲層之下的聲音，也敢吵到神面前？"
+        },
+        {
+          "id": "enel.g2",
+          "text": "第一道雷光還沒落下，你就打算往後退？"
+        },
+        {
+          "id": "enel.g3",
+          "text": "繼續仰望吧，雷聲會替我回答。"
+        }
+      ]
+    },
+    "gecko_moria": {
+      "actorId": "gecko_moria",
+      "displayName": "月光莫利亞",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "gecko_moria.g1",
+          "text": "嘻嘻嘻！站好，讓我瞧瞧你的影子值不值錢！"
+        },
+        {
+          "id": "gecko_moria.g2",
+          "text": "別那麼勤快，讓別人替我出力多省事！"
+        },
+        {
+          "id": "gecko_moria.g3",
+          "text": "等你的影子歸我，這場才真正有趣！"
+        }
+      ]
+    },
+    "doflamingo": {
+      "actorId": "doflamingo",
+      "displayName": "多佛朗明哥",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "doflamingo.g1",
+          "text": "咈咈咈，你掙扎的樣子倒比演說有意思。"
+        },
+        {
+          "id": "doflamingo.g2",
+          "text": "台上站著誰，不是靠你喊得多響決定的。"
+        },
+        {
+          "id": "doflamingo.g3",
+          "text": "再走一步吧，看看扯動的是哪一根線。"
+        }
+      ]
+    },
+    "pica": {
+      "actorId": "pica",
+      "displayName": "皮卡",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "pica.g1",
+          "text": "你剛才……是在笑我的聲音嗎？"
+        },
+        {
+          "id": "pica.g2",
+          "text": "連腳下的石頭都不認得，還敢往前走！"
+        },
+        {
+          "id": "pica.g3",
+          "text": "這座戰場有多大，你就得躲多遠！"
+        }
+      ]
+    },
+    "sentomaru": {
+      "actorId": "sentomaru",
+      "displayName": "戰桃丸",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "sentomaru.g1",
+          "text": "別打算套我的話，我的嘴可緊得很！"
+        },
+        {
+          "id": "sentomaru.g2",
+          "text": "正面過來，讓你看看什麼叫守得住！"
+        },
+        {
+          "id": "sentomaru.g3",
+          "text": "我負責的地方，沒打算讓任何人闖過去！"
+        }
+      ]
+    },
+    "impel_l1_sadie": {
+      "actorId": "impel_l1_sadie",
+      "displayName": "小莎蒂",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "impel_l1_sadie.g1",
+          "text": "再跑快一點呀，這樣追起來才有意思。"
+        },
+        {
+          "id": "impel_l1_sadie.g2",
+          "text": "獄卒獸，別讓客人以為能輕鬆走出去。"
+        },
+        {
+          "id": "impel_l1_sadie.g3",
+          "text": "聽見腳步聲了嗎？好戲現在才開始呢。"
+        }
+      ]
+    },
+    "impel_l2_minochihuahua": {
+      "actorId": "impel_l2_minochihuahua",
+      "displayName": "米諾吉娃娃",
+      "presentation": "action",
+      "general": [
+        {
+          "id": "impel_l2_minochihuahua.g1",
+          "text": "米諾吉娃娃壓低身體，齒間擠出急促的低吼。"
+        },
+        {
+          "id": "impel_l2_minochihuahua.g2",
+          "text": "細小的耳朵猛然豎起，獄卒獸拖著武器逼近。"
+        },
+        {
+          "id": "impel_l2_minochihuahua.g3",
+          "text": "牠在地面刨出兩道痕跡，擋住通道中央。"
+        }
+      ]
+    },
+    "impel_l3_minokoala": {
+      "actorId": "impel_l3_minokoala",
+      "displayName": "米諾無尾熊",
+      "presentation": "action",
+      "general": [
+        {
+          "id": "impel_l3_minokoala.g1",
+          "text": "米諾無尾熊扭動肩膀，握緊手中的武器。"
+        },
+        {
+          "id": "impel_l3_minokoala.g2",
+          "text": "沉重的腳步突然停住，下一刻便朝前撲去。"
+        },
+        {
+          "id": "impel_l3_minokoala.g3",
+          "text": "獄卒獸歪過頭，將陰影壓到對手腳邊。"
+        }
+      ]
+    },
+    "impel_l4_minotaur": {
+      "actorId": "impel_l4_minotaur",
+      "displayName": "米諾陶爾",
+      "presentation": "action",
+      "general": [
+        {
+          "id": "impel_l4_minotaur.g1",
+          "text": "米諾陶爾用鼻息震散塵土，將狼牙棒扛上肩。"
+        },
+        {
+          "id": "impel_l4_minotaur.g2",
+          "text": "龐大的身影側過牛角，封住逃跑的空隙。"
+        },
+        {
+          "id": "impel_l4_minotaur.g3",
+          "text": "獄卒獸一腳踏碎石屑，低吼聲沿牢牆傳開。"
+        }
+      ]
+    },
+    "impel_l5_minorhino": {
+      "actorId": "impel_l5_minorhino",
+      "displayName": "米諾犀牛",
+      "presentation": "action",
+      "general": [
+        {
+          "id": "impel_l5_minorhino.g1",
+          "text": "米諾犀牛將重心壓低，尖角直指前方。"
+        },
+        {
+          "id": "impel_l5_minorhino.g2",
+          "text": "獄卒獸拖動鎖鏈，沿著牆根緩緩逼近。"
+        },
+        {
+          "id": "impel_l5_minorhino.g3",
+          "text": "鼻息揚起一圈塵土，厚重的身體堵住去路。"
+        }
+      ]
+    },
+    "impel_l6_hannyabal": {
+      "actorId": "impel_l6_hannyabal",
+      "displayName": "般若拔",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "impel_l6_hannyabal.g1",
+          "text": "誰、誰都不准越過這裡！這可是我的地盤！"
+        },
+        {
+          "id": "impel_l6_hannyabal.g2",
+          "text": "別以為我只會說大話，我也是守監獄的人！"
+        },
+        {
+          "id": "impel_l6_hannyabal.g3",
+          "text": "副署長也好什麼都好，今天我一定守住！"
+        }
+      ]
+    },
+    "magellan": {
+      "actorId": "magellan",
+      "displayName": "麥哲倫",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "magellan.g1",
+          "text": "走到這一步，就別指望我會輕易放你通過。"
+        },
+        {
+          "id": "magellan.g2",
+          "text": "別再靠近，這是最後一次警告。"
+        },
+        {
+          "id": "magellan.g3",
+          "text": "職責就在這裡，我不會讓任何人再多走一步。"
+        }
+      ]
+    },
+    "kizaru": {
+      "actorId": "kizaru",
+      "displayName": "黃猿",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kizaru.g1",
+          "text": "喔唷，現在的年輕人真是一個比一個急。"
+        },
+        {
+          "id": "kizaru.g2",
+          "text": "別那麼緊張，眨個眼也許就結束了呢。"
+        },
+        {
+          "id": "kizaru.g3",
+          "text": "走得太快，可要當心看不見轉彎啊。"
+        }
+      ]
+    },
+    "akainu": {
+      "actorId": "akainu",
+      "displayName": "赤犬",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "akainu.g1",
+          "text": "把退路當選擇的人，沒有資格擋在這裡！"
+        },
+        {
+          "id": "akainu.g2",
+          "text": "既然站到海賊那邊，就一起承擔後果！"
+        },
+        {
+          "id": "akainu.g3",
+          "text": "這一步不會因為你的求情而停下。"
+        }
+      ]
+    },
+    "sengoku": {
+      "actorId": "sengoku",
+      "displayName": "戰國元帥",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "sengoku.g1",
+          "text": "收起那些小算盤，戰場上沒那麼多僥倖。"
+        },
+        {
+          "id": "sengoku.g2",
+          "text": "先看清整個局面，再決定你要站在哪裡。"
+        },
+        {
+          "id": "sengoku.g3",
+          "text": "老夫既然出面，就不會任由局勢繼續失控。"
+        }
+      ]
+    },
+    "yonko_blackbeard": {
+      "actorId": "yonko_blackbeard",
+      "displayName": "黑鬍子",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "yonko_blackbeard.g1",
+          "text": "賊哈哈哈！你護得那麼緊，一定藏著好東西！"
+        },
+        {
+          "id": "yonko_blackbeard.g2",
+          "text": "別怕把場面鬧大，我正等著這一刻！"
+        },
+        {
+          "id": "yonko_blackbeard.g3",
+          "text": "這片海越亂，才越有值得伸手的東西！"
+        }
+      ]
+    },
+    "yonko_shanks": {
+      "actorId": "yonko_shanks",
+      "displayName": "紅髮香克斯",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "yonko_shanks.g1",
+          "text": "刀都拔了，就把那份決心留到最後吧。"
+        },
+        {
+          "id": "yonko_shanks.g2",
+          "text": "這裡沒有能讓你輕鬆回頭的空隙。"
+        },
+        {
+          "id": "yonko_shanks.g3",
+          "text": "別拿夥伴的命，替自己的膽怯找藉口。"
+        }
+      ]
+    },
+    "yonko_bigmom": {
+      "actorId": "yonko_bigmom",
+      "displayName": "大媽",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "yonko_bigmom.g1",
+          "text": "嘛嘛嘛嘛！還沒付清代價，就想離開？"
+        },
+        {
+          "id": "yonko_bigmom.g2",
+          "text": "既然敢來挑戰，就照我的心情陪下去！"
+        },
+        {
+          "id": "yonko_bigmom.g3",
+          "text": "把你最捨不得的東西拿出來，讓我看看！"
+        }
+      ]
+    },
+    "yonko_kaido": {
+      "actorId": "yonko_kaido",
+      "displayName": "凱多",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "yonko_kaido.g1",
+          "text": "喔囉囉囉！再用力些，我還沒覺得痛快！"
+        },
+        {
+          "id": "yonko_kaido.g2",
+          "text": "你背著的那點野心，扛得住這一棒嗎？"
+        },
+        {
+          "id": "yonko_kaido.g3",
+          "text": "別忙著替自己留後路，先想想怎麼站起來！"
+        }
+      ]
+    },
+    "final_imu": {
+      "actorId": "final_imu",
+      "displayName": "伊姆",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "final_imu.g1",
+          "text": "抬頭，已是逾越。"
+        },
+        {
+          "id": "final_imu.g2",
+          "text": "你們的名字，沒有留下的必要。"
+        },
+        {
+          "id": "final_imu.g3",
+          "text": "這片海，不需要另一種答案。"
+        }
+      ]
+    },
+    "god_knight_killingham": {
+      "actorId": "god_knight_killingham",
+      "displayName": "麒麟格姆",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "god_knight_killingham.g1",
+          "text": "你的恐懼，已經替我選好對手了。"
+        },
+        {
+          "id": "god_knight_killingham.g2",
+          "text": "閉上眼睛也沒用，噩夢不會因此散去。"
+        },
+        {
+          "id": "god_knight_killingham.g3",
+          "text": "把膽量留著吧，等夢裡的東西走到面前再用。"
+        }
+      ]
+    },
+    "god_knight_sommers": {
+      "actorId": "god_knight_sommers",
+      "displayName": "索瑪茲",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "god_knight_sommers.g1",
+          "text": "還想伸手救人？先抱緊那份疼痛吧。"
+        },
+        {
+          "id": "god_knight_sommers.g2",
+          "text": "愛喊得越響，接下來的哭聲才越好聽。"
+        },
+        {
+          "id": "god_knight_sommers.g3",
+          "text": "別急著掙扎，荊棘纏緊時才是好戲。"
+        }
+      ]
+    },
+    "spandam": {
+      "actorId": "spandam",
+      "displayName": "斯潘達姆",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "spandam.g1",
+          "text": "你們都看著幹什麼！快去把他攔下來！"
+        },
+        {
+          "id": "spandam.g2",
+          "text": "我可是有權下命令的人，聽清楚沒有！"
+        },
+        {
+          "id": "spandam.g3",
+          "text": "喂！那個傢伙怎麼還能站起來！"
+        }
+      ]
+    },
+    "blueno": {
+      "actorId": "blueno",
+      "displayName": "布魯諾",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "blueno.g1",
+          "text": "門關上的時候，你才會知道自己站錯了位置。"
+        },
+        {
+          "id": "blueno.g2",
+          "text": "不必找出口，我會替你選好。"
+        },
+        {
+          "id": "blueno.g3",
+          "text": "你看得到的牆，未必是我需要經過的路。"
+        }
+      ]
+    },
+    "kalifa": {
+      "actorId": "kalifa",
+      "displayName": "卡莉法",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kalifa.g1",
+          "text": "先把那副狼狽的樣子整理好，再來質問我。"
+        },
+        {
+          "id": "kalifa.g2",
+          "text": "說話太大聲，並不能替你增加勝算。"
+        },
+        {
+          "id": "kalifa.g3",
+          "text": "別碰錯地方，這裡沒有值得你放心的角落。"
+        }
+      ]
+    },
+    "jabra": {
+      "actorId": "jabra",
+      "displayName": "加布拉",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "jabra.g1",
+          "text": "哈哈哈！你該不會連我隨口編的話都信吧？"
+        },
+        {
+          "id": "jabra.g2",
+          "text": "把背後露給狼，可不是什麼聰明主意。"
+        },
+        {
+          "id": "jabra.g3",
+          "text": "別只顧著提防牙齒，我的手也沒閒著！"
+        }
+      ]
+    },
+    "kaku": {
+      "actorId": "kaku",
+      "displayName": "卡古",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "kaku.g1",
+          "text": "老夫的劍，可不會因為地方窄就施展不開。"
+        },
+        {
+          "id": "kaku.g2",
+          "text": "站遠些看清楚，這一擊要從哪裡過去。"
+        },
+        {
+          "id": "kaku.g3",
+          "text": "別光盯著外形，招式的分量才要緊。"
+        }
+      ]
+    },
+    "lucci": {
+      "actorId": "lucci",
+      "displayName": "羅布・路基",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "lucci.g1",
+          "text": "你的抵抗，只會讓結果來得更直接。"
+        },
+        {
+          "id": "lucci.g2",
+          "text": "我會記住剛才的破綻，你最好也記住。"
+        },
+        {
+          "id": "lucci.g3",
+          "text": "別把喘息的空檔，誤認成我已經收手。"
+        }
+      ]
+    },
+    "postgame_shiki": {
+      "actorId": "postgame_shiki",
+      "displayName": "金獅子史基",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_shiki.g1",
+          "text": "桀哈哈！地面都不牢靠了，你還想站哪裡？"
+        },
+        {
+          "id": "postgame_shiki.g2",
+          "text": "讓我看看，這一代的海賊能掀起多大的浪！"
+        },
+        {
+          "id": "postgame_shiki.g3",
+          "text": "想攔住老子的計畫，就先把天空拉下來！"
+        }
+      ]
+    },
+    "postgame_gild_tesoro": {
+      "actorId": "postgame_gild_tesoro",
+      "displayName": "吉爾德・泰佐洛",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_gild_tesoro.g1",
+          "text": "你付得起入場的代價，可未必付得起離場。"
+        },
+        {
+          "id": "postgame_gild_tesoro.g2",
+          "text": "看看四周，連你的影子都站在我的舞台上。"
+        },
+        {
+          "id": "postgame_gild_tesoro.g3",
+          "text": "別急著叫價，我還沒決定要不要收下你。"
+        }
+      ]
+    },
+    "postgame_zephyr": {
+      "actorId": "postgame_zephyr",
+      "displayName": "澤法",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_zephyr.g1",
+          "text": "把拳頭握穩，別讓信念比腳步先退。"
+        },
+        {
+          "id": "postgame_zephyr.g2",
+          "text": "這場課不會留到明天，現在就拿出答案！"
+        },
+        {
+          "id": "postgame_zephyr.g3",
+          "text": "光有漂亮的理想，擋不住真正的炮火。"
+        }
+      ]
+    },
+    "postgame_tot_musica": {
+      "actorId": "postgame_tot_musica",
+      "displayName": "Tot Musica",
+      "presentation": "action",
+      "general": [
+        {
+          "id": "postgame_tot_musica.g1",
+          "text": "不協和的樂音撕開寂靜，黑影隨著低音膨脹。"
+        },
+        {
+          "id": "postgame_tot_musica.g2",
+          "text": "巨大的輪廓越過樂譜般的裂光，將陰影投向戰場。"
+        },
+        {
+          "id": "postgame_tot_musica.g3",
+          "text": "無形的合唱層層壓近，連腳下的空氣都在震動。"
+        }
+      ]
+    },
+    "postgame_douglas_bullet": {
+      "actorId": "postgame_douglas_bullet",
+      "displayName": "道格拉斯・巴雷特",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_douglas_bullet.g1",
+          "text": "站著別動，讓我量量你究竟有多強！"
+        },
+        {
+          "id": "postgame_douglas_bullet.g2",
+          "text": "別把同伴抬出來，我問的是你自己的拳頭！"
+        },
+        {
+          "id": "postgame_douglas_bullet.g3",
+          "text": "再堆多少東西過來，我也會連根碾碎！"
+        }
+      ]
+    },
+    "postgame_saga": {
+      "actorId": "postgame_saga",
+      "displayName": "薩卡／七星劍",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_saga.g1",
+          "text": "劍握在我手裡，這場就由我來決定。"
+        },
+        {
+          "id": "postgame_saga.g2",
+          "text": "別拿過去的名字，叫我收起現在的刀。"
+        },
+        {
+          "id": "postgame_saga.g3",
+          "text": "還要往前嗎？這道劍光可不認得回頭路。"
+        }
+      ]
+    },
+    "postgame_vinsmoke_judge": {
+      "actorId": "postgame_vinsmoke_judge",
+      "displayName": "文斯莫克・伽治",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_vinsmoke_judge.g1",
+          "text": "感情只會讓判斷變慢，退下的人沒有價值。"
+        },
+        {
+          "id": "postgame_vinsmoke_judge.g2",
+          "text": "看清楚，力量必須經得起結果的檢驗。"
+        },
+        {
+          "id": "postgame_vinsmoke_judge.g3",
+          "text": "我的命令還沒結束，你就不能擅自倒下。"
+        }
+      ]
+    },
+    "postgame_king": {
+      "actorId": "postgame_king",
+      "displayName": "KING",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_king.g1",
+          "text": "若只盯著火焰，你就看不見刀鋒。"
+        },
+        {
+          "id": "postgame_king.g2",
+          "text": "後面的路，你沒有通過的資格。"
+        },
+        {
+          "id": "postgame_king.g3",
+          "text": "還有餘力就站穩，別讓我白拔這把刀。"
+        }
+      ]
+    },
+    "postgame_charlotte_katakuri": {
+      "actorId": "postgame_charlotte_katakuri",
+      "displayName": "夏洛特・卡塔庫栗",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_charlotte_katakuri.g1",
+          "text": "把腳步收好，你下一次的猶豫已經露出來了。"
+        },
+        {
+          "id": "postgame_charlotte_katakuri.g2",
+          "text": "別只看招式，先想想自己會往哪裡退。"
+        },
+        {
+          "id": "postgame_charlotte_katakuri.g3",
+          "text": "你還願意站起來，那我就認真奉陪。"
+        }
+      ]
+    },
+    "postgame_patrick_redfield": {
+      "actorId": "postgame_patrick_redfield",
+      "displayName": "帕特里克・雷德菲爾德",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_patrick_redfield.g1",
+          "text": "人聚得再多，也遮不住心裡那點算計。"
+        },
+        {
+          "id": "postgame_patrick_redfield.g2",
+          "text": "站近些，你的沉默比言語更容易讀懂。"
+        },
+        {
+          "id": "postgame_patrick_redfield.g3",
+          "text": "別急著猜我的下一步，先藏好你自己的。"
+        }
+      ]
+    },
+    "postgame_loki": {
+      "actorId": "postgame_loki",
+      "displayName": "洛基",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_loki.g1",
+          "text": "鎖得住手腳，未必鎖得住接下來的風暴。"
+        },
+        {
+          "id": "postgame_loki.g2",
+          "text": "把你的膽子拿穩，別被這一聲笑嚇落了。"
+        },
+        {
+          "id": "postgame_loki.g3",
+          "text": "敢走到我面前，就別只剩仰頭的力氣。"
+        }
+      ]
+    },
+    "postgame_oars": {
+      "actorId": "postgame_oars",
+      "displayName": "魔人歐斯",
+      "presentation": "action",
+      "general": [
+        {
+          "id": "postgame_oars.g1",
+          "text": "歐斯的巨掌掠過頭頂，陰影瞬間蓋住整片地面。"
+        },
+        {
+          "id": "postgame_oars.g2",
+          "text": "巨大的身軀向前一傾，腳下的碎石隨之震動。"
+        },
+        {
+          "id": "postgame_oars.g3",
+          "text": "沉重的低吼在空中迴盪，巨拳已擋住去路。"
+        }
+      ]
+    },
+    "postgame_aramaki": {
+      "actorId": "postgame_aramaki",
+      "displayName": "綠牛／荒牧",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_aramaki.g1",
+          "text": "別急著拔腳，這片地面已經熱鬧起來了。"
+        },
+        {
+          "id": "postgame_aramaki.g2",
+          "text": "躲到哪裡都一樣，根鬚會替我找到路。"
+        },
+        {
+          "id": "postgame_aramaki.g3",
+          "text": "站得那麼高，也得先問腳下肯不肯放人。"
+        }
+      ]
+    },
+    "postgame_rocks": {
+      "actorId": "postgame_rocks",
+      "displayName": "洛克斯・D・吉貝克",
+      "presentation": "speech",
+      "general": [
+        {
+          "id": "postgame_rocks.g1",
+          "text": "擋在我前面，就拿出值得記住的本事！"
+        },
+        {
+          "id": "postgame_rocks.g2",
+          "text": "小打小鬧到此為止，這場由老子接手！"
+        },
+        {
+          "id": "postgame_rocks.g3",
+          "text": "世界的位子，我可不打算坐在誰的下面！"
+        }
+      ]
+    }
+  },
+  "relationships": [
+    {
+      "id": "luffy__zoro__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "zoro",
+      "context": "opponent",
+      "basis": "船長與最初的夥伴；對戰採切磋語氣。",
+      "variants": [
+        {
+          "id": "luffy__zoro__opponent.v1",
+          "fromText": "索隆！這次可別拿迷路當藉口啊！",
+          "toText": "你站著別亂跑，我一刀就能找到你。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__zoro__opponent.v2",
+          "fromText": "我也想試試，現在能不能接住你的刀！",
+          "toText": "那就把拳頭握緊，別只拿橡膠來敷衍。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__sanji__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "sanji",
+      "context": "opponent",
+      "basis": "同船夥伴；切磋與吃飯的日常。",
+      "variants": [
+        {
+          "id": "luffy__sanji__opponent.v1",
+          "fromText": "香吉士！打完這場我要加菜！",
+          "toText": "先接住這一腳，再來跟廚師點菜！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__sanji__opponent.v2",
+          "fromText": "你的腳怎麼又比剛才快了！",
+          "toText": "你搶肉的手也沒慢過，正好扯平。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "zoro__sanji__opponent",
+      "fromActorId": "zoro",
+      "toActorId": "sanji",
+      "context": "opponent",
+      "basis": "同船競爭與互相挖苦。",
+      "variants": [
+        {
+          "id": "zoro__sanji__opponent.v1",
+          "fromText": "捲眉毛，站開點，別讓我的刀遷就你。",
+          "toText": "綠藻頭，先確定你砍的是正前方。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "zoro__sanji__opponent.v2",
+          "fromText": "這次要是輸了，可別說是鞋子不合腳。",
+          "toText": "你先別把三把刀絆在自己身上就好。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__usopp__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "usopp",
+      "context": "opponent",
+      "basis": "同船夥伴；狙擊手對船長的熟悉。",
+      "variants": [
+        {
+          "id": "luffy__usopp__opponent.v1",
+          "fromText": "騙人布！騙我的招式可不能再用第二次！",
+          "toText": "誰說我要用第二次？這回可是全新版本！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__usopp__opponent.v2",
+          "fromText": "我看見你在瞄準啦！",
+          "toText": "看見和躲開是兩回事，魯夫！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__nami__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "nami",
+      "context": "opponent",
+      "basis": "同船夥伴；娜美管束魯夫的冒失。",
+      "variants": [
+        {
+          "id": "luffy__nami__opponent.v1",
+          "fromText": "娜美！這場可不可以用肉來算輸贏？",
+          "toText": "可以，輸的人付全船的餐費。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__nami__opponent.v2",
+          "fromText": "只是切磋，你怎麼連天氣都搬出來了！",
+          "toText": "你不是最愛熱鬧嗎？我替你準備好了。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__hancock__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "hancock",
+      "context": "opponent",
+      "basis": "漢考克對魯夫的戀慕；魯夫不解風情。",
+      "variants": [
+        {
+          "id": "luffy__hancock__opponent.v1",
+          "fromText": "漢考克！你怎麼一直看著我不出招？",
+          "toText": "妾身……只是在等你先走近一些！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__hancock__opponent.v2",
+          "fromText": "妳準備好了嗎？我要過去囉！",
+          "toText": "慢、慢著！至少讓妾身整理一下心情！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__ace__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "ace",
+      "context": "opponent",
+      "basis": "結義兄弟；切磋不帶仇恨。",
+      "variants": [
+        {
+          "id": "luffy__ace__opponent.v1",
+          "fromText": "艾斯，這回我要讓你追著我跑！",
+          "toText": "好啊，別一跑累就躺下睡著了。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__ace__opponent.v2",
+          "fromText": "我們都長大了，你可不能再讓我！",
+          "toText": "我正想看看，你那份倔勁長了多少。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__sabo__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "sabo",
+      "context": "opponent",
+      "basis": "結義兄弟；互相試探成長。",
+      "variants": [
+        {
+          "id": "luffy__sabo__opponent.v1",
+          "fromText": "薩波！你的爪子抓得住我的拳頭嗎？",
+          "toText": "你要是只顧著看爪子，可會漏掉後面那招。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__sabo__opponent.v2",
+          "fromText": "這次我一定比你先衝到前面！",
+          "toText": "行，那我就替你把後面守住——先分個勝負再說。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__rayleigh__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "rayleigh",
+      "context": "opponent",
+      "basis": "師徒；霸氣修行的切磋。",
+      "variants": [
+        {
+          "id": "luffy__rayleigh__opponent.v1",
+          "fromText": "雷利，我這次可不會只用眼睛看！",
+          "toText": "很好，再把急著出拳的心放慢一點。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__rayleigh__opponent.v2",
+          "fromText": "我已經抓到你要動的時機了！",
+          "toText": "那就試試，能不能跟上下一步。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__garp__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "garp",
+      "context": "opponent",
+      "basis": "祖孫；拳頭與海賊志向的衝突。",
+      "variants": [
+        {
+          "id": "luffy__garp__opponent.v1",
+          "fromText": "爺爺！這回別說只是教訓一下！",
+          "toText": "哈哈哈！那你就拿出能讓老夫認真的本事！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__garp__opponent.v2",
+          "fromText": "我可不會乖乖站著挨你的拳頭！",
+          "toText": "少說兩句，腳步倒是比以前俐落了！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__koby__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "koby",
+      "context": "opponent",
+      "basis": "彼此認可的海賊與海軍。",
+      "variants": [
+        {
+          "id": "luffy__koby__opponent.v1",
+          "fromText": "克比！這次別先替我擔心，先顧好你的拳頭！",
+          "toText": "是！我會把這場當成真正的較量！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__koby__opponent.v2",
+          "fromText": "你變強啦！那我也得更用力！",
+          "toText": "我一直都想親手確認，和你還差多遠！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__law__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "law",
+      "context": "opponent",
+      "basis": "海賊同盟；魯夫的冒進與羅的計畫。",
+      "variants": [
+        {
+          "id": "luffy__law__opponent.v1",
+          "fromText": "托拉男！這回又準備了什麼計畫？",
+          "toText": "第一條：別在我說完以前衝過來。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__law__opponent.v2",
+          "fromText": "我找到最短的路了，就是正面！",
+          "toText": "果然。看來連你的下一步都不用重新算。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__kid__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "kid",
+      "context": "opponent",
+      "basis": "競爭中的船長；不服輸。",
+      "variants": [
+        {
+          "id": "luffy__kid__opponent.v1",
+          "fromText": "鋸齒男！別把我的路也一起拆掉！",
+          "toText": "有本事就跑在前面，別讓我追上！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__kid__opponent.v2",
+          "fromText": "這場我先拿下啦！",
+          "toText": "還沒分出勝負，你就急著把功勞抱走？",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__yonko_shanks__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "yonko_shanks",
+      "context": "opponent",
+      "basis": "草帽的約定；挑戰與期待。",
+      "variants": [
+        {
+          "id": "luffy__yonko_shanks__opponent.v1",
+          "fromText": "香克斯！這回我不是來讓你救我的！",
+          "toText": "我看得出來。那就讓我看看你怎麼往前走。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__yonko_shanks__opponent.v2",
+          "fromText": "這頂帽子，我還要再戴著冒險！",
+          "toText": "好啊，先用你的拳頭說服我。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__lucci__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "lucci",
+      "context": "opponent",
+      "basis": "司法島交手；夥伴與冷酷追殺的對立。",
+      "variants": [
+        {
+          "id": "luffy__lucci__opponent.v1",
+          "fromText": "你別再想把手伸向我的夥伴！",
+          "toText": "那就證明，你有本事守住每一個人。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__lucci__opponent.v2",
+          "fromText": "路基！這條路我以前打開過，這次也一樣！",
+          "toText": "你記得結果，我記得你的破綻。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__magellan__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "magellan",
+      "context": "opponent",
+      "basis": "推進城交手與越獄。",
+      "variants": [
+        {
+          "id": "luffy__magellan__opponent.v1",
+          "fromText": "這次我不會只顧著往前撞了！",
+          "toText": "記住教訓，也不代表你能通過這裡。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__magellan__opponent.v2",
+          "fromText": "你的毒很麻煩，可我還是要過去！",
+          "toText": "明知如此還前進，就自己承擔後果。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__akainu__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "akainu",
+      "context": "opponent",
+      "basis": "頂上戰爭留下的仇恨；魯夫守護同伴。",
+      "variants": [
+        {
+          "id": "luffy__akainu__opponent.v1",
+          "fromText": "我不會再讓你從我面前奪走任何人！",
+          "toText": "憑一股怒氣，攔不住老夫的正義！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__akainu__opponent.v2",
+          "fromText": "赤犬！這次我會一直站到最後！",
+          "toText": "那就讓老夫看看，你拿什麼撐住這句話。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__yonko_blackbeard__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "yonko_blackbeard",
+      "context": "opponent",
+      "basis": "爭逐同一片海、價值對立的海賊。",
+      "variants": [
+        {
+          "id": "luffy__yonko_blackbeard__opponent.v1",
+          "fromText": "你愛怎麼笑都行，別把手伸向我的夥伴！",
+          "toText": "賊哈哈！守著那麼多東西，你忙得過來嗎？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__yonko_blackbeard__opponent.v2",
+          "fromText": "這片海不是讓你一個人胡來的！",
+          "toText": "說得好像你會乖乖照規矩走一樣啊，草帽！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__yonko_kaido__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "yonko_kaido",
+      "context": "opponent",
+      "basis": "和之國交鋒；自由與支配。",
+      "variants": [
+        {
+          "id": "luffy__yonko_kaido__opponent.v1",
+          "fromText": "我會讓這裡的人，想吃什麼就能吃什麼！",
+          "toText": "喔囉囉！那就別讓你的拳頭只剩空話！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__yonko_kaido__opponent.v2",
+          "fromText": "凱多！我已經不打算從你面前繞路了！",
+          "toText": "那就正面過來，讓我看看你能站多久！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__doflamingo__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "doflamingo",
+      "context": "opponent",
+      "basis": "多雷斯羅薩；魯夫反抗操控。",
+      "variants": [
+        {
+          "id": "luffy__doflamingo__opponent.v1",
+          "fromText": "你把大家當成什麼了！這些線我會全部打斷！",
+          "toText": "咈咈咈，扯斷一根，就以為整個舞台會倒下？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__doflamingo__opponent.v2",
+          "fromText": "明明是別人的國家，你憑什麼想怎樣就怎樣！",
+          "toText": "等你有本事從我手裡拿走，再來問這句話。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "zoro__custom_mp3l85c1__opponent",
+      "fromActorId": "zoro",
+      "toActorId": "custom_mp3l85c1",
+      "context": "opponent",
+      "basis": "劍士挑戰與師徒淵源。",
+      "variants": [
+        {
+          "id": "zoro__custom_mp3l85c1__opponent.v1",
+          "fromText": "這次我想看的，不只是你和我的差距。",
+          "toText": "那就讓我看到，這些年你把刀磨成了什麼樣子。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "zoro__custom_mp3l85c1__opponent.v2",
+          "fromText": "我會接住這一刀，再向前一步。",
+          "toText": "很好。別讓你的決心比劍先折斷。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "zoro__kaku__opponent",
+      "fromActorId": "zoro",
+      "toActorId": "kaku",
+      "context": "opponent",
+      "basis": "司法島劍士再戰；彼此熟悉。",
+      "variants": [
+        {
+          "id": "zoro__kaku__opponent.v1",
+          "fromText": "長鼻子的，這次又帶了什麼奇怪招式？",
+          "toText": "你這傢伙，能不能先好好記住老夫的劍！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "zoro__kaku__opponent.v2",
+          "fromText": "手腳再長，也別指望我替你留空隙。",
+          "toText": "那老夫就從沒有空隙的地方劈出一條路。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "zoro__postgame_king__opponent",
+      "fromActorId": "zoro",
+      "toActorId": "postgame_king",
+      "context": "opponent",
+      "basis": "和之國劍士對決；認可硬仗。",
+      "variants": [
+        {
+          "id": "zoro__postgame_king__opponent.v1",
+          "fromText": "火也好，翅膀也好，這次我會一起看清。",
+          "toText": "那就別讓你的刀只追著影子跑。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "zoro__postgame_king__opponent.v2",
+          "fromText": "我不會再把你的沉默當成沒有破綻。",
+          "toText": "找到了就斬過來，用不著先說給我聽。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "sanji__jabra__opponent",
+      "fromActorId": "sanji",
+      "toActorId": "jabra",
+      "context": "opponent",
+      "basis": "司法島交手；狼的謊言與踢技。",
+      "variants": [
+        {
+          "id": "sanji__jabra__opponent.v1",
+          "fromText": "你的故事可以留給別人，我只想把這一腳送到。",
+          "toText": "喂喂，聽人把話說完也是一種禮貌吧！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "sanji__jabra__opponent.v2",
+          "fromText": "狼再會演，也藏不住想咬人的牙。",
+          "toText": "看穿又怎樣？躲不開還不是一樣！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "sanji__postgame_vinsmoke_judge__opponent",
+      "fromActorId": "sanji",
+      "toActorId": "postgame_vinsmoke_judge",
+      "context": "opponent",
+      "basis": "父子衝突；香吉士拒絕以感情為弱點。",
+      "variants": [
+        {
+          "id": "sanji__postgame_vinsmoke_judge__opponent.v1",
+          "fromText": "你覺得沒用的那顆心，會陪我踢到最後。",
+          "toText": "感情再熱，也替不了你交出勝負。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "sanji__postgame_vinsmoke_judge__opponent.v2",
+          "fromText": "別再拿你的標準，替我決定該成為什麼人。",
+          "toText": "那就用結果，證明你選的那條路。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "sanji__kalifa__opponent",
+      "fromActorId": "sanji",
+      "toActorId": "kalifa",
+      "context": "opponent",
+      "basis": "司法島交手；香吉士不願攻擊女性。",
+      "variants": [
+        {
+          "id": "sanji__kalifa__opponent.v1",
+          "fromText": "女士，能不能先把這條路讓出來？",
+          "toText": "想靠禮貌過關？你倒是選了輕鬆的辦法。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "sanji__kalifa__opponent.v2",
+          "fromText": "我會攔住妳，可不會拿妳當出氣的對象。",
+          "toText": "這份堅持，剛好替我省下許多麻煩。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "nami__arlong__opponent",
+      "fromActorId": "nami",
+      "toActorId": "arlong",
+      "context": "opponent",
+      "basis": "阿龍對可可亞西與娜美的剝削。",
+      "variants": [
+        {
+          "id": "nami__arlong__opponent.v1",
+          "fromText": "這回沒有地圖，也沒有錢，是我自己要站在這裡！",
+          "toText": "翅膀硬了，就忘了誰教過你海有多可怕？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "nami__arlong__opponent.v2",
+          "fromText": "你再怎麼叫價，我也不會把自由交回去！",
+          "toText": "那就看看，你拿什麼付清這份膽量！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "nami__kalifa__opponent",
+      "fromActorId": "nami",
+      "toActorId": "kalifa",
+      "context": "opponent",
+      "basis": "司法島交手；天候對泡沫。",
+      "variants": [
+        {
+          "id": "nami__kalifa__opponent.v1",
+          "fromText": "又是泡沫？這次我可不會慢慢陪妳洗！",
+          "toText": "那就小心，別讓自己的天氣先失去力氣。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "nami__kalifa__opponent.v2",
+          "fromText": "妳忙著擦亮鞋子的時候，風向已經變了。",
+          "toText": "嘴上倒挺俐落，待會兒還笑得出來嗎？",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "usopp__perona__opponent",
+      "fromActorId": "usopp",
+      "toActorId": "perona",
+      "context": "opponent",
+      "basis": "幽靈能力與騙人布的消極個性。",
+      "variants": [
+        {
+          "id": "usopp__perona__opponent.v1",
+          "fromText": "先說好，我今天本來就沒什麼自信！",
+          "toText": "你這種人也太犯規了吧，真討厭！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "usopp__perona__opponent.v2",
+          "fromText": "別以為我怕幽靈，就會忘了瞄準妳！",
+          "toText": "少虛張聲勢！你剛才明明嚇得退了三步！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "robin__spandam__opponent",
+      "fromActorId": "robin",
+      "toActorId": "spandam",
+      "context": "opponent",
+      "basis": "司法島的迫害與脫離控制。",
+      "variants": [
+        {
+          "id": "robin__spandam__opponent.v1",
+          "fromText": "你的命令，已經沒有能困住我的地方了。",
+          "toText": "少、少用那種眼神看我！衛兵在哪裡！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "robin__spandam__opponent.v2",
+          "fromText": "這次我會親眼看著，你怎麼收拾自己的話。",
+          "toText": "我可是有權下命令的人！妳最好想清楚！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "robin__kuzan__opponent",
+      "fromActorId": "robin",
+      "toActorId": "kuzan",
+      "context": "opponent",
+      "basis": "童年陰影與後來的放行。",
+      "variants": [
+        {
+          "id": "robin__kuzan__opponent.v1",
+          "fromText": "這一次，我會和選擇的夥伴站在一起。",
+          "toText": "那就站穩，別讓任何人替你後悔。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "robin__kuzan__opponent.v2",
+          "fromText": "我已經有想回去的地方了。",
+          "toText": "是嗎……那可別再一個人躲進寒風裡。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "brook__yonko_bigmom__opponent",
+      "fromActorId": "brook",
+      "toActorId": "yonko_bigmom",
+      "context": "opponent",
+      "basis": "萬國交手；靈魂與膽量。",
+      "variants": [
+        {
+          "id": "brook__yonko_bigmom__opponent.v1",
+          "fromText": "夫人，您這場演奏的聲音未免太大了。",
+          "toText": "嘛嘛嘛嘛！一副骨頭，還想替我定調子？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "brook__yonko_bigmom__opponent.v2",
+          "fromText": "若是靈魂的較量，我倒還能陪上一曲。",
+          "toText": "好啊！我可不准你在最精彩的地方散架！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "jinbe__arlong__opponent",
+      "fromActorId": "jinbe",
+      "toActorId": "arlong",
+      "context": "opponent",
+      "basis": "太陽海賊團舊緣與不同道路。",
+      "variants": [
+        {
+          "id": "jinbe__arlong__opponent.v1",
+          "fromText": "阿龍，把別人的痛苦當力量，只會越走越窄。",
+          "toText": "你那套道理，又替誰討回過什麼！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "jinbe__arlong__opponent.v2",
+          "fromText": "老夫會攔住你，不讓仇恨再借你的手前進。",
+          "toText": "那就別只站著說，拿拳頭來攔啊！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "jinbe__hody_jones__opponent",
+      "fromActorId": "jinbe",
+      "toActorId": "hody_jones",
+      "context": "opponent",
+      "basis": "魚人島；拒絕用仇恨綁架族群。",
+      "variants": [
+        {
+          "id": "jinbe__hody_jones__opponent.v1",
+          "fromText": "霍迪，你要拖下水的可不只是敵人。",
+          "toText": "現在才勸我收手，你不覺得太遲了嗎？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "jinbe__hody_jones__opponent.v2",
+          "fromText": "老夫不會讓下一代，繼續替這份恨付帳。",
+          "toText": "那就試試，你的拳頭能替他們擋多久！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "jinbe__yonko_bigmom__opponent",
+      "fromActorId": "jinbe",
+      "toActorId": "yonko_bigmom",
+      "context": "opponent",
+      "basis": "脫離大媽麾下與獨立抉擇。",
+      "variants": [
+        {
+          "id": "jinbe__yonko_bigmom__opponent.v1",
+          "fromText": "老夫選的道路，不會再向妳借膽量。",
+          "toText": "嘛嘛嘛嘛！說走就走，你可真敢開口！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "jinbe__yonko_bigmom__opponent.v2",
+          "fromText": "代價由老夫承擔，夥伴不該成為妳的籌碼。",
+          "toText": "那就站穩了，讓我看看你能付到哪一步！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "ace__yonko_blackbeard__opponent",
+      "fromActorId": "ace",
+      "toActorId": "yonko_blackbeard",
+      "context": "opponent",
+      "basis": "二番隊舊部背叛；艾斯追捕汀奇。",
+      "variants": [
+        {
+          "id": "ace__yonko_blackbeard__opponent.v1",
+          "fromText": "汀奇，這筆帳輪不到你用笑聲帶過去！",
+          "toText": "賊哈哈！你還是那麼認真啊，艾斯隊長！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "ace__yonko_blackbeard__opponent.v2",
+          "fromText": "把同伴丟在腳下的人，別想讓我讓路。",
+          "toText": "要把我帶回去？先看看你抓得住多少黑暗！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "ace__akainu__opponent",
+      "fromActorId": "ace",
+      "toActorId": "akainu",
+      "context": "opponent",
+      "basis": "頂上戰爭；艾斯守護家人與弟弟。",
+      "variants": [
+        {
+          "id": "ace__akainu__opponent.v1",
+          "fromText": "別拿老爹和我的家人，替你那套話墊腳！",
+          "toText": "被幾句話就拖住腳步，還想守得住誰！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "ace__akainu__opponent.v2",
+          "fromText": "這一步，我會站在他們前面！",
+          "toText": "那就讓老夫看看，你的火能撐到哪裡。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "law__doflamingo__opponent",
+      "fromActorId": "law",
+      "toActorId": "doflamingo",
+      "context": "opponent",
+      "basis": "柯拉松與羅的過去；長年對立。",
+      "variants": [
+        {
+          "id": "law__doflamingo__opponent.v1",
+          "fromText": "你的線到這裡為止，剩下的由我自己決定。",
+          "toText": "咈咈咈，羅，你還是急著替過去收尾啊。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "law__doflamingo__opponent.v2",
+          "fromText": "我不會再站在你安排好的位置上。",
+          "toText": "離開棋盤？那得先看你有沒有這個本事。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "kid__killer__ally",
+      "fromActorId": "kid",
+      "toActorId": "killer",
+      "context": "ally",
+      "basis": "船長與長年搭檔；彼此信任。",
+      "variants": [
+        {
+          "id": "kid__killer__ally.v1",
+          "fromText": "基拉，左邊那條路替我切開！",
+          "toText": "明白。你只管往前，別把整條路都捲走。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "kid__killer__ally.v2",
+          "fromText": "這次的雜音有點多啊，基拉！",
+          "toText": "那就快點結束，我還有話要跟你算。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "yamato__yonko_kaido__opponent",
+      "fromActorId": "yamato",
+      "toActorId": "yonko_kaido",
+      "context": "opponent",
+      "basis": "父子支配與大和追求自由。",
+      "variants": [
+        {
+          "id": "yamato__yonko_kaido__opponent.v1",
+          "fromText": "你沒資格替我決定，要走出哪一扇門！",
+          "toText": "喔囉囉！那就拿出砸開它的力氣！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "yamato__yonko_kaido__opponent.v2",
+          "fromText": "這一次，我會站在我選的人那邊！",
+          "toText": "站穩再說，別把決心丟在第一棒下面！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "oden__yonko_kaido__opponent",
+      "fromActorId": "oden",
+      "toActorId": "yonko_kaido",
+      "context": "opponent",
+      "basis": "和之國的統治衝突與決戰。",
+      "variants": [
+        {
+          "id": "oden__yonko_kaido__opponent.v1",
+          "fromText": "這片土地上的人，不能由你拿來消遣！",
+          "toText": "你的刀若真能改變什麼，就斬過來！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "oden__yonko_kaido__opponent.v2",
+          "fromText": "凱多！今天這一刀，可不只替我自己揮！",
+          "toText": "背得越多，倒下時才越有分量啊！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "kinemon__yonko_kaido__opponent",
+      "fromActorId": "kinemon",
+      "toActorId": "yonko_kaido",
+      "context": "opponent",
+      "basis": "御田家臣對凱多的仇怨。",
+      "variants": [
+        {
+          "id": "kinemon__yonko_kaido__opponent.v1",
+          "fromText": "在下帶來的，不只有手裡這把刀！",
+          "toText": "靠一群不肯散去的影子，就想讓我退？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "kinemon__yonko_kaido__opponent.v2",
+          "fromText": "主君留下的道路，輪不到你一棒抹去！",
+          "toText": "那就把那條路，親手從我面前打開！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "garp__custom_mp3la6fr__opponent",
+      "fromActorId": "garp",
+      "toActorId": "custom_mp3la6fr",
+      "context": "opponent",
+      "basis": "海軍英雄與海賊王的長年競爭。",
+      "variants": [
+        {
+          "id": "garp__custom_mp3la6fr__opponent.v1",
+          "fromText": "羅傑！這回可別打到一半又拐去冒險！",
+          "toText": "哈哈哈！那就看你的拳頭追不追得上！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "garp__custom_mp3la6fr__opponent.v2",
+          "fromText": "少笑得那麼大聲，老夫這一拳可不會讓！",
+          "toText": "正好！太客氣反而不像你啊，卡普！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "yonko_shanks__custom_mp3l85c1__opponent",
+      "fromActorId": "yonko_shanks",
+      "toActorId": "custom_mp3l85c1",
+      "context": "opponent",
+      "basis": "多年劍術競爭；相互熟悉。",
+      "variants": [
+        {
+          "id": "yonko_shanks__custom_mp3l85c1__opponent.v1",
+          "fromText": "難得見你出門，就別只站著看風景了。",
+          "toText": "若只是陪酒，你不必特地把刀帶出來。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "yonko_shanks__custom_mp3l85c1__opponent.v2",
+          "fromText": "這場打完，我替你找瓶像樣的酒。",
+          "toText": "先別急著安排，你還得接住這一刀。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "yonko_shanks__yonko_blackbeard__opponent",
+      "fromActorId": "yonko_shanks",
+      "toActorId": "yonko_blackbeard",
+      "context": "opponent",
+      "basis": "眼上傷疤與彼此警惕。",
+      "variants": [
+        {
+          "id": "yonko_shanks__yonko_blackbeard__opponent.v1",
+          "fromText": "汀奇，這次我會看著你把每一步走清楚。",
+          "toText": "賊哈哈！你那隻眼睛，還記得我的招呼嗎？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "yonko_shanks__yonko_blackbeard__opponent.v2",
+          "fromText": "這片海已經夠亂了，別再伸錯手。",
+          "toText": "你管得真寬啊，紅髮。那就親自來攔！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "yonko_shanks__custom_mp3l6s8w__ally",
+      "fromActorId": "yonko_shanks",
+      "toActorId": "custom_mp3l6s8w",
+      "context": "ally",
+      "basis": "養父與女兒；支持而非敵對嘲弄。",
+      "variants": [
+        {
+          "id": "yonko_shanks__custom_mp3l6s8w__ally.v1",
+          "fromText": "烏塔，唱你的吧，身後交給我們。",
+          "toText": "那你可得聽仔細，這回不能半途走掉！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "yonko_shanks__custom_mp3l6s8w__ally.v2",
+          "fromText": "我一直都在聽，別讓那些雜音搶走舞台。",
+          "toText": "好，這首也會留一個位置給你。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "perona__gecko_moria__ally",
+      "fromActorId": "perona",
+      "toActorId": "gecko_moria",
+      "context": "ally",
+      "basis": "佩羅娜對莫利亞的忠誠與日常。",
+      "variants": [
+        {
+          "id": "perona__gecko_moria__ally.v1",
+          "fromText": "莫利亞大人，您別又把麻煩全丟過來啦！",
+          "toText": "嘻嘻嘻！妳的幽靈不是最會收拾這種場面？",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "perona__gecko_moria__ally.v2",
+          "fromText": "我會把靠近的傢伙都趕開，您可別偷懶！",
+          "toText": "知道了知道了，等我把這些影子整理好。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "prison_crocodile__prison_buggy__opponent",
+      "fromActorId": "prison_crocodile",
+      "toActorId": "prison_buggy",
+      "context": "opponent",
+      "basis": "十字公會的實際權力與名義招牌。",
+      "variants": [
+        {
+          "id": "prison_crocodile__prison_buggy__opponent.v1",
+          "fromText": "巴奇，把招牌舉好，少替我增加額外開銷。",
+          "toText": "喂！招牌也是有身價的！至少先聽我講價！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "prison_crocodile__prison_buggy__opponent.v2",
+          "fromText": "你那份華麗，最好能抵得上這次的損失。",
+          "toText": "為什麼每次帳單都要算到本大爺頭上！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "custom_mp3l85c1__prison_buggy__opponent",
+      "fromActorId": "custom_mp3l85c1",
+      "toActorId": "prison_buggy",
+      "context": "opponent",
+      "basis": "十字公會的壓力與巴奇的畏縮。",
+      "variants": [
+        {
+          "id": "custom_mp3l85c1__prison_buggy__opponent.v1",
+          "fromText": "把聲音收小一點，刀尖已經聽見你了。",
+          "toText": "等等！我剛才那句只是帶動氣氛！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "custom_mp3l85c1__prison_buggy__opponent.v2",
+          "fromText": "若你只準備了演說，這場很快就會結束。",
+          "toText": "本大爺還有談判！談判也是重要的準備！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "prison_crocodile__prison_mr1_daz_bones__ally",
+      "fromActorId": "prison_crocodile",
+      "toActorId": "prison_mr1_daz_bones",
+      "context": "ally",
+      "basis": "長年合作的上司與可靠部下。",
+      "variants": [
+        {
+          "id": "prison_crocodile__prison_mr1_daz_bones__ally.v1",
+          "fromText": "達茲，這邊的缺口交給你。",
+          "toText": "明白。您只管處理前面。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "prison_crocodile__prison_mr1_daz_bones__ally.v2",
+          "fromText": "別讓多餘的人插進來，會弄髒計畫。",
+          "toText": "他們能走到的地方，由我的刀決定。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "prison_buggy__prison_mr3__ally",
+      "fromActorId": "prison_buggy",
+      "toActorId": "prison_mr3",
+      "context": "ally",
+      "basis": "越獄搭檔；誇功與務實。",
+      "variants": [
+        {
+          "id": "prison_buggy__prison_mr3__ally.v1",
+          "fromText": "Mr.3！替本大爺的華麗登場搭個台！",
+          "toText": "先把追兵引開，我可不想邊跑邊做！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "prison_buggy__prison_mr3__ally.v2",
+          "fromText": "別忘了，這回最大的功勞得寫我的名字！",
+          "toText": "您要是能先看一眼背後，我會更樂意替您記。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "prison_mr2_bon_clay__luffy__ally",
+      "fromActorId": "prison_mr2_bon_clay",
+      "toActorId": "luffy",
+      "context": "ally",
+      "basis": "越獄與捨身相助的友情。",
+      "variants": [
+        {
+          "id": "prison_mr2_bon_clay__luffy__ally.v1",
+          "fromText": "小草帽，儘管向前！這裡就照我的舞步走！",
+          "toText": "好！小馮，你也一定要跟上來！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "prison_mr2_bon_clay__luffy__ally.v2",
+          "fromText": "朋友要走的路，怎麼能少了我的一個轉身！",
+          "toText": "那我就把前面打開，等你一起走！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "ivankov__dragon__ally",
+      "fromActorId": "ivankov",
+      "toActorId": "dragon",
+      "context": "ally",
+      "basis": "革命軍合作；舞台感與沉著。",
+      "variants": [
+        {
+          "id": "ivankov__dragon__ally.v1",
+          "fromText": "龍！風都到這裡了，你可別還站著不動！",
+          "toText": "路已經打開，接下來需要你的力量。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "ivankov__dragon__ally.v2",
+          "fromText": "把那張嚴肅的臉收一收，大家會跟上的！",
+          "toText": "那就讓每一個人，都有跟上的機會。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "koby__alvida__opponent",
+      "fromActorId": "koby",
+      "toActorId": "alvida",
+      "context": "opponent",
+      "basis": "克比曾受亞爾麗塔支配。",
+      "variants": [
+        {
+          "id": "koby__alvida__opponent.v1",
+          "fromText": "我不會再因為害怕，就把頭低下來！",
+          "toText": "口氣變大了啊，倒讓我想看看你能站多久。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "koby__alvida__opponent.v2",
+          "fromText": "這一次，我會自己決定要往哪裡走！",
+          "toText": "那就先從我面前走過去，再說那種大話！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "kuro__usopp__opponent",
+      "fromActorId": "kuro",
+      "toActorId": "usopp",
+      "context": "opponent",
+      "basis": "可雅與西羅布村危機。",
+      "variants": [
+        {
+          "id": "kuro__usopp__opponent.v1",
+          "fromText": "你的謊言，這次還能換來多少時間？",
+          "toText": "夠我瞄準你，也夠我把大家護在後面！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "kuro__usopp__opponent.v2",
+          "fromText": "你還是只會把聲音喊得比膽子大。",
+          "toText": "那就聽清楚！這回我真的會攔住你！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "sanji__gin__opponent",
+      "fromActorId": "sanji",
+      "toActorId": "gin",
+      "context": "opponent",
+      "basis": "海上餐廳；飯菜的恩情與敵對立場。",
+      "variants": [
+        {
+          "id": "sanji__gin__opponent.v1",
+          "fromText": "飯已經給你吃過了，現在輪到我把門守住。",
+          "toText": "那份恩我記得，所以這一棍不會敷衍。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "sanji__gin__opponent.v2",
+          "fromText": "別再用餓肚子的眼神，替命令找藉口。",
+          "toText": "你說的我都懂，可我還有自己要面對的事。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "chopper__wapol__opponent",
+      "fromActorId": "chopper",
+      "toActorId": "wapol",
+      "context": "opponent",
+      "basis": "磁鼓王國的傷害與醫者信念。",
+      "variants": [
+        {
+          "id": "chopper__wapol__opponent.v1",
+          "fromText": "不准再把大家活下去的希望吞掉！",
+          "toText": "小馴鹿還想教訓本王？先躲過這一口吧！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "chopper__wapol__opponent.v2",
+          "fromText": "雪再大，也蓋不住你做過的壞事！",
+          "toText": "少拿那些舊事吵本王，這次連你也一起吞！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "zoro__hatchan__opponent",
+      "fromActorId": "zoro",
+      "toActorId": "hatchan",
+      "context": "opponent",
+      "basis": "阿龍樂園的多刀流交手。",
+      "variants": [
+        {
+          "id": "zoro__hatchan__opponent.v1",
+          "fromText": "刀多不代表每一把都能派上用場。",
+          "toText": "紐！這次我會把六把刀都看牢！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "zoro__hatchan__opponent.v2",
+          "fromText": "別再忙著數刀了，先看我站在哪裡。",
+          "toText": "我看見啦！這回不會再讓你從旁邊過去！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__enel__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "enel",
+      "context": "opponent",
+      "basis": "空島決戰；魯夫不敬畏神的態度。",
+      "variants": [
+        {
+          "id": "luffy__enel__opponent.v1",
+          "fromText": "你一直閃來閃去，到底準備好打了沒有？",
+          "toText": "敢把神的威光當成兒戲，你的膽量倒不小！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__enel__opponent.v2",
+          "fromText": "天上再高，也不是你一個人的地方！",
+          "toText": "那就試試，能不能走到雷聲的盡頭！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "luffy__gecko_moria__opponent",
+      "fromActorId": "luffy",
+      "toActorId": "gecko_moria",
+      "context": "opponent",
+      "basis": "恐怖三桅帆船；奪回影子。",
+      "variants": [
+        {
+          "id": "luffy__gecko_moria__opponent.v1",
+          "fromText": "把大家的影子還來！少在那裡笑！",
+          "toText": "嘻嘻嘻！有本事就自己把它們帶回去啊！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "luffy__gecko_moria__opponent.v2",
+          "fromText": "這回別又躲在別人後面！",
+          "toText": "省力氣有什麼不好？你倒是先過得了這一關！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "yonko_kaido__yonko_bigmom__opponent",
+      "fromActorId": "yonko_kaido",
+      "toActorId": "yonko_bigmom",
+      "context": "opponent",
+      "basis": "洛克斯舊緣與四皇競爭。",
+      "variants": [
+        {
+          "id": "yonko_kaido__yonko_bigmom__opponent.v1",
+          "fromText": "老太婆，這次可別又把帳算到我頭上！",
+          "toText": "嘛嘛嘛嘛！你欠下的，可沒那麼容易清！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "yonko_kaido__yonko_bigmom__opponent.v2",
+          "fromText": "要比誰鬧得大，老子可不會讓！",
+          "toText": "那就拿出力氣，別把好戲全搶去喝酒！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "garp__kuzan__opponent",
+      "fromActorId": "garp",
+      "toActorId": "kuzan",
+      "context": "opponent",
+      "basis": "昔日師徒與不同選擇。",
+      "variants": [
+        {
+          "id": "garp__kuzan__opponent.v1",
+          "fromText": "庫山！腳步都冷成這樣，拳頭還熱不熱！",
+          "toText": "唉，跟您打招呼總得先接一拳嗎。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "garp__kuzan__opponent.v2",
+          "fromText": "老夫可沒教你把決心也一起凍住！",
+          "toText": "我沒忘您教的事，只是路得自己走。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "smoker__tashigi__ally",
+      "fromActorId": "smoker",
+      "toActorId": "tashigi",
+      "context": "ally",
+      "basis": "海軍搭檔；命令與成長。",
+      "variants": [
+        {
+          "id": "smoker__tashigi__ally.v1",
+          "fromText": "達斯琪，顧好右側，別只盯著那把刀。",
+          "toText": "明白！我也會看清楚您留下的空隙！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "smoker__tashigi__ally.v2",
+          "fromText": "別急著追，先把後面的人護住。",
+          "toText": "我知道。這次不會讓判斷追在腳步後面。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "kizaru__sentomaru__opponent",
+      "fromActorId": "kizaru",
+      "toActorId": "sentomaru",
+      "context": "opponent",
+      "basis": "舊交與職責衝突。",
+      "variants": [
+        {
+          "id": "kizaru__sentomaru__opponent.v1",
+          "fromText": "戰桃丸，你還是那麼會替人守門呢。",
+          "toText": "老爺子，既然站在兩邊，就別想我讓路！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "kizaru__sentomaru__opponent.v2",
+          "fromText": "這份差事真不好辦啊，你也看得出來吧。",
+          "toText": "看得出來，所以才要親手把你擋住！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "doflamingo__corazon__opponent",
+      "fromActorId": "doflamingo",
+      "toActorId": "corazon",
+      "context": "opponent",
+      "basis": "兄弟背叛與對羅的保護。",
+      "variants": [
+        {
+          "id": "doflamingo__corazon__opponent.v1",
+          "fromText": "羅西，你這次又準備把什麼藏在沉默裡？",
+          "toText": "藏不藏得住都一樣，我不會把他交回去。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "doflamingo__corazon__opponent.v2",
+          "fromText": "咈咈咈，離了家族，你還能替誰擋多久？",
+          "toText": "至少這一次，我會把你的聲音留在外面。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "sabo__dragon__ally",
+      "fromActorId": "sabo",
+      "toActorId": "dragon",
+      "context": "ally",
+      "basis": "革命軍首領與參謀總長。",
+      "variants": [
+        {
+          "id": "sabo__dragon__ally.v1",
+          "fromText": "路已經探好了，接下來交給我。",
+          "toText": "記住，我們要打開的是路，不是讓人留下的墳場。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "sabo__dragon__ally.v2",
+          "fromText": "這道火會替大家照清前方。",
+          "toText": "去吧，讓每個人都能自己選擇往哪裡走。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "whitebeard__marco__ally",
+      "fromActorId": "whitebeard",
+      "toActorId": "marco",
+      "context": "ally",
+      "basis": "船長與隊長；家人的守護。",
+      "variants": [
+        {
+          "id": "whitebeard__marco__ally.v1",
+          "fromText": "馬可，天空那邊就拜託你了。",
+          "toText": "知道了，老爹。您腳下可也別太逞強啊。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "whitebeard__marco__ally.v2",
+          "fromText": "孩子們還沒走完，老夫可不能先收手！",
+          "toText": "那我們就陪您，把這一段路守到最後。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "whitebeard__squard__ally",
+      "fromActorId": "whitebeard",
+      "toActorId": "squard",
+      "context": "ally",
+      "basis": "家族信任與史庫亞德曾受挑撥。",
+      "variants": [
+        {
+          "id": "whitebeard__squard__ally.v1",
+          "fromText": "史庫亞德，這次把刀指向真正的敵人吧。",
+          "toText": "是！老爹，這回我會用自己的眼睛看清楚！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "whitebeard__squard__ally.v2",
+          "fromText": "別再替過去低著頭，前面還有家人等著你。",
+          "toText": "我會站到前面，用這把刀補上該守的位置！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "ace__little_oars_jr__ally",
+      "fromActorId": "ace",
+      "toActorId": "little_oars_jr",
+      "context": "ally",
+      "basis": "艾斯贈笠與小奧茲的友情。",
+      "variants": [
+        {
+          "id": "ace__little_oars_jr__ally.v1",
+          "fromText": "奧茲，那頂帽子可得好好戴著！",
+          "toText": "放心，艾斯！這次我不會讓風把它帶走！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "ace__little_oars_jr__ally.v2",
+          "fromText": "慢一點，別把全部火力都往自己身上攬！",
+          "toText": "只要能替你們把路打開，我還走得動！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "law__corazon__ally",
+      "fromActorId": "law",
+      "toActorId": "corazon",
+      "context": "ally",
+      "basis": "柯拉松救羅；延續的牽掛。",
+      "variants": [
+        {
+          "id": "law__corazon__ally.v1",
+          "fromText": "柯拉先生，這次換我替你把傷口處理好。",
+          "toText": "別只顧著看我，你也得把自己平安帶回去。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "law__corazon__ally.v2",
+          "fromText": "你替我留下的路，我一直都在走。",
+          "toText": "那就好。往前的時候，別忘了偶爾笑一下。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "postgame_zephyr__kizaru__opponent",
+      "fromActorId": "postgame_zephyr",
+      "toActorId": "kizaru",
+      "context": "opponent",
+      "basis": "教官與昔日學生。",
+      "variants": [
+        {
+          "id": "postgame_zephyr__kizaru__opponent.v1",
+          "fromText": "波魯薩利諾，別把漫不經心當作答案！",
+          "toText": "澤法老師，您的課還是一樣不好過啊。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "postgame_zephyr__kizaru__opponent.v2",
+          "fromText": "讓我看看，你的腳步有沒有跟上自己的力量！",
+          "toText": "真傷腦筋，老師一出手就要查這麼仔細呢。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "postgame_shiki__custom_mp3la6fr__opponent",
+      "fromActorId": "postgame_shiki",
+      "toActorId": "custom_mp3la6fr",
+      "context": "opponent",
+      "basis": "舊時代海賊競爭。",
+      "variants": [
+        {
+          "id": "postgame_shiki__custom_mp3la6fr__opponent.v1",
+          "fromText": "羅傑！這回你可別只顧著笑！",
+          "toText": "哈哈哈！有這麼大的場面，不笑怎麼盡興！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "postgame_shiki__custom_mp3la6fr__opponent.v2",
+          "fromText": "老子要的局面，你遲早會親眼看見！",
+          "toText": "那我就先看看，你手裡這把刀有多痛快！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "postgame_douglas_bullet__custom_mp3la6fr__opponent",
+      "fromActorId": "postgame_douglas_bullet",
+      "toActorId": "custom_mp3la6fr",
+      "context": "opponent",
+      "basis": "巴雷特曾為羅傑船員、追逐力量。",
+      "variants": [
+        {
+          "id": "postgame_douglas_bullet__custom_mp3la6fr__opponent.v1",
+          "fromText": "羅傑！這一次，我要用自己的力量走到你面前！",
+          "toText": "很好啊，巴雷特！先讓拳頭比你的急躁更穩！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "postgame_douglas_bullet__custom_mp3la6fr__opponent.v2",
+          "fromText": "我不需要誰替我站在身後！",
+          "toText": "那也別急著把身邊的人，全推到海的另一邊。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "postgame_gild_tesoro__luffy__opponent",
+      "fromActorId": "postgame_gild_tesoro",
+      "toActorId": "luffy",
+      "context": "opponent",
+      "basis": "黃金城；價值與自由的衝突。",
+      "variants": [
+        {
+          "id": "postgame_gild_tesoro__luffy__opponent.v1",
+          "fromText": "草帽，你真的明白自己踩在什麼地方嗎？",
+          "toText": "明白啊，就是得把你打開的地方！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "postgame_gild_tesoro__luffy__opponent.v2",
+          "fromText": "你想要的自由，打算付出多少價碼？",
+          "toText": "自由又不是你拿來賣的東西！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "postgame_saga__zoro__opponent",
+      "fromActorId": "postgame_saga",
+      "toActorId": "zoro",
+      "context": "opponent",
+      "basis": "舊識劍士；七星劍事件。",
+      "variants": [
+        {
+          "id": "postgame_saga__zoro__opponent.v1",
+          "fromText": "索隆，別拿以前的眼光來看這把劍。",
+          "toText": "那就讓我看看，是你在握劍，還是劍在握你。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "postgame_saga__zoro__opponent.v2",
+          "fromText": "我們還有一場，沒好好分過勝負。",
+          "toText": "行。這回把你真正想揮的那一刀拿出來。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "custom_mp3l6s8w__luffy__opponent",
+      "fromActorId": "custom_mp3l6s8w",
+      "toActorId": "luffy",
+      "context": "opponent",
+      "basis": "兒時玩伴；音樂與冒險。",
+      "variants": [
+        {
+          "id": "custom_mp3l6s8w__luffy__opponent.v1",
+          "fromText": "魯夫，這回不准只顧著肚子餓！",
+          "toText": "那就快點打完，我還想聽妳唱歌！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "custom_mp3l6s8w__luffy__opponent.v2",
+          "fromText": "你要是跟不上節拍，我可不會停下等你！",
+          "toText": "我跑得很快，妳唱到哪我都跟得上！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "fujitora__akainu__opponent",
+      "fromActorId": "fujitora",
+      "toActorId": "akainu",
+      "context": "opponent",
+      "basis": "海軍正義路線的分歧。",
+      "variants": [
+        {
+          "id": "fujitora__akainu__opponent.v1",
+          "fromText": "若只看命令，腳下的人又該交給誰看？",
+          "toText": "戰場不是讓你憑個人喜好改規矩的地方！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "fujitora__akainu__opponent.v2",
+          "fromText": "老夫會為自己的判斷負責。",
+          "toText": "那就拿出能承擔後果的分量！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "sengoku__garp__ally",
+      "fromActorId": "sengoku",
+      "toActorId": "garp",
+      "context": "ally",
+      "basis": "海軍老搭檔；互損與信任。",
+      "variants": [
+        {
+          "id": "sengoku__garp__ally.v1",
+          "fromText": "卡普，這回先聽老夫把部署說完！",
+          "toText": "哈哈哈！你說你的，老夫會把前面打開！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "sengoku__garp__ally.v2",
+          "fromText": "至少別把自己的隊形也一起打散。",
+          "toText": "放心，老夫看得清楚哪邊該揮拳！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "yamato__ace__ally",
+      "fromActorId": "yamato",
+      "toActorId": "ace",
+      "context": "ally",
+      "basis": "和之國結識、彼此談論出海。",
+      "variants": [
+        {
+          "id": "yamato__ace__ally.v1",
+          "fromText": "艾斯！這次我們就從正面一起闖出去！",
+          "toText": "好啊，記得替後面的人也留條路！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "yamato__ace__ally.v2",
+          "fromText": "我已經不是只在岸邊看海的那個人了！",
+          "toText": "那就讓我看看，你現在跑得有多快！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "vista__custom_mp3l85c1__opponent",
+      "fromActorId": "vista",
+      "toActorId": "custom_mp3l85c1",
+      "context": "opponent",
+      "basis": "頂上戰爭短暫交鋒；劍術敬意。",
+      "variants": [
+        {
+          "id": "vista__custom_mp3l85c1__opponent.v1",
+          "fromText": "難得重逢，這回可要多請教幾刀。",
+          "toText": "既然如此，別讓別人的腳步打斷你。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "vista__custom_mp3l85c1__opponent.v2",
+          "fromText": "花瓣落地以前，就先交換一招吧。",
+          "toText": "好。讓我看看，你想把劍送到哪裡。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "jozu__kuzan__opponent",
+      "fromActorId": "jozu",
+      "toActorId": "kuzan",
+      "context": "opponent",
+      "basis": "頂上戰爭交手；鑽石與冰。",
+      "variants": [
+        {
+          "id": "jozu__kuzan__opponent.v1",
+          "fromText": "這次我不會把目光從你身上移開。",
+          "toText": "那我也得找個更不容易被你撞開的位置了。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "jozu__kuzan__opponent.v2",
+          "fromText": "冰再厚，我也會把路撞出來。",
+          "toText": "真有力氣啊。那就小心別先凍住腳步。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "postgame_charlotte_katakuri__luffy__opponent",
+      "fromActorId": "postgame_charlotte_katakuri",
+      "toActorId": "luffy",
+      "context": "opponent",
+      "basis": "萬國對決；相互認可與持續站起。",
+      "variants": [
+        {
+          "id": "postgame_charlotte_katakuri__luffy__opponent.v1",
+          "fromText": "草帽，你打算再站起來幾次？",
+          "toText": "站到能和你一起倒下的時候！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "postgame_charlotte_katakuri__luffy__opponent.v2",
+          "fromText": "這一次，別把目光從我的拳頭上移開。",
+          "toText": "我一直在看！連你接下來那一步也在看！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "vivi__prison_crocodile__opponent",
+      "fromActorId": "vivi",
+      "toActorId": "prison_crocodile",
+      "context": "opponent",
+      "basis": "阿拉巴斯坦的壓迫與反抗。",
+      "variants": [
+        {
+          "id": "vivi__prison_crocodile__opponent.v1",
+          "fromText": "你想從這場混亂裡拿走的東西，我不會再讓你碰！",
+          "toText": "公主，光站出來可還不夠把局面收回去。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "vivi__prison_crocodile__opponent.v2",
+          "fromText": "這個國家的眼淚，不是你的籌碼！",
+          "toText": "那就別只顧著哭喊，拿出能讓我退讓的本事。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "koby__garp__ally",
+      "fromActorId": "koby",
+      "toActorId": "garp",
+      "context": "ally",
+      "basis": "師徒；拳頭的修行。",
+      "variants": [
+        {
+          "id": "koby__garp__ally.v1",
+          "fromText": "卡普先生，這次請讓我站在前面！",
+          "toText": "好小子！別等老夫喊第二次，往前踏！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "koby__garp__ally.v2",
+          "fromText": "我會把您教的每一步，都用在該用的地方！",
+          "toText": "先把眼前這一步踩穩，再談後面那一百步！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "kuma__ivankov__ally",
+      "fromActorId": "kuma",
+      "toActorId": "ivankov",
+      "context": "ally",
+      "basis": "革命軍舊友；彼此掩護。",
+      "variants": [
+        {
+          "id": "kuma__ivankov__ally.v1",
+          "fromText": "伊娃，後面那邊由我擋住。",
+          "toText": "熊！別把自己的份量也一起扛過頭啦！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "kuma__ivankov__ally.v2",
+          "fromText": "你把大家帶開，我會替你留出空間。",
+          "toText": "那你也得留條回來的路，聽見沒有！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "mr5__miss_valentine__ally",
+      "fromActorId": "mr5",
+      "toActorId": "miss_valentine",
+      "context": "ally",
+      "basis": "巴洛克工作社搭檔；爆炸與重量配合。",
+      "variants": [
+        {
+          "id": "mr5__miss_valentine__ally.v1",
+          "fromText": "落點看好了，別把我的爆炸搶在前面。",
+          "toText": "你才要看清楚，別連我一起揚起來。",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "mr5__miss_valentine__ally.v2",
+          "fromText": "等他抬頭，你就知道該往哪裡落。",
+          "toText": "呵呵，那你可別讓我等太久。",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "gin__krieg__opponent",
+      "fromActorId": "gin",
+      "toActorId": "krieg",
+      "context": "opponent",
+      "basis": "船長命令、忠誠與個人良知的衝突。",
+      "variants": [
+        {
+          "id": "gin__krieg__opponent.v1",
+          "fromText": "首領，這一次我會自己看清楚再出手。",
+          "toText": "阿金，你只需要照命令揮棍就夠了！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "gin__krieg__opponent.v2",
+          "fromText": "欠下的恩，不能裝作從來沒發生過。",
+          "toText": "想在戰場上講恩情？先想清楚你站在哪一邊！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    },
+    {
+      "id": "mohji__cabaji__opponent",
+      "fromActorId": "mohji",
+      "toActorId": "cabaji",
+      "context": "opponent",
+      "basis": "巴奇海賊團的競爭搭檔。",
+      "variants": [
+        {
+          "id": "mohji__cabaji__opponent.v1",
+          "fromText": "卡巴吉，別把你的輪子騎進利基的路上！",
+          "toText": "你先把獅子管好，別讓牠追著我的輪子跑！",
+          "firstSpeaker": "from"
+        },
+        {
+          "id": "mohji__cabaji__opponent.v2",
+          "fromText": "看好了，船長一定會記得誰先把敵人攔住！",
+          "toText": "那就別只顧著喊，我的刀已經出手了！",
+          "firstSpeaker": "to"
+        }
+      ],
+      "match": "exact-canonical-pair-reversible",
+      "sourceKind": "original-authored-text",
+      "audio": false
+    }
+  ],
+  "identity": {
+    "baseCardIds": {
+      "luffy": "luffy",
+      "zoro": "zoro",
+      "nami": "nami",
+      "sanji": "sanji",
+      "law": "law",
+      "robin": "robin",
+      "hancock": "hancock",
+      "carrot": "carrot",
+      "ace": "ace",
+      "sabo": "sabo",
+      "yamato": "yamato",
+      "corazon": "corazon",
+      "usopp": "usopp",
+      "chopper": "chopper",
+      "jinbe": "jinbe",
+      "brook": "brook",
+      "franky": "franky",
+      "oden": "oden",
+      "rayleigh": "rayleigh",
+      "garp": "garp",
+      "vivi": "vivi",
+      "koby": "koby",
+      "smoker": "smoker",
+      "tashigi": "tashigi",
+      "kuzan": "kuzan",
+      "fujitora": "fujitora",
+      "bartolomeo": "bartolomeo",
+      "cavendish": "cavendish",
+      "kinemon": "kinemon",
+      "ivankov": "ivankov",
+      "kuma": "kuma",
+      "dragon": "dragon",
+      "kid": "kid",
+      "killer": "killer",
+      "perona": "perona",
+      "mansherry": "mansherry",
+      "whitebeard": "whitebeard",
+      "jozu": "jozu",
+      "vista": "vista",
+      "izo": "izo",
+      "little_oars_jr": "little_oars_jr",
+      "squard": "squard",
+      "marco": "marco",
+      "prison_buggy": "prison_buggy",
+      "prison_mr3": "prison_mr3",
+      "prison_mr2_bon_clay": "prison_mr2_bon_clay",
+      "prison_mr1_daz_bones": "prison_mr1_daz_bones",
+      "prison_crocodile": "prison_crocodile",
+      "custom_mp3l6s8w": "custom_mp3l6s8w",
+      "custom_mp3l85c1": "custom_mp3l85c1",
+      "custom_mp3la6fr": "custom_mp3la6fr"
+    },
+    "heroTemplateIds": {
+      "luffy": "luffy",
+      "zoro": "zoro",
+      "nami": "nami",
+      "sanji": "sanji",
+      "law": "law",
+      "robin": "robin",
+      "hancock": "hancock",
+      "carrot": "carrot",
+      "ace": "ace",
+      "sabo": "sabo",
+      "yamato": "yamato",
+      "corazon": "corazon",
+      "usopp": "usopp",
+      "chopper": "chopper",
+      "jinbe": "jinbe",
+      "brook": "brook",
+      "franky": "franky",
+      "oden": "oden",
+      "rayleigh": "rayleigh",
+      "garp": "garp",
+      "vivi": "vivi",
+      "koby": "koby",
+      "smoker": "smoker",
+      "tashigi": "tashigi",
+      "kuzan": "kuzan",
+      "fujitora": "fujitora",
+      "bartolomeo": "bartolomeo",
+      "cavendish": "cavendish",
+      "kinemon": "kinemon",
+      "ivankov": "ivankov",
+      "kuma": "kuma",
+      "dragon": "dragon",
+      "kid": "kid",
+      "killer": "killer",
+      "perona": "perona",
+      "mansherry": "mansherry",
+      "whitebeard": "whitebeard",
+      "jozu": "jozu",
+      "vista": "vista",
+      "izo": "izo",
+      "little_oars_jr": "little_oars_jr",
+      "squard": "squard",
+      "marco": "marco",
+      "prison_buggy": "prison_buggy",
+      "prison_mr3": "prison_mr3",
+      "prison_mr2_bon_clay": "prison_mr2_bon_clay",
+      "prison_mr1_daz_bones": "prison_mr1_daz_bones",
+      "prison_crocodile": "prison_crocodile",
+      "custom_mp3l6s8w": "custom_mp3l6s8w",
+      "custom_mp3l85c1": "custom_mp3l85c1",
+      "custom_mp3la6fr": "custom_mp3la6fr",
+      "lineage_mohji": "mohji",
+      "lineage_cabaji": "cabaji",
+      "lineage_alvida": "alvida",
+      "lineage_axe_hand_morgan": "axe_hand_morgan",
+      "lineage_krieg": "krieg",
+      "lineage_gin": "gin",
+      "lineage_kuro": "kuro",
+      "lineage_mr5": "mr5",
+      "lineage_miss_valentine": "miss_valentine",
+      "lineage_wapol": "wapol",
+      "lineage_caesar_clown": "caesar_clown",
+      "lineage_arlong": "arlong",
+      "lineage_kuroobi": "kuroobi",
+      "lineage_hatchan": "hatchan",
+      "lineage_bellamy": "bellamy",
+      "lineage_foxy": "foxy",
+      "lineage_hody_jones": "hody_jones",
+      "lineage_enel": "enel",
+      "lineage_gecko_moria": "gecko_moria",
+      "lineage_doflamingo": "doflamingo",
+      "lineage_pica": "pica",
+      "lineage_sentomaru": "sentomaru",
+      "lineage_impel_l1_sadie": "impel_l1_sadie",
+      "lineage_impel_l2_minochihuahua": "impel_l2_minochihuahua",
+      "lineage_impel_l3_minokoala": "impel_l3_minokoala",
+      "lineage_impel_l4_minotaur": "impel_l4_minotaur",
+      "lineage_impel_l5_minorhino": "impel_l5_minorhino",
+      "lineage_impel_l6_hannyabal": "impel_l6_hannyabal",
+      "lineage_magellan": "magellan",
+      "lineage_kizaru": "kizaru",
+      "lineage_akainu": "akainu",
+      "lineage_sengoku": "sengoku",
+      "lineage_yonko_blackbeard": "yonko_blackbeard",
+      "lineage_yonko_shanks": "yonko_shanks",
+      "lineage_yonko_bigmom": "yonko_bigmom",
+      "lineage_yonko_kaido": "yonko_kaido",
+      "lineage_final_imu": "final_imu",
+      "lineage_god_knight_killingham": "god_knight_killingham",
+      "lineage_god_knight_sommers": "god_knight_sommers",
+      "lineage_spandam": "spandam",
+      "lineage_blueno": "blueno",
+      "lineage_kalifa": "kalifa",
+      "lineage_jabra": "jabra",
+      "lineage_kaku": "kaku",
+      "lineage_lucci": "lucci",
+      "lineage_postgame_rob_lucci_awakened": "lucci",
+      "lineage_postgame_shiki": "postgame_shiki",
+      "lineage_postgame_gild_tesoro": "postgame_gild_tesoro",
+      "lineage_postgame_zephyr": "postgame_zephyr",
+      "lineage_postgame_tot_musica": "postgame_tot_musica",
+      "lineage_postgame_douglas_bullet": "postgame_douglas_bullet",
+      "lineage_postgame_saga": "postgame_saga",
+      "lineage_postgame_vinsmoke_judge": "postgame_vinsmoke_judge",
+      "lineage_postgame_king": "postgame_king",
+      "lineage_postgame_charlotte_katakuri": "postgame_charlotte_katakuri",
+      "lineage_postgame_patrick_redfield": "postgame_patrick_redfield",
+      "lineage_postgame_loki": "postgame_loki",
+      "lineage_postgame_oars": "postgame_oars",
+      "lineage_postgame_aramaki": "postgame_aramaki",
+      "lineage_postgame_rocks": "postgame_rocks"
+    },
+    "evolutionFormIds": {
+      "luffy_gear_second": "luffy",
+      "luffy_evolution_2": "luffy",
+      "luffy_gear_fifth": "luffy",
+      "zoro_santoryu_plus": "zoro",
+      "zoro_evolution_2": "zoro",
+      "zoro_zorojuro": "zoro",
+      "nami_clima_tact_plus": "nami",
+      "nami_evolution_2": "nami",
+      "sanji_diable_jambe": "sanji",
+      "sanji_evolution_2": "sanji",
+      "law_new_world": "law",
+      "robin_cien_fleur": "robin",
+      "carrot_moon_lion": "carrot",
+      "usopp_sogeking": "usopp",
+      "usopp_evolution_2": "usopp",
+      "chopper_rumble_ball_plus": "chopper",
+      "chopper_evolution_2": "chopper",
+      "brook_yomi_swordsman": "brook",
+      "franky_weapon_left": "franky",
+      "rayleigh_young": "rayleigh",
+      "koby_colonel": "koby",
+      "smoker_new_world": "smoker",
+      "tashigi_new_world": "tashigi",
+      "kuzan_evolution_1": "kuzan",
+      "kid_new_world": "kid",
+      "perona_new_world": "perona",
+      "whitebeard_evolution_1": "whitebeard",
+      "prison_buggy_escape_alliance": "prison_buggy",
+      "prison_mr3_candle_strategist": "prison_mr3",
+      "prison_mr1_steel_blade": "prison_mr1_daz_bones",
+      "prison_crocodile_desert_alliance": "prison_crocodile",
+      "custom_mp3l85c1_evolution_1": "custom_mp3l85c1",
+      "custom_mp3la6fr_evolution_1": "custom_mp3la6fr"
+    },
+    "enemyKeys": {
+      "aokiji": "kuzan",
+      "buggy": "prison_buggy",
+      "mr3": "prison_mr3",
+      "mr2_bon_clay": "prison_mr2_bon_clay",
+      "mr1_daz_bones": "prison_mr1_daz_bones",
+      "crocodile": "prison_crocodile",
+      "mohji": "mohji",
+      "cabaji": "cabaji",
+      "alvida": "alvida",
+      "axe_hand_morgan": "axe_hand_morgan",
+      "krieg": "krieg",
+      "gin": "gin",
+      "kuro": "kuro",
+      "mr5": "mr5",
+      "miss_valentine": "miss_valentine",
+      "wapol": "wapol",
+      "caesar_clown": "caesar_clown",
+      "arlong": "arlong",
+      "kuroobi": "kuroobi",
+      "hatchan": "hatchan",
+      "bellamy": "bellamy",
+      "foxy": "foxy",
+      "hody_jones": "hody_jones",
+      "enel": "enel",
+      "gecko_moria": "gecko_moria",
+      "doflamingo": "doflamingo",
+      "pica": "pica",
+      "sentomaru": "sentomaru",
+      "impel_l1_sadie": "impel_l1_sadie",
+      "impel_l2_minochihuahua": "impel_l2_minochihuahua",
+      "impel_l3_minokoala": "impel_l3_minokoala",
+      "impel_l4_minotaur": "impel_l4_minotaur",
+      "impel_l5_minorhino": "impel_l5_minorhino",
+      "impel_l6_hannyabal": "impel_l6_hannyabal",
+      "magellan": "magellan",
+      "kizaru": "kizaru",
+      "akainu": "akainu",
+      "sengoku": "sengoku",
+      "yonko_blackbeard": "yonko_blackbeard",
+      "yonko_shanks": "yonko_shanks",
+      "yonko_bigmom": "yonko_bigmom",
+      "yonko_kaido": "yonko_kaido",
+      "final_imu": "final_imu",
+      "god_knight_killingham": "god_knight_killingham",
+      "god_knight_sommers": "god_knight_sommers",
+      "spandam": "spandam",
+      "blueno": "blueno",
+      "kalifa": "kalifa",
+      "jabra": "jabra",
+      "kaku": "kaku",
+      "lucci": "lucci",
+      "postgame_rob_lucci_awakened": "lucci",
+      "postgame_shiki": "postgame_shiki",
+      "postgame_gild_tesoro": "postgame_gild_tesoro",
+      "postgame_zephyr": "postgame_zephyr",
+      "postgame_tot_musica": "postgame_tot_musica",
+      "postgame_douglas_bullet": "postgame_douglas_bullet",
+      "postgame_saga": "postgame_saga",
+      "postgame_vinsmoke_judge": "postgame_vinsmoke_judge",
+      "postgame_king": "postgame_king",
+      "postgame_charlotte_katakuri": "postgame_charlotte_katakuri",
+      "postgame_patrick_redfield": "postgame_patrick_redfield",
+      "postgame_loki": "postgame_loki",
+      "postgame_oars": "postgame_oars",
+      "postgame_aramaki": "postgame_aramaki",
+      "postgame_rocks": "postgame_rocks"
+    },
+    "arenaKeys": {
+      "arena_luffy": "luffy",
+      "arena_zoro": "zoro",
+      "arena_nami": "nami",
+      "arena_sanji": "sanji",
+      "arena_law": "law",
+      "arena_robin": "robin",
+      "arena_hancock": "hancock",
+      "arena_carrot": "carrot",
+      "arena_ace": "ace",
+      "arena_sabo": "sabo",
+      "arena_yamato": "yamato",
+      "arena_corazon": "corazon",
+      "arena_usopp": "usopp",
+      "arena_chopper": "chopper",
+      "arena_jinbe": "jinbe",
+      "arena_brook": "brook",
+      "arena_franky": "franky",
+      "arena_oden": "oden",
+      "arena_rayleigh": "rayleigh",
+      "arena_garp": "garp",
+      "arena_vivi": "vivi",
+      "arena_koby": "koby",
+      "arena_smoker": "smoker",
+      "arena_tashigi": "tashigi",
+      "arena_kuzan": "kuzan",
+      "arena_fujitora": "fujitora",
+      "arena_bartolomeo": "bartolomeo",
+      "arena_cavendish": "cavendish",
+      "arena_kinemon": "kinemon",
+      "arena_ivankov": "ivankov",
+      "arena_kuma": "kuma",
+      "arena_dragon": "dragon",
+      "arena_kid": "kid",
+      "arena_killer": "killer",
+      "arena_perona": "perona",
+      "arena_mansherry": "mansherry",
+      "arena_whitebeard": "whitebeard",
+      "arena_jozu": "jozu",
+      "arena_vista": "vista",
+      "arena_izo": "izo",
+      "arena_little_oars_jr": "little_oars_jr",
+      "arena_squard": "squard",
+      "arena_marco": "marco",
+      "arena_prison_buggy": "prison_buggy",
+      "arena_prison_mr3": "prison_mr3",
+      "arena_prison_mr2_bon_clay": "prison_mr2_bon_clay",
+      "arena_prison_mr1_daz_bones": "prison_mr1_daz_bones",
+      "arena_prison_crocodile": "prison_crocodile",
+      "arena_custom_mp3l6s8w": "custom_mp3l6s8w",
+      "arena_custom_mp3l85c1": "custom_mp3l85c1",
+      "arena_custom_mp3la6fr": "custom_mp3la6fr"
+    },
+    "stableIds": {
+      "luffy": "luffy",
+      "zoro": "zoro",
+      "nami": "nami",
+      "sanji": "sanji",
+      "law": "law",
+      "robin": "robin",
+      "hancock": "hancock",
+      "carrot": "carrot",
+      "ace": "ace",
+      "sabo": "sabo",
+      "yamato": "yamato",
+      "corazon": "corazon",
+      "usopp": "usopp",
+      "chopper": "chopper",
+      "jinbe": "jinbe",
+      "brook": "brook",
+      "franky": "franky",
+      "oden": "oden",
+      "rayleigh": "rayleigh",
+      "garp": "garp",
+      "vivi": "vivi",
+      "koby": "koby",
+      "smoker": "smoker",
+      "tashigi": "tashigi",
+      "kuzan": "kuzan",
+      "fujitora": "fujitora",
+      "bartolomeo": "bartolomeo",
+      "cavendish": "cavendish",
+      "kinemon": "kinemon",
+      "ivankov": "ivankov",
+      "kuma": "kuma",
+      "dragon": "dragon",
+      "kid": "kid",
+      "killer": "killer",
+      "perona": "perona",
+      "mansherry": "mansherry",
+      "whitebeard": "whitebeard",
+      "jozu": "jozu",
+      "vista": "vista",
+      "izo": "izo",
+      "little_oars_jr": "little_oars_jr",
+      "squard": "squard",
+      "marco": "marco",
+      "prison_buggy": "prison_buggy",
+      "prison_mr3": "prison_mr3",
+      "prison_mr2_bon_clay": "prison_mr2_bon_clay",
+      "prison_mr1_daz_bones": "prison_mr1_daz_bones",
+      "prison_crocodile": "prison_crocodile",
+      "custom_mp3l6s8w": "custom_mp3l6s8w",
+      "custom_mp3l85c1": "custom_mp3l85c1",
+      "custom_mp3la6fr": "custom_mp3la6fr",
+      "lineage_mohji": "mohji",
+      "lineage_cabaji": "cabaji",
+      "lineage_alvida": "alvida",
+      "lineage_axe_hand_morgan": "axe_hand_morgan",
+      "lineage_krieg": "krieg",
+      "lineage_gin": "gin",
+      "lineage_kuro": "kuro",
+      "lineage_mr5": "mr5",
+      "lineage_miss_valentine": "miss_valentine",
+      "lineage_wapol": "wapol",
+      "lineage_caesar_clown": "caesar_clown",
+      "lineage_arlong": "arlong",
+      "lineage_kuroobi": "kuroobi",
+      "lineage_hatchan": "hatchan",
+      "lineage_bellamy": "bellamy",
+      "lineage_foxy": "foxy",
+      "lineage_hody_jones": "hody_jones",
+      "lineage_enel": "enel",
+      "lineage_gecko_moria": "gecko_moria",
+      "lineage_doflamingo": "doflamingo",
+      "lineage_pica": "pica",
+      "lineage_sentomaru": "sentomaru",
+      "lineage_impel_l1_sadie": "impel_l1_sadie",
+      "lineage_impel_l2_minochihuahua": "impel_l2_minochihuahua",
+      "lineage_impel_l3_minokoala": "impel_l3_minokoala",
+      "lineage_impel_l4_minotaur": "impel_l4_minotaur",
+      "lineage_impel_l5_minorhino": "impel_l5_minorhino",
+      "lineage_impel_l6_hannyabal": "impel_l6_hannyabal",
+      "lineage_magellan": "magellan",
+      "lineage_kizaru": "kizaru",
+      "lineage_akainu": "akainu",
+      "lineage_sengoku": "sengoku",
+      "lineage_yonko_blackbeard": "yonko_blackbeard",
+      "lineage_yonko_shanks": "yonko_shanks",
+      "lineage_yonko_bigmom": "yonko_bigmom",
+      "lineage_yonko_kaido": "yonko_kaido",
+      "lineage_final_imu": "final_imu",
+      "lineage_god_knight_killingham": "god_knight_killingham",
+      "lineage_god_knight_sommers": "god_knight_sommers",
+      "lineage_spandam": "spandam",
+      "lineage_blueno": "blueno",
+      "lineage_kalifa": "kalifa",
+      "lineage_jabra": "jabra",
+      "lineage_kaku": "kaku",
+      "lineage_lucci": "lucci",
+      "lineage_postgame_rob_lucci_awakened": "lucci",
+      "lineage_postgame_shiki": "postgame_shiki",
+      "lineage_postgame_gild_tesoro": "postgame_gild_tesoro",
+      "lineage_postgame_zephyr": "postgame_zephyr",
+      "lineage_postgame_tot_musica": "postgame_tot_musica",
+      "lineage_postgame_douglas_bullet": "postgame_douglas_bullet",
+      "lineage_postgame_saga": "postgame_saga",
+      "lineage_postgame_vinsmoke_judge": "postgame_vinsmoke_judge",
+      "lineage_postgame_king": "postgame_king",
+      "lineage_postgame_charlotte_katakuri": "postgame_charlotte_katakuri",
+      "lineage_postgame_patrick_redfield": "postgame_patrick_redfield",
+      "lineage_postgame_loki": "postgame_loki",
+      "lineage_postgame_oars": "postgame_oars",
+      "lineage_postgame_aramaki": "postgame_aramaki",
+      "lineage_postgame_rocks": "postgame_rocks",
+      "luffy_gear_second": "luffy",
+      "luffy_evolution_2": "luffy",
+      "luffy_gear_fifth": "luffy",
+      "zoro_santoryu_plus": "zoro",
+      "zoro_evolution_2": "zoro",
+      "zoro_zorojuro": "zoro",
+      "nami_clima_tact_plus": "nami",
+      "nami_evolution_2": "nami",
+      "sanji_diable_jambe": "sanji",
+      "sanji_evolution_2": "sanji",
+      "law_new_world": "law",
+      "robin_cien_fleur": "robin",
+      "carrot_moon_lion": "carrot",
+      "usopp_sogeking": "usopp",
+      "usopp_evolution_2": "usopp",
+      "chopper_rumble_ball_plus": "chopper",
+      "chopper_evolution_2": "chopper",
+      "brook_yomi_swordsman": "brook",
+      "franky_weapon_left": "franky",
+      "rayleigh_young": "rayleigh",
+      "koby_colonel": "koby",
+      "smoker_new_world": "smoker",
+      "tashigi_new_world": "tashigi",
+      "kuzan_evolution_1": "kuzan",
+      "kid_new_world": "kid",
+      "perona_new_world": "perona",
+      "whitebeard_evolution_1": "whitebeard",
+      "prison_buggy_escape_alliance": "prison_buggy",
+      "prison_mr3_candle_strategist": "prison_mr3",
+      "prison_mr1_steel_blade": "prison_mr1_daz_bones",
+      "prison_crocodile_desert_alliance": "prison_crocodile",
+      "custom_mp3l85c1_evolution_1": "custom_mp3l85c1",
+      "custom_mp3la6fr_evolution_1": "custom_mp3la6fr",
+      "aokiji": "kuzan",
+      "buggy": "prison_buggy",
+      "mr3": "prison_mr3",
+      "mr2_bon_clay": "prison_mr2_bon_clay",
+      "mr1_daz_bones": "prison_mr1_daz_bones",
+      "crocodile": "prison_crocodile",
+      "mohji": "mohji",
+      "cabaji": "cabaji",
+      "alvida": "alvida",
+      "axe_hand_morgan": "axe_hand_morgan",
+      "krieg": "krieg",
+      "gin": "gin",
+      "kuro": "kuro",
+      "mr5": "mr5",
+      "miss_valentine": "miss_valentine",
+      "wapol": "wapol",
+      "caesar_clown": "caesar_clown",
+      "arlong": "arlong",
+      "kuroobi": "kuroobi",
+      "hatchan": "hatchan",
+      "bellamy": "bellamy",
+      "foxy": "foxy",
+      "hody_jones": "hody_jones",
+      "enel": "enel",
+      "gecko_moria": "gecko_moria",
+      "doflamingo": "doflamingo",
+      "pica": "pica",
+      "sentomaru": "sentomaru",
+      "impel_l1_sadie": "impel_l1_sadie",
+      "impel_l2_minochihuahua": "impel_l2_minochihuahua",
+      "impel_l3_minokoala": "impel_l3_minokoala",
+      "impel_l4_minotaur": "impel_l4_minotaur",
+      "impel_l5_minorhino": "impel_l5_minorhino",
+      "impel_l6_hannyabal": "impel_l6_hannyabal",
+      "magellan": "magellan",
+      "kizaru": "kizaru",
+      "akainu": "akainu",
+      "sengoku": "sengoku",
+      "yonko_blackbeard": "yonko_blackbeard",
+      "yonko_shanks": "yonko_shanks",
+      "yonko_bigmom": "yonko_bigmom",
+      "yonko_kaido": "yonko_kaido",
+      "final_imu": "final_imu",
+      "god_knight_killingham": "god_knight_killingham",
+      "god_knight_sommers": "god_knight_sommers",
+      "spandam": "spandam",
+      "blueno": "blueno",
+      "kalifa": "kalifa",
+      "jabra": "jabra",
+      "kaku": "kaku",
+      "lucci": "lucci",
+      "postgame_rob_lucci_awakened": "lucci",
+      "postgame_shiki": "postgame_shiki",
+      "postgame_gild_tesoro": "postgame_gild_tesoro",
+      "postgame_zephyr": "postgame_zephyr",
+      "postgame_tot_musica": "postgame_tot_musica",
+      "postgame_douglas_bullet": "postgame_douglas_bullet",
+      "postgame_saga": "postgame_saga",
+      "postgame_vinsmoke_judge": "postgame_vinsmoke_judge",
+      "postgame_king": "postgame_king",
+      "postgame_charlotte_katakuri": "postgame_charlotte_katakuri",
+      "postgame_patrick_redfield": "postgame_patrick_redfield",
+      "postgame_loki": "postgame_loki",
+      "postgame_oars": "postgame_oars",
+      "postgame_aramaki": "postgame_aramaki",
+      "postgame_rocks": "postgame_rocks",
+      "arena_luffy": "luffy",
+      "arena_zoro": "zoro",
+      "arena_nami": "nami",
+      "arena_sanji": "sanji",
+      "arena_law": "law",
+      "arena_robin": "robin",
+      "arena_hancock": "hancock",
+      "arena_carrot": "carrot",
+      "arena_ace": "ace",
+      "arena_sabo": "sabo",
+      "arena_yamato": "yamato",
+      "arena_corazon": "corazon",
+      "arena_usopp": "usopp",
+      "arena_chopper": "chopper",
+      "arena_jinbe": "jinbe",
+      "arena_brook": "brook",
+      "arena_franky": "franky",
+      "arena_oden": "oden",
+      "arena_rayleigh": "rayleigh",
+      "arena_garp": "garp",
+      "arena_vivi": "vivi",
+      "arena_koby": "koby",
+      "arena_smoker": "smoker",
+      "arena_tashigi": "tashigi",
+      "arena_kuzan": "kuzan",
+      "arena_fujitora": "fujitora",
+      "arena_bartolomeo": "bartolomeo",
+      "arena_cavendish": "cavendish",
+      "arena_kinemon": "kinemon",
+      "arena_ivankov": "ivankov",
+      "arena_kuma": "kuma",
+      "arena_dragon": "dragon",
+      "arena_kid": "kid",
+      "arena_killer": "killer",
+      "arena_perona": "perona",
+      "arena_mansherry": "mansherry",
+      "arena_whitebeard": "whitebeard",
+      "arena_jozu": "jozu",
+      "arena_vista": "vista",
+      "arena_izo": "izo",
+      "arena_little_oars_jr": "little_oars_jr",
+      "arena_squard": "squard",
+      "arena_marco": "marco",
+      "arena_prison_buggy": "prison_buggy",
+      "arena_prison_mr3": "prison_mr3",
+      "arena_prison_mr2_bon_clay": "prison_mr2_bon_clay",
+      "arena_prison_mr1_daz_bones": "prison_mr1_daz_bones",
+      "arena_prison_crocodile": "prison_crocodile",
+      "arena_custom_mp3l6s8w": "custom_mp3l6s8w",
+      "arena_custom_mp3l85c1": "custom_mp3l85c1",
+      "arena_custom_mp3la6fr": "custom_mp3la6fr"
+    },
+    "nameAliases": {
+      "蒙其·D·魯夫": "luffy",
+      "索隆": "zoro",
+      "娜美": "nami",
+      "香吉士": "sanji",
+      "托拉法爾加·羅": "law",
+      "妮可·羅賓": "robin",
+      "波雅·漢考克": "hancock",
+      "凱洛特": "carrot",
+      "波特卡斯·D·艾斯": "ace",
+      "薩波": "sabo",
+      "大和": "yamato",
+      "柯拉松": "corazon",
+      "騙人布": "usopp",
+      "多尼多尼·喬巴": "chopper",
+      "吉貝爾": "jinbe",
+      "布魯克": "brook",
+      "佛朗基": "franky",
+      "光月御田": "oden",
+      "西爾巴茲·雷利": "rayleigh",
+      "蒙其·D·卡普": "garp",
+      "薇薇": "vivi",
+      "克比": "koby",
+      "斯摩格": "smoker",
+      "達斯琪": "tashigi",
+      "庫山": "kuzan",
+      "藤虎": "fujitora",
+      "巴托洛米奧": "bartolomeo",
+      "卡文迪許": "cavendish",
+      "錦衛門": "kinemon",
+      "安布里歐·伊娃科夫": "ivankov",
+      "巴索羅繆·熊": "kuma",
+      "蒙其·D·龍": "dragon",
+      "尤斯塔斯·基德": "kid",
+      "基拉": "killer",
+      "佩羅娜": "perona",
+      "曼雪莉": "mansherry",
+      "白鬍子": "whitebeard",
+      "鑽石喬茲": "jozu",
+      "花劍比斯塔": "vista",
+      "以藏": "izo",
+      "小奧茲 Jr.": "little_oars_jr",
+      "大渦蜘蛛・史庫亞德": "squard",
+      "馬可": "marco",
+      "囚服巴奇": "prison_buggy",
+      "囚服Mr.3": "prison_mr3",
+      "囚服Mr.2": "prison_mr2_bon_clay",
+      "囚服Mr.1": "prison_mr1_daz_bones",
+      "囚服克洛克達爾": "prison_crocodile",
+      "烏塔": "custom_mp3l6s8w",
+      "鷹眼": "custom_mp3l85c1",
+      "哥爾·D·羅傑": "custom_mp3la6fr",
+      "二檔魯夫": "luffy",
+      "司法島索隆": "zoro",
+      "司法島娜美": "nami",
+      "司法島香吉士": "sanji",
+      "人獸形喬巴": "chopper",
+      "狙擊王": "usopp",
+      "新世界羅賓": "robin",
+      "佛朗基將軍": "franky",
+      "靈魂之王布魯克": "brook",
+      "凱洛特月獅型態": "carrot",
+      "四檔": "luffy",
+      "蒙其·D·魯夫（四檔）": "luffy",
+      "五檔・尼卡": "luffy",
+      "蒙其·D·魯夫（五檔・尼卡）": "luffy",
+      "新世界索隆": "zoro",
+      "索隆十郎": "zoro",
+      "新世界娜美": "nami",
+      "新世界香吉士": "sanji",
+      "新世界騙人布": "usopp",
+      "新世界喬巴": "chopper",
+      "新世界 羅": "law",
+      "新世界斯摩格": "smoker",
+      "新世界達斯琪": "tashigi",
+      "新世界基德": "kid",
+      "新世界佩羅娜": "perona",
+      "年輕雷利": "rayleigh",
+      "上校克比": "koby",
+      "愛德華·紐蓋特": "whitebeard",
+      "10號船長庫山": "kuzan",
+      "新世界鷹眼": "custom_mp3l85c1",
+      "年輕羅傑": "custom_mp3la6fr",
+      "四皇巴奇": "prison_buggy",
+      "新世界Mr.3": "prison_mr3",
+      "新世界Mr.1": "prison_mr1_daz_bones",
+      "新世界克洛克達爾": "prison_crocodile",
+      "摩奇": "mohji",
+      "卡巴吉": "cabaji",
+      "亞爾麗塔": "alvida",
+      "斧手摩根": "axe_hand_morgan",
+      "克利克": "krieg",
+      "阿金": "gin",
+      "克洛": "kuro",
+      "Mr.5": "mr5",
+      "Miss Valentine": "miss_valentine",
+      "瓦波爾": "wapol",
+      "凱薩·庫朗": "caesar_clown",
+      "阿龍": "arlong",
+      "克羅歐比": "kuroobi",
+      "小八": "hatchan",
+      "貝拉密": "bellamy",
+      "銀狐弗克西": "foxy",
+      "霍迪·瓊斯": "hody_jones",
+      "艾尼路": "enel",
+      "月光莫利亞": "gecko_moria",
+      "多佛朗明哥": "doflamingo",
+      "皮卡": "pica",
+      "戰桃丸": "sentomaru",
+      "小莎蒂": "impel_l1_sadie",
+      "米諾吉娃娃": "impel_l2_minochihuahua",
+      "米諾無尾熊": "impel_l3_minokoala",
+      "米諾陶爾": "impel_l4_minotaur",
+      "米諾犀牛": "impel_l5_minorhino",
+      "般若拔": "impel_l6_hannyabal",
+      "麥哲倫": "magellan",
+      "黃猿": "kizaru",
+      "赤犬": "akainu",
+      "戰國元帥": "sengoku",
+      "黑鬍子": "yonko_blackbeard",
+      "紅髮香克斯": "yonko_shanks",
+      "大媽": "yonko_bigmom",
+      "凱多": "yonko_kaido",
+      "伊姆": "final_imu",
+      "麒麟格姆": "god_knight_killingham",
+      "索瑪茲": "god_knight_sommers",
+      "斯潘達姆": "spandam",
+      "布魯諾": "blueno",
+      "卡莉法": "kalifa",
+      "加布拉": "jabra",
+      "卡古": "kaku",
+      "羅布・路基": "lucci",
+      "金獅子史基": "postgame_shiki",
+      "吉爾德・泰佐洛": "postgame_gild_tesoro",
+      "澤法": "postgame_zephyr",
+      "Tot Musica": "postgame_tot_musica",
+      "道格拉斯・巴雷特": "postgame_douglas_bullet",
+      "薩卡／七星劍": "postgame_saga",
+      "文斯莫克・伽治": "postgame_vinsmoke_judge",
+      "覺醒羅布・路基": "lucci",
+      "KING": "postgame_king",
+      "夏洛特・卡塔庫栗": "postgame_charlotte_katakuri",
+      "帕特里克・雷德菲爾德": "postgame_patrick_redfield",
+      "洛基": "postgame_loki",
+      "魔人歐斯": "postgame_oars",
+      "綠牛／荒牧": "postgame_aramaki",
+      "洛克斯・D・吉貝克": "postgame_rocks",
+      "巴其": "prison_buggy",
+      "巴奇": "prison_buggy",
+      "蒙卡": "axe_hand_morgan",
+      "Mr.3": "prison_mr3",
+      "凱薩": "caesar_clown",
+      "惡龍": "arlong",
+      "Mr.2": "prison_mr2_bon_clay",
+      "Mr.1": "prison_mr1_daz_bones",
+      "霍迪・瓊斯": "hody_jones",
+      "克洛克達爾": "prison_crocodile",
+      "青雉": "kuzan"
+    },
+    "ambiguousNameAliases": {},
+    "priority": "StablegameID first; names are explicitlysecondary and ambiguity must not guess."
+  },
+  "runtimeContexts": {
+    "blackSnapshot": {
+      "identityKeys": [
+        "id",
+        "templateId",
+        "baseId"
+      ],
+      "idToActor": {
+        "luffy": "luffy",
+        "zoro": "zoro",
+        "nami": "nami",
+        "sanji": "sanji",
+        "law": "law",
+        "robin": "robin",
+        "hancock": "hancock",
+        "carrot": "carrot",
+        "ace": "ace",
+        "sabo": "sabo",
+        "yamato": "yamato",
+        "corazon": "corazon",
+        "usopp": "usopp",
+        "chopper": "chopper",
+        "jinbe": "jinbe",
+        "brook": "brook",
+        "franky": "franky",
+        "oden": "oden",
+        "rayleigh": "rayleigh",
+        "garp": "garp",
+        "vivi": "vivi",
+        "koby": "koby",
+        "smoker": "smoker",
+        "tashigi": "tashigi",
+        "kuzan": "kuzan",
+        "fujitora": "fujitora",
+        "bartolomeo": "bartolomeo",
+        "cavendish": "cavendish",
+        "kinemon": "kinemon",
+        "ivankov": "ivankov",
+        "kuma": "kuma",
+        "dragon": "dragon",
+        "kid": "kid",
+        "killer": "killer",
+        "perona": "perona",
+        "mansherry": "mansherry",
+        "whitebeard": "whitebeard",
+        "jozu": "jozu",
+        "vista": "vista",
+        "izo": "izo",
+        "little_oars_jr": "little_oars_jr",
+        "squard": "squard",
+        "marco": "marco",
+        "prison_buggy": "prison_buggy",
+        "prison_mr3": "prison_mr3",
+        "prison_mr2_bon_clay": "prison_mr2_bon_clay",
+        "prison_mr1_daz_bones": "prison_mr1_daz_bones",
+        "prison_crocodile": "prison_crocodile",
+        "custom_mp3l6s8w": "custom_mp3l6s8w",
+        "custom_mp3l85c1": "custom_mp3l85c1",
+        "custom_mp3la6fr": "custom_mp3la6fr",
+        "lineage_mohji": "mohji",
+        "lineage_cabaji": "cabaji",
+        "lineage_alvida": "alvida",
+        "lineage_axe_hand_morgan": "axe_hand_morgan",
+        "lineage_krieg": "krieg",
+        "lineage_gin": "gin",
+        "lineage_kuro": "kuro",
+        "lineage_mr5": "mr5",
+        "lineage_miss_valentine": "miss_valentine",
+        "lineage_wapol": "wapol",
+        "lineage_caesar_clown": "caesar_clown",
+        "lineage_arlong": "arlong",
+        "lineage_kuroobi": "kuroobi",
+        "lineage_hatchan": "hatchan",
+        "lineage_bellamy": "bellamy",
+        "lineage_foxy": "foxy",
+        "lineage_hody_jones": "hody_jones",
+        "lineage_enel": "enel",
+        "lineage_gecko_moria": "gecko_moria",
+        "lineage_doflamingo": "doflamingo",
+        "lineage_pica": "pica",
+        "lineage_sentomaru": "sentomaru",
+        "lineage_impel_l1_sadie": "impel_l1_sadie",
+        "lineage_impel_l2_minochihuahua": "impel_l2_minochihuahua",
+        "lineage_impel_l3_minokoala": "impel_l3_minokoala",
+        "lineage_impel_l4_minotaur": "impel_l4_minotaur",
+        "lineage_impel_l5_minorhino": "impel_l5_minorhino",
+        "lineage_impel_l6_hannyabal": "impel_l6_hannyabal",
+        "lineage_magellan": "magellan",
+        "lineage_kizaru": "kizaru",
+        "lineage_akainu": "akainu",
+        "lineage_sengoku": "sengoku",
+        "lineage_yonko_blackbeard": "yonko_blackbeard",
+        "lineage_yonko_shanks": "yonko_shanks",
+        "lineage_yonko_bigmom": "yonko_bigmom",
+        "lineage_yonko_kaido": "yonko_kaido",
+        "lineage_final_imu": "final_imu",
+        "lineage_god_knight_killingham": "god_knight_killingham",
+        "lineage_god_knight_sommers": "god_knight_sommers",
+        "lineage_spandam": "spandam",
+        "lineage_blueno": "blueno",
+        "lineage_kalifa": "kalifa",
+        "lineage_jabra": "jabra",
+        "lineage_kaku": "kaku",
+        "lineage_lucci": "lucci",
+        "lineage_postgame_rob_lucci_awakened": "lucci",
+        "lineage_postgame_shiki": "postgame_shiki",
+        "lineage_postgame_gild_tesoro": "postgame_gild_tesoro",
+        "lineage_postgame_zephyr": "postgame_zephyr",
+        "lineage_postgame_tot_musica": "postgame_tot_musica",
+        "lineage_postgame_douglas_bullet": "postgame_douglas_bullet",
+        "lineage_postgame_saga": "postgame_saga",
+        "lineage_postgame_vinsmoke_judge": "postgame_vinsmoke_judge",
+        "lineage_postgame_king": "postgame_king",
+        "lineage_postgame_charlotte_katakuri": "postgame_charlotte_katakuri",
+        "lineage_postgame_patrick_redfield": "postgame_patrick_redfield",
+        "lineage_postgame_loki": "postgame_loki",
+        "lineage_postgame_oars": "postgame_oars",
+        "lineage_postgame_aramaki": "postgame_aramaki",
+        "lineage_postgame_rocks": "postgame_rocks",
+        "luffy_gear_second": "luffy",
+        "luffy_evolution_2": "luffy",
+        "luffy_gear_fifth": "luffy",
+        "zoro_santoryu_plus": "zoro",
+        "zoro_evolution_2": "zoro",
+        "zoro_zorojuro": "zoro",
+        "nami_clima_tact_plus": "nami",
+        "nami_evolution_2": "nami",
+        "sanji_diable_jambe": "sanji",
+        "sanji_evolution_2": "sanji",
+        "law_new_world": "law",
+        "robin_cien_fleur": "robin",
+        "carrot_moon_lion": "carrot",
+        "usopp_sogeking": "usopp",
+        "usopp_evolution_2": "usopp",
+        "chopper_rumble_ball_plus": "chopper",
+        "chopper_evolution_2": "chopper",
+        "brook_yomi_swordsman": "brook",
+        "franky_weapon_left": "franky",
+        "rayleigh_young": "rayleigh",
+        "koby_colonel": "koby",
+        "smoker_new_world": "smoker",
+        "tashigi_new_world": "tashigi",
+        "kuzan_evolution_1": "kuzan",
+        "kid_new_world": "kid",
+        "perona_new_world": "perona",
+        "whitebeard_evolution_1": "whitebeard",
+        "prison_buggy_escape_alliance": "prison_buggy",
+        "prison_mr3_candle_strategist": "prison_mr3",
+        "prison_mr1_steel_blade": "prison_mr1_daz_bones",
+        "prison_crocodile_desert_alliance": "prison_crocodile",
+        "custom_mp3l85c1_evolution_1": "custom_mp3l85c1",
+        "custom_mp3la6fr_evolution_1": "custom_mp3la6fr",
+        "aokiji": "kuzan",
+        "buggy": "prison_buggy",
+        "mr3": "prison_mr3",
+        "mr2_bon_clay": "prison_mr2_bon_clay",
+        "mr1_daz_bones": "prison_mr1_daz_bones",
+        "crocodile": "prison_crocodile",
+        "mohji": "mohji",
+        "cabaji": "cabaji",
+        "alvida": "alvida",
+        "axe_hand_morgan": "axe_hand_morgan",
+        "krieg": "krieg",
+        "gin": "gin",
+        "kuro": "kuro",
+        "mr5": "mr5",
+        "miss_valentine": "miss_valentine",
+        "wapol": "wapol",
+        "caesar_clown": "caesar_clown",
+        "arlong": "arlong",
+        "kuroobi": "kuroobi",
+        "hatchan": "hatchan",
+        "bellamy": "bellamy",
+        "foxy": "foxy",
+        "hody_jones": "hody_jones",
+        "enel": "enel",
+        "gecko_moria": "gecko_moria",
+        "doflamingo": "doflamingo",
+        "pica": "pica",
+        "sentomaru": "sentomaru",
+        "impel_l1_sadie": "impel_l1_sadie",
+        "impel_l2_minochihuahua": "impel_l2_minochihuahua",
+        "impel_l3_minokoala": "impel_l3_minokoala",
+        "impel_l4_minotaur": "impel_l4_minotaur",
+        "impel_l5_minorhino": "impel_l5_minorhino",
+        "impel_l6_hannyabal": "impel_l6_hannyabal",
+        "magellan": "magellan",
+        "kizaru": "kizaru",
+        "akainu": "akainu",
+        "sengoku": "sengoku",
+        "yonko_blackbeard": "yonko_blackbeard",
+        "yonko_shanks": "yonko_shanks",
+        "yonko_bigmom": "yonko_bigmom",
+        "yonko_kaido": "yonko_kaido",
+        "final_imu": "final_imu",
+        "god_knight_killingham": "god_knight_killingham",
+        "god_knight_sommers": "god_knight_sommers",
+        "spandam": "spandam",
+        "blueno": "blueno",
+        "kalifa": "kalifa",
+        "jabra": "jabra",
+        "kaku": "kaku",
+        "lucci": "lucci",
+        "postgame_rob_lucci_awakened": "lucci",
+        "postgame_shiki": "postgame_shiki",
+        "postgame_gild_tesoro": "postgame_gild_tesoro",
+        "postgame_zephyr": "postgame_zephyr",
+        "postgame_tot_musica": "postgame_tot_musica",
+        "postgame_douglas_bullet": "postgame_douglas_bullet",
+        "postgame_saga": "postgame_saga",
+        "postgame_vinsmoke_judge": "postgame_vinsmoke_judge",
+        "postgame_king": "postgame_king",
+        "postgame_charlotte_katakuri": "postgame_charlotte_katakuri",
+        "postgame_patrick_redfield": "postgame_patrick_redfield",
+        "postgame_loki": "postgame_loki",
+        "postgame_oars": "postgame_oars",
+        "postgame_aramaki": "postgame_aramaki",
+        "postgame_rocks": "postgame_rocks",
+        "arena_luffy": "luffy",
+        "arena_zoro": "zoro",
+        "arena_nami": "nami",
+        "arena_sanji": "sanji",
+        "arena_law": "law",
+        "arena_robin": "robin",
+        "arena_hancock": "hancock",
+        "arena_carrot": "carrot",
+        "arena_ace": "ace",
+        "arena_sabo": "sabo",
+        "arena_yamato": "yamato",
+        "arena_corazon": "corazon",
+        "arena_usopp": "usopp",
+        "arena_chopper": "chopper",
+        "arena_jinbe": "jinbe",
+        "arena_brook": "brook",
+        "arena_franky": "franky",
+        "arena_oden": "oden",
+        "arena_rayleigh": "rayleigh",
+        "arena_garp": "garp",
+        "arena_vivi": "vivi",
+        "arena_koby": "koby",
+        "arena_smoker": "smoker",
+        "arena_tashigi": "tashigi",
+        "arena_kuzan": "kuzan",
+        "arena_fujitora": "fujitora",
+        "arena_bartolomeo": "bartolomeo",
+        "arena_cavendish": "cavendish",
+        "arena_kinemon": "kinemon",
+        "arena_ivankov": "ivankov",
+        "arena_kuma": "kuma",
+        "arena_dragon": "dragon",
+        "arena_kid": "kid",
+        "arena_killer": "killer",
+        "arena_perona": "perona",
+        "arena_mansherry": "mansherry",
+        "arena_whitebeard": "whitebeard",
+        "arena_jozu": "jozu",
+        "arena_vista": "vista",
+        "arena_izo": "izo",
+        "arena_little_oars_jr": "little_oars_jr",
+        "arena_squard": "squard",
+        "arena_marco": "marco",
+        "arena_prison_buggy": "prison_buggy",
+        "arena_prison_mr3": "prison_mr3",
+        "arena_prison_mr2_bon_clay": "prison_mr2_bon_clay",
+        "arena_prison_mr1_daz_bones": "prison_mr1_daz_bones",
+        "arena_prison_crocodile": "prison_crocodile",
+        "arena_custom_mp3l6s8w": "custom_mp3l6s8w",
+        "arena_custom_mp3l85c1": "custom_mp3l85c1",
+        "arena_custom_mp3la6fr": "custom_mp3la6fr"
+      },
+      "fallback": "Keep stablecard identity; never identify by transformed display label.",
+      "changesGameId": false
+    },
+    "stealthBlack": {
+      "actorId": "sanji",
+      "baseId": "sanji",
+      "formId": "sanji_evolution_2",
+      "runtimePredicate": "sanjiRaidSuitTransformed",
+      "textMode": "RetainSanji personality; no extra actor is invented."
+    },
+    "phaseTwo": {
+      "enemyKeys": [
+        "yonko_shanks",
+        "yonko_blackbeard",
+        "yonko_bigmom",
+        "yonko_kaido",
+        "final_imu"
+      ],
+      "textMode": "Samecanonicalactor; do not restartintro only because phase changes."
+    },
+    "arena": {
+      "identityPriority": [
+        "sourceCardId",
+        "formId",
+        "arenaId"
+      ],
+      "changesGameId": false
+    }
+  },
+  "selectionNotes": [
+    "Every actor has3distinctgeneral lines. A missingrelationship uses thatactor general pool; never generateenemy-name Cartesian filler.",
+    "Pick onevariant per encounter and preservebothfrom/to sides, even when reversinghero/enemy orientation.",
+    "Onlycontextopponent is eligible for opposing sides; allycontent must not be used to taunt anenemy.",
+    "General/action pools require no MP3, timing7s, speech synthesis, or network service.",
+    "presentationaction is prose/narration for nonverbal creatures, not spoken dialogue.",
+    "No turn/reward/Socket/storage/account rules changed by thisdata; Sourceowner implements selector separately."
+  ],
+  "legacyNameAliases": {
+    "蒙其·D·魯夫": "luffy",
+    "索隆": "zoro",
+    "娜美": "nami",
+    "香吉士": "sanji",
+    "托拉法爾加·羅": "law",
+    "妮可·羅賓": "robin",
+    "波雅·漢考克": "hancock",
+    "凱洛特": "carrot",
+    "波特卡斯·D·艾斯": "ace",
+    "薩波": "sabo",
+    "大和": "yamato",
+    "柯拉松": "corazon",
+    "騙人布": "usopp",
+    "多尼多尼·喬巴": "chopper",
+    "吉貝爾": "jinbe",
+    "布魯克": "brook",
+    "佛朗基": "franky",
+    "光月御田": "oden",
+    "西爾巴茲·雷利": "rayleigh",
+    "蒙其·D·卡普": "garp",
+    "薇薇": "vivi",
+    "克比": "koby",
+    "斯摩格": "smoker",
+    "達斯琪": "tashigi",
+    "庫山": "kuzan",
+    "藤虎": "fujitora",
+    "巴托洛米奧": "bartolomeo",
+    "卡文迪許": "cavendish",
+    "錦衛門": "kinemon",
+    "安布里歐·伊娃科夫": "ivankov",
+    "巴索羅繆·熊": "kuma",
+    "蒙其·D·龍": "dragon",
+    "尤斯塔斯·基德": "kid",
+    "基拉": "killer",
+    "佩羅娜": "perona",
+    "曼雪莉": "mansherry",
+    "白鬍子": "whitebeard",
+    "鑽石喬茲": "jozu",
+    "花劍比斯塔": "vista",
+    "以藏": "izo",
+    "小奧茲 Jr.": "little_oars_jr",
+    "大渦蜘蛛・史庫亞德": "squard",
+    "馬可": "marco",
+    "囚服巴奇": "prison_buggy",
+    "囚服Mr.3": "prison_mr3",
+    "囚服Mr.2": "prison_mr2_bon_clay",
+    "囚服Mr.1": "prison_mr1_daz_bones",
+    "囚服克洛克達爾": "prison_crocodile",
+    "烏塔": "custom_mp3l6s8w",
+    "鷹眼": "custom_mp3l85c1",
+    "哥爾·D·羅傑": "custom_mp3la6fr",
+    "二檔魯夫": "luffy",
+    "司法島索隆": "zoro",
+    "司法島娜美": "nami",
+    "司法島香吉士": "sanji",
+    "人獸形喬巴": "chopper",
+    "狙擊王": "usopp",
+    "新世界羅賓": "robin",
+    "佛朗基將軍": "franky",
+    "靈魂之王布魯克": "brook",
+    "凱洛特月獅型態": "carrot",
+    "四檔": "luffy",
+    "蒙其·D·魯夫（四檔）": "luffy",
+    "五檔・尼卡": "luffy",
+    "蒙其·D·魯夫（五檔・尼卡）": "luffy",
+    "新世界索隆": "zoro",
+    "索隆十郎": "zoro",
+    "新世界娜美": "nami",
+    "新世界香吉士": "sanji",
+    "新世界騙人布": "usopp",
+    "新世界喬巴": "chopper",
+    "新世界 羅": "law",
+    "新世界斯摩格": "smoker",
+    "新世界達斯琪": "tashigi",
+    "新世界基德": "kid",
+    "新世界佩羅娜": "perona",
+    "年輕雷利": "rayleigh",
+    "上校克比": "koby",
+    "愛德華·紐蓋特": "whitebeard",
+    "10號船長庫山": "kuzan",
+    "新世界鷹眼": "custom_mp3l85c1",
+    "年輕羅傑": "custom_mp3la6fr",
+    "四皇巴奇": "prison_buggy",
+    "新世界Mr.3": "prison_mr3",
+    "新世界Mr.1": "prison_mr1_daz_bones",
+    "新世界克洛克達爾": "prison_crocodile",
+    "摩奇": "mohji",
+    "卡巴吉": "cabaji",
+    "亞爾麗塔": "alvida",
+    "斧手摩根": "axe_hand_morgan",
+    "克利克": "krieg",
+    "阿金": "gin",
+    "克洛": "kuro",
+    "Mr.5": "mr5",
+    "Miss Valentine": "miss_valentine",
+    "瓦波爾": "wapol",
+    "凱薩·庫朗": "caesar_clown",
+    "阿龍": "arlong",
+    "克羅歐比": "kuroobi",
+    "小八": "hatchan",
+    "貝拉密": "bellamy",
+    "銀狐弗克西": "foxy",
+    "霍迪·瓊斯": "hody_jones",
+    "艾尼路": "enel",
+    "月光莫利亞": "gecko_moria",
+    "多佛朗明哥": "doflamingo",
+    "皮卡": "pica",
+    "戰桃丸": "sentomaru",
+    "小莎蒂": "impel_l1_sadie",
+    "米諾吉娃娃": "impel_l2_minochihuahua",
+    "米諾無尾熊": "impel_l3_minokoala",
+    "米諾陶爾": "impel_l4_minotaur",
+    "米諾犀牛": "impel_l5_minorhino",
+    "般若拔": "impel_l6_hannyabal",
+    "麥哲倫": "magellan",
+    "黃猿": "kizaru",
+    "赤犬": "akainu",
+    "戰國元帥": "sengoku",
+    "黑鬍子": "yonko_blackbeard",
+    "紅髮香克斯": "yonko_shanks",
+    "大媽": "yonko_bigmom",
+    "凱多": "yonko_kaido",
+    "伊姆": "final_imu",
+    "麒麟格姆": "god_knight_killingham",
+    "索瑪茲": "god_knight_sommers",
+    "斯潘達姆": "spandam",
+    "布魯諾": "blueno",
+    "卡莉法": "kalifa",
+    "加布拉": "jabra",
+    "卡古": "kaku",
+    "羅布・路基": "lucci",
+    "金獅子史基": "postgame_shiki",
+    "吉爾德・泰佐洛": "postgame_gild_tesoro",
+    "澤法": "postgame_zephyr",
+    "Tot Musica": "postgame_tot_musica",
+    "道格拉斯・巴雷特": "postgame_douglas_bullet",
+    "薩卡／七星劍": "postgame_saga",
+    "文斯莫克・伽治": "postgame_vinsmoke_judge",
+    "覺醒羅布・路基": "lucci",
+    "KING": "postgame_king",
+    "夏洛特・卡塔庫栗": "postgame_charlotte_katakuri",
+    "帕特里克・雷德菲爾德": "postgame_patrick_redfield",
+    "洛基": "postgame_loki",
+    "魔人歐斯": "postgame_oars",
+    "綠牛／荒牧": "postgame_aramaki",
+    "洛克斯・D・吉貝克": "postgame_rocks",
+    "巴其": "prison_buggy",
+    "巴奇": "prison_buggy",
+    "蒙卡": "axe_hand_morgan",
+    "Mr.3": "prison_mr3",
+    "凱薩": "caesar_clown",
+    "惡龍": "arlong",
+    "Mr.2": "prison_mr2_bon_clay",
+    "Mr.1": "prison_mr1_daz_bones",
+    "霍迪・瓊斯": "hody_jones",
+    "克洛克達爾": "prison_crocodile",
+    "青雉": "kuzan",
+    "魯夫": "luffy",
+    "羅": "law",
+    "羅賓": "robin",
+    "漢考克": "hancock",
+    "艾斯": "ace",
+    "喬巴": "chopper",
+    "御田": "oden",
+    "雷利": "rayleigh",
+    "卡普": "garp",
+    "達絲琪": "tashigi",
+    "伊娃科夫": "ivankov",
+    "熊": "kuma",
+    "龍": "dragon",
+    "基德": "kid",
+    "喬茲": "jozu",
+    "比斯塔": "vista",
+    "小奧茲Jr.": "little_oars_jr",
+    "史庫亞德": "squard",
+    "蒙其・D・魯夫": "luffy",
+    "羅羅亞·索隆": "zoro",
+    "羅羅亞・索隆": "zoro",
+    "托拉法爾加・羅": "law",
+    "妮可・羅賓": "robin",
+    "波雅・漢考克": "hancock",
+    "波特卡斯・D・艾斯": "ace",
+    "烏索普": "usopp",
+    "多尼多尼・喬巴": "chopper",
+    "西爾巴茲・雷利": "rayleigh",
+    "蒙其・D・卡普": "garp",
+    "安布里歐・伊娃科夫": "ivankov",
+    "巴索羅繆・熊": "kuma",
+    "蒙其・D・龍": "dragon",
+    "尤斯塔斯・基德": "kid",
+    "愛德華·紐蓋特／白鬍子": "whitebeard",
+    "愛德華・紐蓋特／白鬍子": "whitebeard",
+    "愛德華・紐蓋特": "whitebeard",
+    "大渦蜘蛛·史庫亞德": "squard",
+    "戰國": "sengoku",
+    "凱薩・庫朗": "caesar_clown",
+    "羅布·路基": "lucci",
+    "羅布路基": "lucci"
+  },
+  "legacyIdAliases": {
+    "rob_lucci": "lucci"
+  },
+  "legacyCategoryActors": {
+    "司法島敵人": [
+      "spandam",
+      "blueno",
+      "kalifa",
+      "jabra",
+      "kaku",
+      "lucci"
+    ],
+    "推進城敵人": [
+      "magellan",
+      "impel_l1_sadie",
+      "impel_l2_minochihuahua",
+      "impel_l3_minokoala",
+      "impel_l4_minotaur",
+      "impel_l5_minorhino",
+      "impel_l6_hannyabal"
+    ],
+    "海軍敵人": [
+      "axe_hand_morgan",
+      "sentomaru",
+      "akainu",
+      "kuzan",
+      "kizaru",
+      "sengoku"
+    ]
+  },
+  "legacyFormAliases": {
+    "luffy_gear_second": "luffy_gear_second",
+    "二檔魯夫": "luffy_gear_second",
+    "zoro_santoryu_plus": "zoro_santoryu_plus",
+    "司法島索隆": "zoro_santoryu_plus",
+    "nami_clima_tact_plus": "nami_clima_tact_plus",
+    "司法島娜美": "nami_clima_tact_plus",
+    "sanji_diable_jambe": "sanji_diable_jambe",
+    "司法島香吉士": "sanji_diable_jambe",
+    "chopper_rumble_ball_plus": "chopper_rumble_ball_plus",
+    "人獸形喬巴": "chopper_rumble_ball_plus",
+    "usopp_sogeking": "usopp_sogeking",
+    "狙擊王": "usopp_sogeking",
+    "robin_cien_fleur": "robin_cien_fleur",
+    "新世界羅賓": "robin_cien_fleur",
+    "franky_weapon_left": "franky_weapon_left",
+    "佛朗基將軍": "franky_weapon_left",
+    "brook_yomi_swordsman": "brook_yomi_swordsman",
+    "靈魂之王布魯克": "brook_yomi_swordsman",
+    "carrot_moon_lion": "carrot_moon_lion",
+    "凱洛特月獅型態": "carrot_moon_lion",
+    "luffy_evolution_2": "luffy_evolution_2",
+    "四檔": "luffy_evolution_2",
+    "蒙其·D·魯夫（四檔）": "luffy_evolution_2",
+    "luffy_gear_fifth": "luffy_gear_fifth",
+    "五檔・尼卡": "luffy_gear_fifth",
+    "蒙其·D·魯夫（五檔・尼卡）": "luffy_gear_fifth",
+    "zoro_evolution_2": "zoro_evolution_2",
+    "新世界索隆": "zoro_evolution_2",
+    "zoro_zorojuro": "zoro_zorojuro",
+    "索隆十郎": "zoro_zorojuro",
+    "nami_evolution_2": "nami_evolution_2",
+    "新世界娜美": "nami_evolution_2",
+    "sanji_evolution_2": "sanji_evolution_2",
+    "新世界香吉士": "sanji_evolution_2",
+    "usopp_evolution_2": "usopp_evolution_2",
+    "新世界騙人布": "usopp_evolution_2",
+    "chopper_evolution_2": "chopper_evolution_2",
+    "新世界喬巴": "chopper_evolution_2",
+    "law_new_world": "law_new_world",
+    "新世界 羅": "law_new_world",
+    "smoker_new_world": "smoker_new_world",
+    "新世界斯摩格": "smoker_new_world",
+    "tashigi_new_world": "tashigi_new_world",
+    "新世界達斯琪": "tashigi_new_world",
+    "kid_new_world": "kid_new_world",
+    "新世界基德": "kid_new_world",
+    "perona_new_world": "perona_new_world",
+    "新世界佩羅娜": "perona_new_world",
+    "rayleigh_young": "rayleigh_young",
+    "年輕雷利": "rayleigh_young",
+    "koby_colonel": "koby_colonel",
+    "上校克比": "koby_colonel",
+    "whitebeard_evolution_1": "whitebeard_evolution_1",
+    "愛德華·紐蓋特": "whitebeard_evolution_1",
+    "kuzan_evolution_1": "kuzan_evolution_1",
+    "10號船長庫山": "kuzan_evolution_1",
+    "custom_mp3l85c1_evolution_1": "custom_mp3l85c1_evolution_1",
+    "新世界鷹眼": "custom_mp3l85c1_evolution_1",
+    "custom_mp3la6fr_evolution_1": "custom_mp3la6fr_evolution_1",
+    "年輕羅傑": "custom_mp3la6fr_evolution_1",
+    "prison_buggy_escape_alliance": "prison_buggy_escape_alliance",
+    "四皇巴奇": "prison_buggy_escape_alliance",
+    "prison_mr3_candle_strategist": "prison_mr3_candle_strategist",
+    "新世界Mr.3": "prison_mr3_candle_strategist",
+    "prison_mr1_steel_blade": "prison_mr1_steel_blade",
+    "新世界Mr.1": "prison_mr1_steel_blade",
+    "prison_crocodile_desert_alliance": "prison_crocodile_desert_alliance",
+    "新世界克洛克達爾": "prison_crocodile_desert_alliance"
+  },
+  "runtimeContract": {
+    "install": "installBoardBanterText(host,data,{legacyBaseline})",
+    "legacyBaseline": "Use existing d75d PREBATTLE_LINE_DATA read-only; do not ship an extra1.6MB copy.",
+    "edits": "Stock330plus onlychanged/addedcustomrows; onlytruecustompairs takepriority overauthoredrelationships. Uneditedoriginalrows/fillers never reenterselection.",
+    "storage": "No writes/removals; unknowncustomkeys retained ineditorstorage but not assignedtoaguessedactor."
+  }
+};
+})();

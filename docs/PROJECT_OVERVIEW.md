@@ -3254,3 +3254,10 @@ Source v5 的 Main／Core／Battle 與 v4 精確相同；只有 Web UI 更新音
 Native Android raw Stage 與 iOS compiled Stage 在 Windows 實際 NativeGameRuntime／Core／Stage 加 WASAPI 分別 run11／run12 完成，兩次 host 報告均 PASS、各 23 個原流程節點，程序 exit0／0 engine errors 以 Native READY 為準。包含 fresh 真 ScreenTouch、新 39 OGG 解碼／播放位置與非零 PCM、偏好／mute、六聲部准入與真 stop、私有 limiter、原／未映射聲音、原最後一擊／重要物品 HUD、合法 CPU skip、回玩家可操作、virtual BGM position 與 dispose；清理後無聲部、pending timer 清空且私有 bus 移除。受控前置為 Source 生成敵 HP1 的 phase2 checkpoint 及原 CPU skip 效果，沒有直接清 turn／lock 或假造獎勵。
 
 驗收界線：上述 Native 是 Windows 執行 Android raw／iOS compiled 程式面的 host 接受，不是實體 Android／iPhone 音訊硬體或舊個人存檔驗收；AudioContext analyser／AudioServer PCM 不是主觀聽感、耳機或系統 loopback 接受。一般解碼／峰值／播放位置不能證明每個音色都好聽。standalone 的 persisted pagehide 是受控事件，不冒稱真 BFCache restore。保留 Native 既有 setup-save 初始 LAN 等待 modal 限制，以 fresh-host 原 setup 真 tap 作新局聲音入口驗證，未為音訊繞過玩法。沒有把自然完整戰役／完整 CPU 策略或原影片手機 decoder 驗收附會到這些受控案例。
+
+
+## 2026-11-14 艾爾巴夫後段流程維護
+
+手機版的神騎戰後流程沿用電腦版 Source 規則，補齊原生伊姆降臨地圖效果與後續對話銜接。呈現失敗不應遺失原本的故事或戰鬥續接；回呼屬於原航海紀錄、回合與玩家。讀取舊紀錄時，僅恢復已中斷且無活躍呈現的合法後段流程，保留既有戰鬥、獎勵收據和玩家進度。
+
+一般嗆聲依穩定角色 ID 選擇，每個 canonical actor 提供至少三句繁體中文；具體關係使用成對變化，無關角色使用一般台詞。進化、培養、競技場與黑轉身分沿用實際角色映射；非語言怪物以動作敘述呈現。只改 Board 遊戲更新檔，正式發布由啟動器責任聊天室統一處理。
