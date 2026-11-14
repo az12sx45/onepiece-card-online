@@ -9638,3 +9638,18 @@ Android／iOS host71各四變更targets：Core、Runtime、Stage與Timeline。25
 原始角色 WEBP 圖片不變。Android `native_portrait_card.gd`／iOS `native_portrait_card.gdc` 在既有25個允許目標內，由 HOST71 改為遊戲更新覆蓋；未擴大宿主允許清單。只提高黑轉／伊姆身體離屏圖層的取樣密度，計入父層縮放與 viewport stretch；完整含 padding 表面每邊上限2048、密度上限4，所以極端縮放仍可能受預算限制。一般角色圖、原框飾、裁切、濾鏡順序、陰影卷積、動畫與全域解析度保持原樣。原 attack／KO 使用 resting raster，近似相同浮點尺寸與密度沿用既有圖層，避免動畫中反覆重配。
 
 最終候選與有界驗證由 `D:/Codex_QA/board-imu-controlled-crew-20261114/COMBINED_READY.json` 統一指定；Windows／原生宿主、GPU 元件、發布更新驗證各有獨立證據。自動化宿主與 GPU 檢查不等於使用者個人手機／存檔或全部自然戰役驗收。正式部署與公開更新結果須另見啟動器發布紀錄。
+
+
+## 2026-11-14：受控船員與手機魔轉頭像發布
+
+公開驗證：2026-11-14T12:58:27.850Z；唯一 Combined READY f2d4f8c1，Source v3 / Native v4。source 4e246340192e439d43dd67b315663c560bba9912；runtime e4098b87d11363154932d4b88223be79b322eeec；Windows package-3458e718078e5bf4，Android16 / iOS21，宿主71及啟動器1.2.34不變。
+
+受控船員移除錯誤注入的 Domi Reversi，保留自己的已解鎖招式及精確舊中途/待續/檢查點血量、PP、狀態與回合；真正持有該招式者不受影響。Owner finite遷移、原AI及黑轉8400ms、KO/伊姆還原證據獨立保留，未重跑完整自然戰役。
+
+手機原生Portrait僅raw/GDC兩平台body更新；依穩定全祖先/viewport transform繪製，密度上限4、padding後surface上限2048，極端4x不保證完整4x原生解析度。原始立繪、外框、一般頭像、動畫時序及全局解析度保持；Owner31attack/31KO GPUallocation1→1證據與先前失敗原樣留存。Publisher原prepare/confirm/coldrestart確認實際新Portrait class及iOS GDC67d87/sourceLen0，不以VFS hash冒充實例，也不再跑owner矩陣。
+
+Windows完整6590列只變Main3989540B，6589列及6533media保留；原安裝1.2.34隔離實體快取的onebody updater、損壞拒絕、LKG與重開證據分開保留。Android/iOS各Core+Portrait兩變更，25targets=11PCK+14HOST，23retain=9PUBLIC+14HOST，下載8188117/8184291B；回復各1PUBLIC舊Core+1HOST舊Portrait，不造HOST URL。原啟動器/App/帳號/存檔namespace不變，不需USB、重裝APK或重簽IPA。
+
+既有Runtime/Stage/Timeline/Modal與音樂、音效bytes原樣保留；Publisher實跑原始啟動、confirm、coldrestart、獎勵HUD/guard/CPU/人類回合，含實際新Core factory及Portrait實例。此為電腦Godot raw/compiled consumer回歸，無手機實機、個人正式帳號/舊存檔、人耳聽測或整場自然戰役驗收宣稱。Canonical Main35407 trailing whitespace及兩種style exit2如實保留，不改受驗bytes，不稱lint通過。
+
+公開Gate：D:\Codex_QA\board-imu-controlled-crew-release-20261114/PUBLIC_VERIFICATION.json；SHA256 6e660f99858c487ae771215a2c4fb6b9fda1670b67634751b3ae766705805490。公告revision118新增本次Board，保留其餘99則內容順序，最舊Board封存；最後僅config與DEV追加。LATTICE API未提供，不宣稱任務或圖譜已持久寫入。

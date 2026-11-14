@@ -1,7 +1,33 @@
 {
   "schemaVersion": 1,
-  "revision": 117,
+  "revision": 118,
   "announcements": [
+    {
+      "id": "board-20261114-controlled-crew-portrait-update",
+      "status": "published",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 16／iOS Preview 21",
+      "title": "新世界航海錄｜受控船員技能與手機頭像修正",
+      "summary": "修正受控船員多出的支配招式，保留自己的已解鎖技能；改善手機魔轉頭像的繪製密度。",
+      "body": [
+        "受控船員沿用自己的已解鎖技能，修正原本沒有該招式卻多出「Domi Reversi」的問題。",
+        "修正受影響的舊中途存檔與待續戰鬥，保留當時的血量、PP、狀態及回合。",
+        "手機魔轉頭像會依畫面顯示密度繪製，保留原始立繪、外框與既有戰鬥動畫。",
+        "音效與配樂沿用已發布版本，原有音量與靜音設定保留。",
+        "在原啟動器或 App 的下載管理檢查「新世界航海錄」更新，套用後完整關閉再重新開啟。",
+        "沿用原帳號與存檔，不需重裝啟動器、APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-3458e718078e5bf4"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      },
+      "publishedAt": "2026-11-14T12:58:59.066Z"
+    },
     {
       "id": "board-20261114-authentic-move-sounds-edited-music",
       "status": "published",
@@ -48,31 +74,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-e6eaf019c04ec64f"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-20261114-battle-sfx-music-update",
-      "status": "published",
-      "publishedAt": "2026-11-13T17:06:35.418Z",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 13／iOS Preview 18",
-      "title": "新世界航海錄：戰鬥音效與配樂更新",
-      "summary": "補強戰鬥與操作音效，改善配樂接續，讓音量與靜音設定確實套用到遊戲聲音。",
-      "body": [
-        "重新整理招式施放、命中、防禦、回復與勝敗等戰鬥音效，讓出手與結果更容易分辨。",
-        "新世界航海錄的選單操作、擲骰與獎勵提示，會播放對應音效。",
-        "保留原有配樂；同一情境的回合交接與戰鬥視窗切換，配樂會接續原本的播放位置，減少重複重播與疊播。",
-        "可調整音量或使用靜音；變更設定會套用到正在播放的遊戲聲音。",
-        "請在目前的啟動器或 App 內檢查《新世界航海錄》更新，下載並套用後完整關閉，再重新開啟即可；沿用原帳號與存檔，不需重裝 APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-929d0029f15414d6"
       },
       "cta": {
         "kind": "game",
