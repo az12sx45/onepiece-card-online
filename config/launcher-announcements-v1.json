@@ -1,7 +1,33 @@
 {
   "schemaVersion": 1,
-  "revision": 118,
+  "revision": 119,
   "announcements": [
+    {
+      "id": "board-20261114-all-controlled-crew-moves-ko-update",
+      "status": "published",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 17／iOS Preview 22",
+      "title": "新世界航海錄｜受控角色招式與手機倒地修正",
+      "summary": "修正部分受控角色施放錯招、舊變身狀態的名稱與圖片，以及手機倒地去色與頭像位置。",
+      "body": [
+        "全面檢查可捕獲角色與永久型態的招式對應及原圖，另含山治戰鬥服狀態。",
+        "修正部分獄卒獸與卡塔克利受控後，選擇招式卻施放另一招的問題。",
+        "保留受控角色捕獲時的變身名稱與圖片，修正受影響舊存檔的招式 PP、排程與變身狀態對應。",
+        "修正手機倒地去色同步與特定獄卒獸頭像位置，沿用原圖及既有動畫節奏。",
+        "在原啟動器或 App 的下載管理更新「新世界航海錄」，套用後完整關閉再重新開啟。",
+        "沿用原帳號、存檔、音量與靜音設定，不需重裝啟動器、APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-91788250a6bbda14"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      },
+      "publishedAt": "2026-11-14T15:55:16.363Z"
+    },
     {
       "id": "board-20261114-controlled-crew-portrait-update",
       "status": "published",
@@ -53,32 +79,6 @@
         "gameId": "board"
       },
       "publishedAt": "2026-11-14T03:19:04.687Z"
-    },
-    {
-      "id": "board-20261114-god-knights-story-text-update",
-      "status": "published",
-      "publishedAt": "2026-11-14T01:59:16.767Z",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 14／iOS Preview 19",
-      "title": "新世界航海錄：神之騎士戰後銜接與文字嗆聲",
-      "summary": "修正兩名神之騎士戰後卡地圖與後續故事銜接，補強舊紀錄恢復，新增角色純文字嗆聲。",
-      "body": [
-        "修正艾爾巴夫兩名神之騎士戰後可能卡在地圖、無法接續伊姆劇情與戰鬥的問題。",
-        "補強舊紀錄、領獎提示關閉後、伊姆戰後，以及最終島結局與研究故事的銜接；沿用既有進度與獎勵。",
-        "缺圖或圖片延遲時，仍可閱讀字幕並使用繼續／跳過，讓主流程繼續。",
-        "新增110個角色各三句純文字一般嗆聲，70組對手關係各提供兩種對答變化，保留原本戰鬥開場時序。",
-        "沿用原本的自訂台詞儲存，實際編輯或新增的文字也可加入選池；同場已選定的開場對話保留。",
-        "在原啟動器或 App 下載管理更新新世界航海錄，套用後完整關閉再重開；原帳號與存檔沿用，不需重裝 APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-e6eaf019c04ec64f"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
     },
     {
       "id": "marineford-20261107-cpu-seat-memory",

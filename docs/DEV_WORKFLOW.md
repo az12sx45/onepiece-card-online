@@ -9669,3 +9669,22 @@ Windows完整6590列只變Main3989540B，6589列及6533media保留；原安裝1.
 Native僅既有PUBLIC `native_portrait_card.gd`／`.gdc`：把既有 `knockout_fade` 同步至黑轉／伊姆身體圖層的材質副本。原timeline仍先受擊、再暈眩、按原900／990ms等待後進KO Tween；參數改變只標dirty並在節點仍在tree時重繪原ordered filter鏈一次，退出只留dirty而不渲染，stop／reset恢復。未改原圖、shader來源、CSS順序、動作與戰鬥時序。唯一 `images/board/battle/enemies/impel_l2_minochihuahua/dizzy.webp` 以既有 `portrait_shift.y=-0.25` 調整手機方形卡取景，保持原ImageTexture／圖檔bytes，其它path恢復原enemy／player位移。
 
 原生raw／GDC、GPU元件及公開更新屬不同驗證證據；未宣稱實體Android／iPhone、個人正式帳號／舊存檔、整場自然campaign、FPS或記憶體測試已完成。原密度4／含padding表面2048上限保持。新候選的null／退出錯誤、初始QA錯誤與舊Source反例全部封存，不把早版含錯誤紀錄改標PASS。原App host71、launcher1.2.34、帳號／存檔鍵與25目標allowlist不變；正式版本與公告以啟動器後續真實RELEASED為準。
+
+
+## 2026-11-14：全受控角色招式與手機倒地修正發布
+
+公開驗證：2026-11-14T15:54:56.659Z；唯一 Combined c851865a，新的 Source3／Native4 root=board-imu-all-crew-audit-20261114，不與前輪標號混用。Source f14001be560a2e1220abc694020507f2c3bd6a71；runtime 39ffa6239f7d5e1fabfeb7d800ef09662181e751；Windows package-91788250a6bbda14，Android 17／iOS 22，host71／launcher1.2.34不變。
+
+修正 Mino／Katakuri 兩lineage共7個長ID legacy54碰撞，只改7個generated key，1366其他form-own IDs保留，最大107不變。舊child精確技能證據配對保留PP，ambiguous queued由原AI重選，不猜已施放退款。捕獲真正戰鬥服時先用snapshot再card fallback；舊確切Suitmove證據才修圖名。無instanceId舊伊姆父戰只在同owner、精確cardref/index/itemeligible讀舊forms[id:index]；new false優先，不rekey或新增狀態。
+
+Native僅既有Portrait：clone材質KO去色flag同步、dirty一次沿原filter重繪、tree內才render；退出後待正常重入。特定Mino exactasset的square portrait_shift.y=-.25，其他路徑恢復原shift，原圖bytes/ImageTexture/框/正常像素/Shader/全域解析度與hit→dizzy→900/990→KO時序不改，density4/padded2048上限保持。
+
+Owner分母110card＋33永久form=143，另1合法Suit transient共144；1123 unique ownMoves／1373 associations。275838合法配招、433legacy、8舊父戰guards、143default真AI與Suit18actions等有限證據在唯一Ready逐項定義；1210 generator可達與163 filtered utility isolated consumer分開。兩平台143×9 renderer/parent-child/priorKOreset各1287；四代表flow版本分別pin，不全重標final。final133f四collider實JSB/AI/resolve/timeline、兩平台舊Suit父戰原8400callback/9poses及RootDesktop/iframe before→final修正均有獨立receipt。
+
+真npm start＋兩Chrome Socket另以NETWORK_READY證據保存，26wireframes、原owner push v3兩端一致/reload可操，client applying/pending/inflight/timer flags按receipt如實；未複製完整media，不冒充圖像驗收。Art143 baseline1144 GPU＋Suit8=1152；721選中paths、1018原body230127414B，Android實APK dex→W3458 manifest與iOS固定index分別核。174未選舊alias不存在明列，不當actual缺圖或bytePASS；24頁Media審視與Root部分親視/最終Mino全臉、KO/reset範圍分開。前v1-v3 null/exit/QA錯誤與既有Ready保留。
+
+Publisher只原updater/currentbaseline/startup/confirm/coldrestart/rewardHUD/CPU-human及新factory/actualPortrait class、兩sync方法/boolean只讀見證，不呼叫sync方法，也不重跑owner全roster/KO/Art大矩陣。Windows全6590／保留6589／6533media，只換Main3995035B；原版1.2.34本機/公開各73/0，公開one原Response clone後原樣forward。Android/iOS各Core+Portrait兩PUBLIC，25=11PCK14HOST，23retain=9PUBLIC14HOST，下載8195154／8190751B。回復各2PUBLIC、0HOST，不沿前輪HOST→PUBLIC邏輯，5URLs/4unique hashes。
+
+手機實機、私人正式save/login、全自然戰役、FPS與人耳未代測；保留App/account/save namespace，不USB或重裝。Source style記錄以source-commit.json真實診斷為準，不改canonical bytes或把metadata/news style結果當source結果。
+
+公開Gate：D:\Codex_QA\board-imu-all-crew-release-20261114/PUBLIC_VERIFICATION.json；SHA256 136d047ee50260b0c3a2a9e8d339f86aeac4350309d4bc276ab059841a614f2c。revision119保留其餘99則內容順序，最舊Board封存；最後只公告config與DEV追加。LATTICE無API，不假ledger/graph；清理只保護0刪。
