@@ -9688,3 +9688,25 @@ Publisher只原updater/currentbaseline/startup/confirm/coldrestart/rewardHUD/CPU
 手機實機、私人正式save/login、全自然戰役、FPS與人耳未代測；保留App/account/save namespace，不USB或重裝。Source style記錄以source-commit.json真實診斷為準，不改canonical bytes或把metadata/news style結果當source結果。
 
 公開Gate：D:\Codex_QA\board-imu-all-crew-release-20261114/PUBLIC_VERIFICATION.json；SHA256 136d047ee50260b0c3a2a9e8d339f86aeac4350309d4bc276ab059841a614f2c。revision119保留其餘99則內容順序，最舊Board封存；最後只公告config與DEV追加。LATTICE無API，不假ledger/graph；清理只保護0刪。
+
+
+<!-- board-postgame-parity-20261115-cc15 -->
+
+2026-11-15：戰後／二周目接續核驗。`public/js/board_battle.js` 僅補抽取已結算 (`lineageExtraction.allResolved`) 的終止條件，避免持續清除敵人 KO action/timer 使返回地圖按鈕永遠等不到動畫結束。原 KO 時長與抽取 UI 保留。桌機 Main d64ffa74、手機 Core 133f40ed 沒有本輪規則變更。Source 13 Boss 終擊與結算、暫停舊存續戰、支配船員還原、伊姆二層 HP／戰後、結局／研究所、約克三難度／練習／CPU 二階、洛克斯後續均有有界證據；這些受控資料／演出回呼不等於每場自然戰役。原頁面實際 KING unavailable 抽取→確認→結果→獎勵→地圖／存讀檔已核，success/failure/declined 是原 Source API 與時鐘契約測，不稱真人小遊戲操作。隔離 `npm start` 加兩個真 Chrome 的 child 勝後原結算、Socket.IO 推送與重整恢復亦通過。QA：`D:/Codex_QA/board-postgame-parity-20261115/source-audit/`。保留先前 QA 操作／fixture 失敗與更正；未做實體 Android/iOS 裝置驗收。Native Runtime／AppStage 修正與真 raw/GDC 驗證由 Native owner 另列證據。
+
+
+<!-- board-postgame-native-story-port-20261115-v3 -->
+
+2026-11-15：手機戰後 CPU 劇情控制介面（Native Runtime v3／AppStage v2）。
+
+原生戰後流程接續：Native Runtime 為目前仍有效的劇情節點提供與觸控共用的原始 click/delegation、可見狀態與實際 Control 範圍。CPU 推進下一句、對話區與全畫面時，仍呼叫原始劇情處理函式；不變更劇情內容、等待時間或 CPU 決策。
+
+AppStage 的 story_node_state_json 在視窗未顯示、換頁待完成、原生輸入封鎖或既有換手橫幅可見時不提供可點範圍。舊劇情節點在移除、替換或 Runtime dispose 後不可再操作。
+
+節點身分使用原始 story.nodes 的固定 key／角色；Source 合法變更全畫面 DOM id（例如研究所劇情的 postgameWorldCinematic）不會破壞原生對話範圍、click 或當前劇情身分檢查，DOM id 本身仍由 Source 管理。
+
+產品範圍為每個手機平台既有兩個目標：native-game-runtime.js 及 Android native_app_stage.gd／iOS native_app_stage.gdc。iOS 保留既有獨立原始碼與 Godot 4.7.2 編譯來源；Core、Portrait、Timeline、固定宿主劇情模組及素材均未改。目標仍在既有 allowlist，無需 App 安裝。
+
+驗證須分開記錄正式基底、候選版本與實際案例：原生 HUD／Modal／Timeline 回呼、戰後抽取與線索展示、CPU 換手、存檔恢復及三階約克解謎等。終擊測試使用原始存檔前置、敵方 HP1 和原始治療／能力階級 API 的明列 QA 支撐，不宣稱自然完成全部戰役或個人手機實機驗收。
+
+驗證、版本與失敗界線以 `D:/Codex_QA/board-postgame-parity-20261115/native-audit/NATIVE_READY.json`、`parity-audit/RUNTIME_READY.json` 及後續 story contract 收據為準。Source Main／Core 保留原雜湊，Godot 4.7.2 只編譯既有 iOS Stage；遊戲更新不更換 host71 App，不修改帳號與存檔名稱空間。

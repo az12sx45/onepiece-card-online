@@ -2560,3 +2560,13 @@ Audio integration changed-target allowlist is Windows5 (Main/Battle/3regular mus
 ## 2026-11-14 全受控船員顯示修正檔案
 
 `native_portrait_card.gd`（Android）／`native_portrait_card.gdc`（iOS）：既有PUBLIC允許目標，新增身體材質KO／portrait_shift同步、dirty重繪與退出tree保護，以及唯一米諾吉娃娃暈眩asset的取景。依賴的原Shader、DemonFrame、CSS ordered image等HOST資源保留；未新增allowlist、原圖或媒體檔。Source Main／Core 的ID碰撞與戰鬥服快照／舊狀態相容修正需同批採納。143原模型批次、144動態addon及最終有界像素／退出驗證分開列於當輪Combined。
+
+
+<!-- board-postgame-parity-20261115-cc15 -->
+
+`public/js/board_battle.js` 的 `restoreLineageExtractionEnemyCard`：抽取 `allResolved` 後停止恢復敵方卡面，讓原 `battleResultPresentationReady`／KO timer 正常完成。Main `public/js/board_game.js` 與手機 `original-core.js` 本輪不變。`D:/Codex_QA/board-postgame-parity-20261115/source-audit/FLOW_MANIFEST.json` 是 13 Boss、伊姆、結局／研究所、約克與洛克斯的有界 fixture／證據索引；`PORTABLE_VERIFIED.json` 保留單行 forward／inverse 的 exact 套用與還原證明。
+
+
+<!-- board-postgame-native-story-port-20261115-v3 -->
+
+手機既有 `native-game-runtime.js` 的 `bindNativeStoryControls`，為目前故事節點補上原 CPU 所需的 click、實際範圍與可見狀態；身份比對與原委派處理使用穩定的 story.nodes Map key，Source 自行管理的 DOM id 仍可變更。Android `native_app_stage.gd`／iOS `native_app_stage.gdc` 新增 `story_node_state_json`，在未顯示、換頁、封鎖或既有換手橫幅可見時拒絕提供可點範圍。固定宿主故事模組、Core、Portrait、Timeline 與原素材均保留。可逆補丁、原 raw／GDC、編譯來源和實跑版本見同輪 Native Ready；發布目標仍為每個手機平台的兩個既有 allowlist 項目。

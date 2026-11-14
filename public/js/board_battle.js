@@ -8611,7 +8611,7 @@
   function restoreLineageExtractionEnemyCard(view) {
     const extraction = view?.battle?.lineageExtraction;
     const scopeKey = String(extraction?.scopeKey || "");
-    if (!scopeKey) {
+    if (!scopeKey || extraction.allResolved) {
       activeLineageExtractionScopeKey = "";
       return;
     }
