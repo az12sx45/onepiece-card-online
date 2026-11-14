@@ -3261,3 +3261,11 @@ Native Android raw Stage 與 iOS compiled Stage 在 Windows 實際 NativeGameRun
 手機版的神騎戰後流程沿用電腦版 Source 規則，補齊原生伊姆降臨地圖效果與後續對話銜接。呈現失敗不應遺失原本的故事或戰鬥續接；回呼屬於原航海紀錄、回合與玩家。讀取舊紀錄時，僅恢復已中斷且無活躍呈現的合法後段流程，保留既有戰鬥、獎勵收據和玩家進度。
 
 一般嗆聲依穩定角色 ID 選擇，每個 canonical actor 提供至少三句繁體中文；具體關係使用成對變化，無關角色使用一般台詞。進化、培養、競技場與黑轉身分沿用實際角色映射；非語言怪物以動作敘述呈現。只改 Board 遊戲更新檔，正式發布由啟動器責任聊天室統一處理。
+
+
+<!-- Board audio Root-review candidate: not publication receipt -->
+Board audio remains a game-only integration candidate until the launcher owner publishes and reads back the next exact update. The source base preserves the God Knights recovery/text release; original App/account/save semantics stay in scope. Desktop ships actual edited OGG files; Android/iOS Core sends at most one requested private music asset per payload to the original music transport. No voiced banter, voice bank, longer dialogue slots or additional music manager is introduced. Local/source/browser tests do not stand for physical phone, real account, installed-previous-version download or human listening acceptance. The publisher must read the latest clean source/live pointers and allocate fresh per-platform update sequences instead of reusing A14/I19 or overwriting the current announcement.
+
+這次Native音效/配樂與nullable-mechanic呈現補強是已公開critical恢復/純文字版本之後的獨立候選，不改App installer/host71、帳號ID、存檔namespace或Socket事件/控制規則。沿用原BGM manager，Core僅提供三檔private metadata index及一次一ID lazy payload；SFX與music bank分開。原關鍵劇情continuation、缺圖有界fallback及owner-safe畫面移除保護保留。兩平台raw/GDC consumer的component、原UI真input及受控guard矩陣，與實體手機、human listening、個人舊存檔/正式登入、公開updater及安裝舊版升級的驗收分開。Native final Ready狀態只是READY_FOR_INTEGRATION_NOT_RELEASED；Root親審及唯一launcher publisher的簽署、fresh sequence、部署/public readback完成前，不能把此附錄或handoff DRAFT當發布。保留所有失敗、withheld與rollback/原素材/QA，清理0；LATTICE API未曝露，不聲稱task/SQL/Graphify持久成功。
+
+Preserve final critical recovery/text behavior and existing game-only host71 flow. Six nullable outer-mechanic guards in the new native candidate normalize only valid absence; no whole battle view or gameplay callback is dropped. Audio/codec/component, actual-control mainflow, human listening, physical phones and public updater acceptance are distinct evidence. The Root DRAFT is not a release.

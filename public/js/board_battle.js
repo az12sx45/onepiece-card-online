@@ -3782,7 +3782,7 @@
             hitIndex: index,
           });
         });
-        playHitEffectSound(event.hitSfx, { allowDuringRokuogan: true });
+        playHitEffectSound(event.hitSfx, { allowDuringRokuogan: true, ...battleMoveAudioContext(event, "hit") });
         playStageShake();
       } else {
         spawnBattleDamageNumber({ amount: 0, miss: true, targetSide, anchorElement: targetCard });
@@ -4250,7 +4250,7 @@
     scheduleTotMusicaDualFx(() => {
       [[real, refs.totMusicaRealFrame], [song, refs.totMusicaSongFrame]].forEach(([world, frame]) => {
         if (!world.direct) {
-          playCastEffectSound(moveFxSound(world, "cast", world.castSfx));
+          playCastEffectSound(moveFxSound(world, "cast", world.castSfx), battleMoveAudioContext(world, "cast"));
           if (world.moveId) moveFxRuntime()?.play(world, { actorSide: "player", targetSide: "player", anchorElement: frame });
         }
       });
@@ -4276,7 +4276,7 @@
       const revealAt = impactAt - TOT_MUSICA_BOSS_REVEAL_HOLD_MS;
       scheduleTotMusicaDualFx(() => {
         [real, song].forEach((world) => {
-          if (world.direct) playCastEffectSound(moveFxSound(world, "cast", world.castSfx));
+          if (world.direct) playCastEffectSound(moveFxSound(world, "cast", world.castSfx), battleMoveAudioContext(world, "cast"));
         });
         refs.totMusicaDualFx?.classList.add("launch-upward");
         if (partialStrike) refs.totMusicaDualFx?.classList.add("split-upward");
@@ -4302,7 +4302,7 @@
         [real, song].forEach((world) => {
           if (!world.direct || !world.hit) return;
           moveFxRuntime()?.play(world, { actorSide: "player", targetSide: "enemy", anchorElement: refs.totMusicaBossFrame });
-          playHitEffectSound(moveFxSound(world, "hit", world.hitSfx));
+          playHitEffectSound(moveFxSound(world, "hit", world.hitSfx), battleMoveAudioContext(world, "hit"));
         });
         spawnBattleDamageNumber({
           amount: event.damage,
@@ -4451,7 +4451,7 @@
     else scheduleTotMusicaDualFx(revealBossForEnemy, revealAt);
 
     scheduleTotMusicaDualFx(() => {
-      playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
+      playCastEffectSound(moveFxSound(event, "cast", event.castSfx), battleMoveAudioContext(event, "cast"));
       refs.totMusicaDualFx?.classList.remove("enemy-rolling");
       refs.totMusicaDualFx?.classList.add(dealsDamage ? "enemy-striking" : "enemy-status-cast");
       refs.totMusicaBossFrame?.classList.remove("boss-high-reveal");
@@ -4480,7 +4480,7 @@
           moveFxRuntime()?.play(event, { actorSide: "enemy", targetSide: "player", anchorElement: frame });
         }
       });
-      if (dealsDamage && (real.hit || song.hit || real.fatalGuard || song.fatalGuard)) playHitEffectSound(moveFxSound(event, "hit", event.hitSfx));
+      if (dealsDamage && (real.hit || song.hit || real.fatalGuard || song.fatalGuard)) playHitEffectSound(moveFxSound(event, "hit", event.hitSfx), battleMoveAudioContext(event, "hit"));
       setTotMusicaHpUi(refs.totMusicaRealHpText, refs.totMusicaRealHpFill, real.currentHp, real.maxHp);
       setTotMusicaHpUi(refs.totMusicaSongHpText, refs.totMusicaSongHpFill, song.currentHp, song.maxHp);
       refs.totMusicaRealMove.textContent = dealsDamage ? (real.fatalGuard ? "不屈・致命傷已抵銷" : real.hit ? `受到 ${Math.max(0, Number(real.damage || 0))} 傷害` : "攻擊落空") : (real.affected ? "效果命中" : "效果未命中");
@@ -5505,14 +5505,33 @@
     return playBattleAudio(key === "down" ? "statusDown" : "statusUp", STATUS_EFFECT_SFX[key], { gain: 0.34, priority: 2 });
   }
 
-  function playHitEffectSound(src, options = {}) {
-    if (!src || (lucciRokuoganEffectAudioSilenced && !options.allowDuringRokuogan)) return;
-    return playBattleAudio("hitDefault", src, { gain: 0.25, priority: 2 });
+  function battleMoveAudioContext(event, phase) {
+    const source = event?.actorCombatant || event?.actorSnapshot || event?.snapshot?.[event?.side] || event?.startSnapshot?.[event?.side] || event?.finalSnapshot?.[event?.side] || {};
+    let identity = source.presentationIdentity || null;
+    if (!identity) for (const candidate of [window.parent, window.opener, window]) {
+      try { identity = candidate?.boardPresentationIdentity?.(source, { side: event?.side, formId: source.formId || source.evolutionFormId }); } catch (_) {}
+      if (identity) break;
+    }
+    const moveId = event?.canonicalMoveId || window.BoardMoveFx?.canonicalMoveId?.(window.BoardMoveFxCatalog, event?.moveId, event?.moveName) || "";
+    return { actorId: identity?.actorId || "", formId: identity?.formId || "", actorPhase: identity?.actorPhase || "normal", moveId, moveName: event?.moveName || "", actionId: event?.id || "", phase };
   }
 
-  function playCastEffectSound(src) {
-    if (!src || lucciRokuoganEffectAudioSilenced) return;
-    return playBattleAudio("castDefault", src, { gain: 0.19, priority: 1 });
+  function playBattleCasterVoiceAtWindup(event) {
+    if (lucciRokuoganEffectAudioSilenced || !battleAudioPresentationIsCurrent(battleAudioScope())) return null;
+    return battleHostAudioBus()?.playCatalogCue?.("castDefault", {
+      ...battleMoveAudioContext(event, "cast"),
+      path: "", preserveUnmapped: true, onlyRole: "casterVoice", scope: battleAudioScope(),
+    }) || null;
+  }
+
+  function playHitEffectSound(src, options = {}) {
+    if ((!src && !options.actorId) || (lucciRokuoganEffectAudioSilenced && !options.allowDuringRokuogan)) return;
+    return playBattleAudio("hitDefault", src, { gain: 0.25, priority: 2, ...options });
+  }
+
+  function playCastEffectSound(src, options = {}) {
+    if ((!src && !options.actorId) || lucciRokuoganEffectAudioSilenced) return;
+    return playBattleAudio("castDefault", src, { gain: 0.19, priority: 1, ...options });
   }
 
   function renderPortraitParticles(card, direction) {
@@ -5726,10 +5745,12 @@
   }
 
   function playImpactFx(event) {
+    battleHostAudioBus()?.beginAction?.({ ...battleMoveAudioContext(event, "cast"), scope: battleAudioScope() });
     clearImpactFxTimers(event.type !== "attack");
     if (event.type === "attack" && event.specialFx === "lucci-rokuogan" && playLucciRokuoganFx(event)) return;
     const side = eventActorSide(event);
     if (!side) return;
+    if (event.type === "attack") playBattleCasterVoiceAtWindup(event);
     const defender = event.type === "attack" ? attackTargetSide(event) : oppositeSide(side);
     const moveType = event.moveType || event.type;
     const effectFx = event.effectFx || null;
@@ -5773,7 +5794,7 @@
         const fatalGuardHit = !!event.fatalGuard && isFinalHit;
         const delay = firstDelay + index * hitGap;
         scheduleImpactFx(() => {
-          if (index === 0) playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
+          if (index === 0) playCastEffectSound(moveFxSound(event, "cast", event.castSfx), battleMoveAudioContext(event, "cast"));
           let spriteLaunched = false;
           if (moveFxRuntime()?.ready(event)) {
             refs.speedlinesFx?.classList.remove("show");
@@ -5834,7 +5855,7 @@
               }
               restartAnimation(refs.impactFx, "active");
             }
-            if (didConnect || cloneBlocked) playHitEffectSound(moveFxSound(event, "hit", event.hitSfx));
+            if (didConnect || cloneBlocked) playHitEffectSound(moveFxSound(event, "hit", event.hitSfx), battleMoveAudioContext(event, "hit"));
             const suppressFatalGuardLeadHit = !!event.fatalGuard && !isFinalHit && damage <= 0;
             if (!suppressFatalGuardLeadHit && (!didHitShikiIsland || damage > 0 || cloneBlocked || fatalGuardHit)) {
               spawnBattleDamageNumber({
@@ -5891,14 +5912,14 @@
       positionImpactFx(targetSide);
       setImpactEffect(impactKind);
       scheduleImpactFx(() => {
-        playCastEffectSound(moveFxSound(event, "cast", event.castSfx));
+        playCastEffectSound(moveFxSound(event, "cast", event.castSfx), battleMoveAudioContext(event, "cast"));
         if (moveFxRuntime()?.play(event, { phase: "impact", actorSide: side, targetSide })) {
           refs.impactFx?.classList.remove("active");
           setImpactEffect("");
         } else {
           restartAnimation(refs.impactFx, "active");
         }
-        playHitEffectSound(moveFxSound(event, "hit", event.hitSfx));
+        playHitEffectSound(moveFxSound(event, "hit", event.hitSfx), battleMoveAudioContext(event, "hit"));
       }, 360);
     }
     if (event.type !== "attack" && event.damage) {
@@ -6132,6 +6153,8 @@
     const event = view?.battle?.visualEvent;
     if (!event || event.id === lastVisualEventId || playedVisualEventIds.has(event.id)) return;
     if (event.moveId) void moveFxRuntime()?.warm(event);
+    if (event.type === "prepare") battleHostAudioBus()?.beginAction?.({ ...battleMoveAudioContext(event, "cast"), scope: battleAudioScope() });
+    if (["switch", "postgame-katakuri-future-sight", "postgame-zephyr-explosion-story", "nika-heartbeat"].includes(event.type)) battleHostAudioBus()?.stopScope?.(battleAudioScope());
     lastVisualEventId = event.id;
     if (event.id) {
       playedVisualEventIds.add(event.id);

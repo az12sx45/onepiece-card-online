@@ -2529,3 +2529,11 @@ Native Android raw Stage 與 iOS compiled Stage 在 Windows 實際 NativeGameRun
 - `public/js/onepiece_prebattle_lines.js`：角色、形態及具體關係的純文字內容與穩定身分映射，精確最終產物依本次 COMBINED_READY。
 - Board 的可獨立更新原生 Runtime、Stage 與 modal bridge：既有地圖降臨圖層、故事呈現及本 instance 的安全關閉。Android raw 與 iOS compiled 均須有實際產品來源與回歸證據，不改固定 host App。
 - `D:/Codex_QA/board-god-knights-recovery-20261114/`：本次原版失敗重現、舊版戰後存檔、候選、內容索引、完整 Web 及原生程式回歸與最終整合交接。原版失敗證據和必要回復材料保留供追查；未發布的日語配音草稿不屬本次更新。
+
+
+<!-- Board audio Root-review candidate: not publication receipt -->
+Board audio Source targets: public/js/board_game.js, public/js/board_battle.js and native original-core.js. Windows adds only public/audio/board_game/bgm_new/board_sailing_v3.ogg, board_battle_v3.ogg and board_boss_v3.ogg. Existing onepiece_prebattle_lines.js remains byte-identical. New short-SFX bytes are embedded in the existing catalog, separate from the private music bank. Transient visual snapshots carry presentationIdentity from the existing PREBATTLE_TEXT actor resolver; no player/storage/Socket IDs are renamed. The native timeline/runtime/Stage changes and their compiled products belong to the coordinated Native receipt.
+
+Native8/Source7交接allowlist：Android為original-core.js、native-game-runtime.js、native_app_stage.gd、native_battle_timeline.gd；iOS為original-core.js、native-game-runtime.js、native_app_stage.gdc、native_battle_timeline.gdc。每平台四項都在既有host71的25-target清單。iOS raw native_app_stage.gd只作編譯與review來源，不假列為iOS下載target。native-modal-bridge.js SHA d90932411631a4e82d761afebe958f23b92df3a56c5ec45b73517cdfc3fca58a及文字Data eea63e40原樣保留。Android/iOS候選changed body分別8345932B／8310300B，這不是正式更新器實際下載量。封裝分類overlay10/HOST15只是待publisher核實的預期，未在此當成實測。Native最終matrix、真input流程、BGM橋、compile與forward/inverse證據全部由final Native Ready引用；publisher應按exactbytes/SHA驗base及新檔，不帶入舊voice/music drafts。
+
+Audio integration changed-target allowlist is Windows5 (Main/Battle/3regular music), Android4 (Core/Runtime/StageGD/TimelineGD), iOS4 (Core/Runtime/StageGDC/TimelineGDC). ModalBridge and prebattle text data are retained byte-identical and excluded from changed-target totals; iOS raw Stage is compile/review source only. New short SFX are embedded in Main/Core, not extra standalone mobile download targets.
