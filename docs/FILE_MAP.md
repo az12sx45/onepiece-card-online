@@ -2549,3 +2549,14 @@ Audio integration changed-target allowlist is Windows5 (Main/Battle/3regular mus
 ## 2026-11-14 黑轉／伊姆角色圖更新覆蓋
 
 `native_portrait_card.gd`（Android）／`native_portrait_card.gdc`（iOS）：既有允許更新目標，包含繼承原 `native_demon_frame.gd` 與 `native_css_ordered_image.gd` 的狹窄 DPI 身體圖層實作；原宿主依賴保留。Source `original-core.js` 與桌面 `public/js/board_game.js` 的黑轉自身招式修正須同批發布，沒有新增素材檔、存檔欄位、命名空間或網路協定。
+
+
+## 2026-11-14 全船員黑轉候選位置
+
+- public/js/board_game.js／行動版 original-core.js：finalGateBlackTurnMoveKeyPart 僅解除已證實的同船員 key 碰撞；repairFinalGateBlackTurnCrewMoves 精準遷移舊招與排程。finalGateBlackTurnCrewSnapshot、applyFinalGateBlackTurnPortraits 與窄 Suit snapshot 修復保留捕獲時呈現；sanjiRaidSuitFormState 僅相容伊姆相關舊 owner/index key，不改通訊或存檔命名空間。
+- D:/Codex_QA/board-imu-all-crew-audit-20261114/source-audit/：143 持久型態共用 manifest、144th 動態 addon、完整技能資料等價類、原函式 consumer／舊存檔測試、候選與正反 exact patch、失敗及限制。Native／圖像 owner 各自維護 native-audit／art-audit 證據，Root 最後整合。
+
+
+## 2026-11-14 全受控船員顯示修正檔案
+
+`native_portrait_card.gd`（Android）／`native_portrait_card.gdc`（iOS）：既有PUBLIC允許目標，新增身體材質KO／portrait_shift同步、dirty重繪與退出tree保護，以及唯一米諾吉娃娃暈眩asset的取景。依賴的原Shader、DemonFrame、CSS ordered image等HOST資源保留；未新增allowlist、原圖或媒體檔。Source Main／Core 的ID碰撞與戰鬥服快照／舊狀態相容修正需同批採納。143原模型批次、144動態addon及最終有界像素／退出驗證分開列於當輪Combined。

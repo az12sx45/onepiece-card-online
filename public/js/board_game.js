@@ -17580,6 +17580,11 @@ const BOARD_STORY_BGM_PROFILES = Object.freeze({
     const playerState = sanjiRaidSuitPlayerState(owner, battle, create);
     if (!playerState) return null;
     const key = sanjiRaidSuitCrewKey(card, crewIndex);
+    if (!playerState.forms[key] && card.instanceId && card.id === "sanji" && owner.crew?.[crewIndex] === card
+      && (isFinalGateBattle(battle) || isFinalGateBlackTurnBattle(battle)) && sanjiRaidSuitEligible(card, battle, crewIndex)) {
+      const legacy = playerState.forms[`sanji:${crewIndex}`];
+      if (legacy && typeof legacy.transformed === "boolean") return legacy;
+    }
     if (!playerState.forms[key] && create) playerState.forms[key] = { transformed: false, stealthReady: false };
     return playerState.forms[key] || null;
   }
@@ -35360,17 +35365,52 @@ function resolveImpelDownEventPrimary(player, context = null) {
   function finalGateBlackTurnCrewSnapshot(card, index) {
     const level = Math.max(1, Math.round(Number(card?.level || 1)));
     const stats = cardStatsForLevel(card, level);
+    const sourceBattle = state.battleState;
+    const owner = sanjiRaidSuitBattleOwner(card, sourceBattle);
+    const transformed = sanjiRaidSuitTransformed(card, owner.player, sourceBattle, owner.index);
     return {
       id: String(card?.id || `crew_${index}`),
-      name: cardDisplayName(card),
+      name: transformed ? sanjiRaidSuitDisplayName(card, owner.player, sourceBattle, owner.index) : cardDisplayName(card),
       baseName: card?.name || "",
       level,
       tier: card?.tier || "T4",
       attribute: card?.attribute || "無",
       roleType: card?.roleType || card?.roleLabel || card?.role || "",
       stats,
-      battlePortraits: card ? safeJsonClone(cardPortraitsForDisplay(card)) : {},
+      battlePortraits: card ? safeJsonClone(transformed ? sanjiRaidSuitPortraits(card, owner.player, sourceBattle, owner.index) : cardPortraitsForDisplay(card)) : {},
     };
+  }
+
+  function repairFinalGateBlackTurnRaidSuitSnapshot(player, battle, card) {
+    if (card?.id !== "sanji" || activeEvolutionForm(card)?.id !== SANJI_RAID_SUIT_FORM_ID
+      || !cardHasBattleCarryItem(card, SANJI_RAID_SUIT_ITEM_ID)) return false;
+    const evidence = (battle.enemyCombatant?.moveSet || []).some((entry) => (card.moveSet || []).some((own, index) => {
+      const override = SANJI_RAID_SUIT_MOVE_OVERRIDES[own.id];
+      if (!override || override.name === own.name) return false;
+      const projected = finalGateBlackTurnMoveFromCrew(card, { ...own, ...override, pp: own.pp }, index);
+      return entry.id === projected.id && entry.name === projected.name
+        && String(entry.category || entry.type) === String(projected.category || projected.type)
+        && Number(entry.power || 0) === Number(projected.power || 0) && Number(entry.pp || 0) === Number(projected.pp || 0)
+        && String(entry.attribute || "無") === String(projected.attribute || "無");
+    }));
+    if (!evidence) return false;
+    const snapshot = safeJsonClone(battle.blackTurnCrewSnapshot || battle.enemyProfile?.blackTurnCrewSnapshot
+      || finalGateBlackTurnCrewSnapshot(card, battle.blackTurnCrewIndex));
+    snapshot.name = "新世界香吉士・隱形黑";
+    snapshot.battlePortraits = safeJsonClone(SANJI_RAID_SUIT_PORTRAITS);
+    battle.blackTurnCrewSnapshot = snapshot;
+    battle.blackTurnCrewName = snapshot.name;
+    battle.enemyProfile ||= {};
+    battle.enemyProfile.blackTurnCrewSnapshot = safeJsonClone(snapshot);
+    battle.enemyProfile.name = `${snapshot.name}（黑轉支配）`;
+    battle.enemyCombatant.name = battle.enemyProfile.name;
+    if (battle.prebattleIntro) {
+      battle.prebattleIntro.enemyName = battle.enemyProfile.name;
+      battle.prebattleIntro.enemyKey = battle.enemyProfile.name;
+    }
+    if (String(player.finalGateBlackTurnCrewId || "") === "sanji") player.finalGateBlackTurnCrewName = snapshot.name;
+    applyFinalGateBlackTurnPortraits(player, battle);
+    return true;
   }
 
   function finalGateBlackTurnMoveFromCrew(card, moveEntry, moveIndex) {
@@ -35385,7 +35425,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
       ? Math.max(42, Math.min(168, Math.round(rawPower * 0.9 + 18)))
       : 0;
     return enemyMove({
-      id: `final_black_turn_${finalGateBlackTurnKeyPart(card?.id || card?.name)}_${finalGateBlackTurnKeyPart(moveEntry?.id || moveEntry?.name, moveIndex)}`,
+      id: `final_black_turn_${finalGateBlackTurnKeyPart(card?.id || card?.name)}_${finalGateBlackTurnMoveKeyPart(card, moveEntry, moveIndex)}`,
       name: String(moveEntry?.name || "黑轉攻擊"),
       type,
       pp: Math.max(6, Math.min(99, Math.round(Number(moveEntry?.pp || 12)))),
@@ -35400,8 +35440,27 @@ function resolveImpelDownEventPrimary(player, context = null) {
     });
   }
 
-  function finalGateBlackTurnMovesForCrew(card) {
-    const unlocked = getUnlockedMoves(card).filter(Boolean);
+  function finalGateBlackTurnMoveKeyPart(card, moveEntry, moveIndex) {
+    const sourceId = String(moveEntry?.id || moveEntry?.name || moveIndex);
+    const legacyPart = finalGateBlackTurnKeyPart(sourceId, moveIndex);
+    const collides = (card?.moveSet || []).some((entry, index) => {
+      const otherId = String(entry?.id || entry?.name || index);
+      return otherId !== sourceId && finalGateBlackTurnKeyPart(otherId, index) === legacyPart;
+    });
+    if (!collides) return legacyPart;
+    let hash = 2166136261;
+    for (let index = 0; index < sourceId.length; index += 1) hash = Math.imul(hash ^ sourceId.charCodeAt(index), 16777619) >>> 0;
+    return `${legacyPart.slice(0, 45)}_${hash.toString(16).padStart(8, "0")}`;
+  }
+
+  function finalGateBlackTurnMovesForCrew(card, capturedSnapshot = null) {
+    const capturedRaidSuit = card?.id === "sanji" && capturedSnapshot?.id === "sanji"
+      && capturedSnapshot.name === "新世界香吉士・隱形黑"
+      && capturedSnapshot.battlePortraits?.normal === SANJI_RAID_SUIT_PORTRAITS.normal;
+    const unlocked = getUnlockedMoves(card).filter(Boolean).map((entry) => {
+      const override = capturedRaidSuit ? SANJI_RAID_SUIT_MOVE_OVERRIDES[entry.id] : null;
+      return override ? { ...entry, ...override, effects: safeJsonClone(override.effects || {}), pp: Number(entry.pp || 0) } : entry;
+    });
     const damaging = unlocked.filter((moveEntry) => Number(moveEntry?.power || 0) > 0);
     const sourceMoves = (damaging.length ? damaging : unlocked).slice(0, 4);
     const moves = sourceMoves.map((moveEntry, index) => finalGateBlackTurnMoveFromCrew(card, moveEntry, index));
@@ -35422,23 +35481,40 @@ function resolveImpelDownEventPrimary(player, context = null) {
       : player.crew?.find((entry) => crewId && String(entry?.id || "") === crewId);
     const sourceId = String(card?.id || crewId);
     if (!sourceId || String(battle.enemyCombatant.key || "") !== `final_black_turn_${finalGateBlackTurnKeyPart(sourceId)}`) return false;
-    const ownMoves = card ? finalGateBlackTurnMovesForCrew(card) : [];
+    const presentationRepaired = repairFinalGateBlackTurnRaidSuitSnapshot(player, battle, card);
+    const ownMoves = card ? finalGateBlackTurnMovesForCrew(card, battle.blackTurnCrewSnapshot) : [];
     const allowOwnMoveIds = new Set(ownMoves.map((entry) => entry.id));
     const injectedMoveId = `final_black_turn_${finalGateBlackTurnKeyPart(sourceId)}_domi_reversi`;
     const isInjectedMove = (entry) => String(entry?.id || "") === injectedMoveId && !allowOwnMoveIds.has(entry.id);
     const existingMoves = battle.enemyCombatant.moveSet || [];
-    if (!existingMoves.some(isInjectedMove) && !(battle.enemyProfile?.moves || []).some(isInjectedMove) && !isInjectedMove({ id: battle.enemyAction?.moveId })) return false;
+    const renamedLegacyIds = new Map();
+    if (card) {
+      const unlocked = getUnlockedMoves(card).filter(Boolean);
+      const damaging = unlocked.filter((entry) => Number(entry?.power || 0) > 0);
+      (damaging.length ? damaging : unlocked).slice(0, 4).forEach((entry, index) => {
+        const legacyId = `final_black_turn_${finalGateBlackTurnKeyPart(sourceId)}_${finalGateBlackTurnKeyPart(entry?.id || entry?.name, index)}`;
+        if (ownMoves[index]?.id !== legacyId) renamedLegacyIds.set(ownMoves[index].id, legacyId);
+      });
+    }
+    const matchesLegacyMove = (entry, own) => String(entry?.id || "") === renamedLegacyIds.get(own.id)
+      && entry.name === own.name && String(entry.category || entry.type) === String(own.category || own.type)
+      && Number(entry.power || 0) === Number(own.power || 0) && Number(entry.pp || 0) === Number(own.pp || 0)
+      && String(entry.attribute || "無") === String(own.attribute || "無");
+    const hasLegacyMove = (entries) => entries.some((entry) => ownMoves.some((own) => matchesLegacyMove(entry, own)));
+    const legacyAction = new Set(renamedLegacyIds.values()).has(String(battle.enemyAction?.moveId || ""));
+    if (!existingMoves.some(isInjectedMove) && !(battle.enemyProfile?.moves || []).some(isInjectedMove)
+      && !isInjectedMove({ id: battle.enemyAction?.moveId }) && !hasLegacyMove(existingMoves)
+      && !hasLegacyMove(battle.enemyProfile?.moves || []) && !legacyAction) return presentationRepaired;
     let moves = card ? ownMoves : existingMoves.filter((entry) => !isInjectedMove(entry));
     if (!moves.length) moves = finalGateBlackTurnMovesForCrew(battle.blackTurnCrewSnapshot || { id: battle.blackTurnCrewId || "unknown" });
-    const previousById = new Map(existingMoves.map((entry) => [entry.id, entry]));
     battle.enemyProfile ||= {};
     battle.enemyProfile.moves = safeJsonClone(moves);
     battle.enemyCombatant.moveSet = createEnemyMoveSet({ moves }).map((entry) => {
-      const saved = previousById.get(entry.id);
+      const saved = existingMoves.find((previous) => previous.id === entry.id || matchesLegacyMove(previous, entry));
       if (saved && Number.isFinite(Number(saved.currentPP))) entry.currentPP = Math.max(0, Math.min(Number(entry.pp || 0), Number(saved.currentPP)));
       return entry;
     });
-    if (isInjectedMove({ id: battle.enemyAction?.moveId })) battle.enemyAction = chooseEnemyAction(battle);
+    if (isInjectedMove({ id: battle.enemyAction?.moveId }) || legacyAction) battle.enemyAction = chooseEnemyAction(battle);
     return true;
   }
 
@@ -35485,7 +35561,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
     const snapshotPortraits = battle.blackTurnCrewSnapshot?.battlePortraits && typeof battle.blackTurnCrewSnapshot.battlePortraits === "object"
       ? battle.blackTurnCrewSnapshot.battlePortraits
       : {};
-    const sourcePortraits = card ? cardPortraitsForDisplay(card) : snapshotPortraits;
+    const sourcePortraits = Object.keys(snapshotPortraits).length ? snapshotPortraits : card ? cardPortraitsForDisplay(card) : {};
     const normal = sourcePortraits.angry || sourcePortraits.attack || sourcePortraits.normal || sourcePortraits.idle || PLACEHOLDER_BATTLE_PORTRAIT;
     battle.enemyCombatant.battlePortraits = {
       ...sourcePortraits,

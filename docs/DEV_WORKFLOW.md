@@ -9653,3 +9653,19 @@ Windows完整6590列只變Main3989540B，6589列及6533media保留；原安裝1.
 既有Runtime/Stage/Timeline/Modal與音樂、音效bytes原樣保留；Publisher實跑原始啟動、confirm、coldrestart、獎勵HUD/guard/CPU/人類回合，含實際新Core factory及Portrait實例。此為電腦Godot raw/compiled consumer回歸，無手機實機、個人正式帳號/舊存檔、人耳聽測或整場自然戰役驗收宣稱。Canonical Main35407 trailing whitespace及兩種style exit2如實保留，不改受驗bytes，不稱lint通過。
 
 公開Gate：D:\Codex_QA\board-imu-controlled-crew-release-20261114/PUBLIC_VERIFICATION.json；SHA256 6e660f99858c487ae771215a2c4fb6b9fda1670b67634751b3ae766705805490。公告revision118新增本次Board，保留其餘99則內容順序，最舊Board封存；最後僅config與DEV追加。LATTICE API未提供，不宣稱任務或圖譜已持久寫入。
+
+
+## 2026-11-14 全船員黑轉招式與型態檢查／修正候選
+
+全船員黑轉檢查以真 catalog 110 個船員 ID、33 個進化型態（143 組持久型態）及 1 個合法隱形黑戰鬥表現，共 144 個呈現情境為分母。265002 個持久型態四招配置及 10836 個戰鬥服配置按原解鎖門檻檢查；1,123 個不同自身招式 ID 沒有增減。修正兩個血統角色的七個長招式來源 ID 在黑轉生成時截斷碰撞：只對同一船員確有碰撞的 key 加固定短後綴，其餘 1366 個型態／招式關聯 ID 不變，最長生成 ID 仍為 107 字。舊子戰依捕獲身分、舊 ID 及招名／類別／威力／PP／屬性精準匹配保留 PP；無法還原的重複舊排程交由原 AI 重選，不回溯已施放效果。捕獲已變身香吉士時凍結原名字與圖；舊錯快照只憑精確戰鬥服招式證據修復。另限伊姆／黑轉戰、同玩家與精確船員索引讀取舊 id:index 變身狀態，避免補 instanceId 後丟失；不新增或重寫狀態字段。
+
+範圍：共用 public/js/board_game.js、行動版 original-core.js 及四份文件追加。數值、傷害轉換、原 AI、8400ms 演出、船員恢復／伊姆回接、音訊、素材與存檔命名空間不改。受控 Source 真函式驗證、原 Desktop 頁面／iframe 前後實招、舊存檔與負對照分別封於 D:/Codex_QA/board-imu-all-crew-audit-20261114/source-audit/；原始失敗保留。隔離工具的即時演出 ACK 與 utility consumer 測例不冒稱自然戰役或實體手機驗收。候選 Ready 仍須與 Native owner 證據由 Root 整合，統一交 launcher 發布。
+
+
+## 2026-11-14 全受控船員原生顯示核對與修正
+
+原名單110角色／33合法永久型態共143項，另外核實1個戰鬥服動態情境，共144；兩平台143模型各9種姿勢／血量與前場KO重置的批次證據，與少量完整原按鈕戰鬥、Source招式組合檢查、實GPU圖像驗證分開記錄，不能合併冒稱144場自然實戰。完整採納範圍以 `D:/Codex_QA/board-imu-all-crew-audit-20261114/COMBINED_READY.json` 為準。
+
+Native僅既有PUBLIC `native_portrait_card.gd`／`.gdc`：把既有 `knockout_fade` 同步至黑轉／伊姆身體圖層的材質副本。原timeline仍先受擊、再暈眩、按原900／990ms等待後進KO Tween；參數改變只標dirty並在節點仍在tree時重繪原ordered filter鏈一次，退出只留dirty而不渲染，stop／reset恢復。未改原圖、shader來源、CSS順序、動作與戰鬥時序。唯一 `images/board/battle/enemies/impel_l2_minochihuahua/dizzy.webp` 以既有 `portrait_shift.y=-0.25` 調整手機方形卡取景，保持原ImageTexture／圖檔bytes，其它path恢復原enemy／player位移。
+
+原生raw／GDC、GPU元件及公開更新屬不同驗證證據；未宣稱實體Android／iPhone、個人正式帳號／舊存檔、整場自然campaign、FPS或記憶體測試已完成。原密度4／含padding表面2048上限保持。新候選的null／退出錯誤、初始QA錯誤與舊Source反例全部封存，不把早版含錯誤紀錄改標PASS。原App host71、launcher1.2.34、帳號／存檔鍵與25目標allowlist不變；正式版本與公告以啟動器後續真實RELEASED為準。
