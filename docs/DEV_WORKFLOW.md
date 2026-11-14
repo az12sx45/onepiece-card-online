@@ -9710,3 +9710,20 @@ AppStage 的 story_node_state_json 在視窗未顯示、換頁待完成、原生
 驗證須分開記錄正式基底、候選版本與實際案例：原生 HUD／Modal／Timeline 回呼、戰後抽取與線索展示、CPU 換手、存檔恢復及三階約克解謎等。終擊測試使用原始存檔前置、敵方 HP1 和原始治療／能力階級 API 的明列 QA 支撐，不宣稱自然完成全部戰役或個人手機實機驗收。
 
 驗證、版本與失敗界線以 `D:/Codex_QA/board-postgame-parity-20261115/native-audit/NATIVE_READY.json`、`parity-audit/RUNTIME_READY.json` 及後續 story contract 收據為準。Source Main／Core 保留原雜湊，Godot 4.7.2 只編譯既有 iOS Stage；遊戲更新不更換 host71 App，不修改帳號與存檔名稱空間。
+
+
+## 2026-11-15：戰後劇情與回合接續修正發布
+
+公開驗證：2026-11-14T18:06:59.724Z；唯一 Combined74bfc1e8／NativeReady54fd4e8b，Owner root board-postgame-parity-20261115。Source a9f06ed5ecd907732fb4891639feda0926bcf5df；runtime af98cdd8fcf812abd46dd15d464e899e4e059e19；Windows package-207149b3862e8526，Android 18／iOS 23；host71／launcher1.2.34維持。
+
+Windows 僅 Battle493447B/cc15fd92，在血統抽取無scope或allResolved時才持續處理倒地，不再與terminal extraction結果互相清除排程；Main3995035B/d64ffa74保留。手機僅Runtime31884B/f7f745與Stage（Android118596B/810de8，iOS88838B/08a3d3）；原生Runtime以穩定Map角色接原StoryBridge幾何、樣式與click，Stage提供只讀story_node_state_json。維持原Handler與pending/blocked/hidden/banner/stale guards。Core、Portrait、Timeline、Modal、音效41與配樂3不變。
+
+Owner證據採納其各自精確版本與限制：13Boss每平台首3v2與其餘10finalRuntimev3/Stagev2分開；clue+1、paid cold不重領，CPU回玩家；另有伊姆支配船員恢復/續戰/戰後與York層級/錯答/取消/練習/save；Source Desktop/iframe與真npm start雙Chrome Socket另有封存。四ending/Rocks原baseline/v2與finalv3 renamed-screen/stable-role/helper/guard/stale supplement不混標同一版本。受控敵HP、healing與checkpoint不是13個自然完整戰役。publisher不重跑Owner矩陣。
+
+Publisher從真上一版W917882/A17/I22獨立實體QA副本起測；Windows全6590／保留6589／6533media，原版1.2.34本機與公開各73/0，僅1次新Battle下載，公開原Response.clone觀察後原樣forward。手機各25=11PCK14HOST／改2PUBLIC／23retain=9PUBLIC14HOST；下載Android150480B／iOS120722B，回復各2PUBLIC、0HOST；五immutable URL四unique hash。原prepare→selectedpack早於scene/require→startup/callback→原confirm→coldrestart，本機/公開各4phase皆含實際factory、Stage/Portrait/Timeline/Modal與獎勵HUD→CPU→玩家接續，合成帳號/save哨兵不變。
+
+每phase另以同Runtime/PID執行單一bounded mounted-story smoke：先封ordinary reward trace/economy，再由原BOARD_GAME_STATE/load-save還原Owner精確research-story checkpoint，原650ms排程自然掛載current Map story-screen（DOM合法改名postgameWorldCinematic），實讀Stage rect/style/原StoryBridge；單次directed原helper推進，真Skip pointer→原modal_command→Sourcecallback收尾，stale隱藏rect0。startup與active方法各5capture，不直接改Source state、flag、timers或ACK，不宣稱自主CPU自然全劇情。
+
+四MD原byte前綴保留，Source/Native共8block各append一次；Source defaultCRLF診斷與CRLF-aware結果如實分開。無實體手機、人耳、私人正式帳號/save、全自然戰役、FPS或完整Windows媒體安裝驗收。沿用App與account/save namespace，不USB、不重簽重裝。
+
+公開Gate：D:\Codex_QA\board-postgame-parity-release-20261115/PUBLIC_VERIFICATION.json；SHA256 7da7133bf8685e113f502dd9d0d1917f0f128e5f9489fed26d070cd2f287cdd5。公告revision120保其餘99則內容順序，最舊Board封存；最後僅公告config與DEV追加。LATTICE API缺席，不宣稱ledger/graph；清理只保護0刪。

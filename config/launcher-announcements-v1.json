@@ -1,7 +1,32 @@
 {
   "schemaVersion": 1,
-  "revision": 119,
+  "revision": 120,
   "announcements": [
+    {
+      "id": "board-20261115-postgame-story-continuation-update",
+      "status": "published",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 18／iOS Preview 23",
+      "title": "新世界航海錄｜戰後劇情與回合接續修正",
+      "summary": "修正手機 Boss 戰後切換 CPU 的劇情操作，並修正電腦版血統抽取結束後的倒地演出衝突。",
+      "body": [
+        "修正手機戰後切換 CPU 時劇情無法繼續，以及劇情節點更換後的控制接續；回合公告顯示時會等待結束。",
+        "同步修正電腦版血統抽取結束後，倒地演出與結果畫面互相干擾的問題。",
+        "已以自動流程檢查伊姆支配船員恢復與續戰、二周目十三 Boss、線索、約克解碼、蛋頭島與洛克斯接續；不等同實體手機或完整自然戰役驗收。",
+        "在原啟動器或 App 的下載管理更新「新世界航海錄」，套用後完整關閉再重新開啟。",
+        "沿用原帳號、存檔、音效、配樂與音量設定，不需重裝啟動器、APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-207149b3862e8526"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      },
+      "publishedAt": "2026-11-14T18:07:11.102Z"
+    },
     {
       "id": "board-20261114-all-controlled-crew-moves-ko-update",
       "status": "published",
@@ -53,32 +78,6 @@
         "gameId": "board"
       },
       "publishedAt": "2026-11-14T12:58:59.066Z"
-    },
-    {
-      "id": "board-20261114-authentic-move-sounds-edited-music",
-      "status": "published",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 15／iOS Preview 20",
-      "title": "新世界航海錄｜招式音效與場景配樂更新",
-      "summary": "恢復招式原有音效對應，調整指定招式的播放時點，更新三首場景配樂並修正部分 Boss 招式顯示。",
-      "body": [
-        "恢復招式原有的音效對應，減少不同招式套用同一類聲音的情況。",
-        "調整薩波的短擊中音效、山治「魔神風腳」起手音效，以及卡塔克利既有施放音效的精準配對與播放時點。",
-        "更新航海、一般戰鬥與 Boss 戰三首場景配樂，沿用原本的音量與靜音設定。",
-        "修正 Boss 特殊招式按鈕返回一般招式時，以及部分招式欄位顯示異常的問題。",
-        "在原啟動器或 App 的下載管理檢查「新世界航海錄」更新，下載套用後完整關閉再重新開啟。",
-        "沿用原帳號與存檔，不需重裝啟動器、APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-2adbacb296a7ee87"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      },
-      "publishedAt": "2026-11-14T03:19:04.687Z"
     },
     {
       "id": "marineford-20261107-cpu-seat-memory",
