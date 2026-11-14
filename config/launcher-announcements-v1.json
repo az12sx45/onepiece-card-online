@@ -1,7 +1,33 @@
 {
   "schemaVersion": 1,
-  "revision": 115,
+  "revision": 116,
   "announcements": [
+    {
+      "id": "board-20261114-god-knights-story-text-update",
+      "status": "published",
+      "publishedAt": "2026-11-14T01:59:16.767Z",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 14／iOS Preview 19",
+      "title": "新世界航海錄：神之騎士戰後銜接與文字嗆聲",
+      "summary": "修正兩名神之騎士戰後卡地圖與後續故事銜接，補強舊紀錄恢復，新增角色純文字嗆聲。",
+      "body": [
+        "修正艾爾巴夫兩名神之騎士戰後可能卡在地圖、無法接續伊姆劇情與戰鬥的問題。",
+        "補強舊紀錄、領獎提示關閉後、伊姆戰後，以及最終島結局與研究故事的銜接；沿用既有進度與獎勵。",
+        "缺圖或圖片延遲時，仍可閱讀字幕並使用繼續／跳過，讓主流程繼續。",
+        "新增110個角色各三句純文字一般嗆聲，70組對手關係各提供兩種對答變化，保留原本戰鬥開場時序。",
+        "沿用原本的自訂台詞儲存，實際編輯或新增的文字也可加入選池；同場已選定的開場對話保留。",
+        "在原啟動器或 App 下載管理更新新世界航海錄，套用後完整關閉再重開；原帳號與存檔沿用，不需重裝 APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-e6eaf019c04ec64f"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      }
+    },
     {
       "id": "board-20261114-battle-sfx-music-update",
       "status": "published",
@@ -46,29 +72,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-07270657b0b8ea50"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-20261113-soul-choice-cosmetic-frames",
-      "status": "published",
-      "publishedAt": "2026-11-13T06:44:01.845Z",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 11／iOS Preview 16",
-      "title": "新世界航海錄：靈魂拷問與角色框修正",
-      "summary": "補回手機版大媽靈魂拷問的選項，調整戰鬥與裝備預覽的角色框。",
-      "body": [
-        "手機進入或返回大媽戰鬥時，可依原規則選擇靈魂拷問的代價，處理後繼續戰鬥操作。",
-        "大媽框裝飾移至人物後方；凱多框移除中央雲霧，保留原有邊框與側邊圖案。戰鬥畫面與裝備預覽同步。",
-        "沿用現有啟動器或 App，在下載管理更新新世界航海錄，保留帳號與舊存檔。手機下載後請完整關閉原 App 再重開，不需重裝 APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-f0512e19492f33b3"
       },
       "cta": {
         "kind": "game",

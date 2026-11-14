@@ -9582,3 +9582,20 @@ Android與iOS沿用原host71 App，各更新Core、Runtime與平台Stage三檔�
 最終島結局的按鈕、定時器與完成回呼須屬於原故事 session 和航海紀錄／回合。普通同回合 LAN 更新保留可讀對話，完成時重取目前玩家物件；明確讀取另一份存檔或切換回合後，舊回呼不得修改新紀錄、關閉新 UI 或取消新 session 的定時器。私有故事快照不遞增共用 owned-turn epoch；否則會使既有戰後 finally 失去清理退出鎖的資格。
 
 自訂嗆聲保留原儲存，將相對舊預設的實際編輯／新增文字加入至少三句 stock 選池；不宣稱舊整池覆蓋／刪除語意完全相同。一般對手入口可用的關係為 70 組；另 18 組 ally 對話僅保留內容及選擇函式資料，未接隊友對話 UI，不得公告成 88 組皆可在普通對戰顯示。
+
+
+## 2026-11-14：航海錄神之騎士戰後銜接與純文字嗆聲發布
+
+公開驗證完成時間：2026-11-14T01:58:52.380Z。唯一owner READY ba8e4839；原始遊戲提交 f22922cb10d1b15d62fea6a4e979e3622463e004，正式runtime／metadata c69a54c66c8c3cce54de4b204c22f1d87ff5155b；Windows package-e6eaf019c04ec64f、Android Update 14、iOS Preview 19。只有Root完成真正Live、原更新器normal-public更新與保護讀回後才套用本追加稿。
+
+Source僅採v10 Main49474052、Core87a5f54b與台詞eea63e40；Native四項產品a385/d909/debe/19a3沿原Ready3579，final-Core addendum e9f86490的真執行factory f5a36c25另有界採納，不把舊Core32c689記為final。神騎戰後、accepted payload同步後的恢復、退出鎖／closing續接、領獎HUD清除、研究Seen和最終島ending回呼均保留原玩家／回合／存檔scope；圖像failed或pending有界fallback保原字幕、繼續與跳過。
+
+Windows沿用原啟動器1.2.34，正式6587筆只更新Main3971019B及台詞1897881B，共5868900B；6585筆與所有6530媒體記錄原樣保留，原Battle／AudioUI也不變。原ASAR更新器實際建立五筆舊fixture收據後更新兩檔；68項本機Node契約檢查通過，並以本輪公開Gate的真2GET原Response重播證據為準。五筆契約與完整清單差異分開，不聲稱完整玩家媒體安裝。
+
+Android與iOS沿用host71，各更新Core、Runtime、ModalBridge、平台Stage四檔，合計7094716B／7067361B；25允許targets推導9個原更新器PCK資源與16個宿主資源，21筆保留。ModalBridge從原HOST來源改為更新PCK覆蓋，回復仍採真原HOST33754B/9c4c266f，不造HOST公開URL；其餘三個回復採原PUBLIC body。公開prepare／original confirm／coldrestart證據由Gate內本輪實際四phase收據綁定。
+
+純文字110actor／330general，70組普通對手關係各兩種variation；另外18組ally只保內容、未接UI，不宣稱88組都可見。原自訂storage不寫入，真正編輯或新增文字加入stock3選池；不宣稱原整池覆蓋／刪除語意完全相同。同intro既有id/key/done/text與原3s時序保留。沒有VO、7s開場或先前未發布音樂草稿。
+
+8張既有伊姆PNG由已核對的既有media通道供應，原compiled resolver的隔離cache可解不等於個人手機已存檔；Android resolve不自動補抓，保留缺圖fallback。沿用原App、帳號、存檔schema／namespace與Socket名稱，不要求USB、APK重裝或IPA重簽。owner Source39項與有限single/multi鏈、原Web DOM及raw／compiled Native證據有各自界線；未聲稱實體手機、正式帳號、個人舊存檔或全自然新局驗收。
+
+公開Gate：D:\Codex_QA\board-god-knights-release-20261114/PUBLIC_VERIFICATION.json；SHA256 0769b3ee25b0f28aabe70bedb0b6ea86b4fcac4319174aa55f5638715f371dab。公告revision116只新增本次Board紀錄並完整保留其餘99則內容與順序；最舊同遊戲已發布紀錄封存QA／Git。Root最後公告提交只含newsconfig與本DEV追加，另核真正Live與七份公開metadata。
