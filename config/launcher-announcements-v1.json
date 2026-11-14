@@ -1,7 +1,33 @@
 {
   "schemaVersion": 1,
-  "revision": 116,
+  "revision": 117,
   "announcements": [
+    {
+      "id": "board-20261114-authentic-move-sounds-edited-music",
+      "status": "published",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows 遊戲更新／Android Update 15／iOS Preview 20",
+      "title": "新世界航海錄｜招式音效與場景配樂更新",
+      "summary": "恢復招式原有音效對應，調整指定招式的播放時點，更新三首場景配樂並修正部分 Boss 招式顯示。",
+      "body": [
+        "恢復招式原有的音效對應，減少不同招式套用同一類聲音的情況。",
+        "調整薩波的短擊中音效、山治「魔神風腳」起手音效，以及卡塔克利既有施放音效的精準配對與播放時點。",
+        "更新航海、一般戰鬥與 Boss 戰三首場景配樂，沿用原本的音量與靜音設定。",
+        "修正 Boss 特殊招式按鈕返回一般招式時，以及部分招式欄位顯示異常的問題。",
+        "在原啟動器或 App 的下載管理檢查「新世界航海錄」更新，下載套用後完整關閉再重新開啟。",
+        "沿用原帳號與存檔，不需重裝啟動器、APK 或 IPA。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-2adbacb296a7ee87"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      },
+      "publishedAt": "2026-11-14T03:19:04.687Z"
+    },
     {
       "id": "board-20261114-god-knights-story-text-update",
       "status": "published",
@@ -47,31 +73,6 @@
       "requiredRelease": {
         "kind": "board",
         "releaseId": "package-929d0029f15414d6"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      }
-    },
-    {
-      "id": "board-20261113-reward-turn-marineford-continuation",
-      "status": "published",
-      "publishedAt": "2026-11-13T09:43:54.214Z",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 12／iOS Preview 17",
-      "title": "新世界航海錄：戰後領獎與頂上救援接續修正",
-      "summary": "修正領獎提示關閉後可能停住的情況，接回原本 CPU 與下一位玩家的回合；頂上救援成功確認也會接回既有演出入口。",
-      "body": [
-        "勝利後領取重要道具並關閉提示，會依原本順序接回 CPU 與下一位玩家的回合。",
-        "保留原有獎勵與結算規則，重複點擊不重發獎勵、不重複跳回合；已領獎的舊存檔仍按原本完成確認接續。",
-        "頂上戰爭救援勝利後，重新接回原本成功確認、霸氣影片與救援演出入口，沿用既有素材。",
-        "沿用原啟動器或 App，在下載管理更新新世界航海錄；保留原帳號與存檔，不需重裝 APK 或 IPA。",
-        "手機更新完成後，請完整關閉，再重新開啟原 App。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-07270657b0b8ea50"
       },
       "cta": {
         "kind": "game",

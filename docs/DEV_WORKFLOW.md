@@ -9607,3 +9607,20 @@ Android與iOS沿用host71，各更新Core、Runtime、ModalBridge、平台Stage�
 2026-11-14（Root交接候選的Native附錄，尚未發布）：本段彙整Native唯一final Ready 7d7bf3cd00b206df8623c680cf8c44633e928bfe66c38040e8ca8df3af7dc666，採Native8＋Source7 Core1ca8ef22；不改已公開critical ba8e/e6/A14/I19的收據或30fc既有公告/DEV。Native保留host71與原25-target清單，每平台實改Core、Runtime、Stage、Timeline四項；ModalBridge與純文字Data不變。六處presentation-only outer postgameBossMechanic null/absent正規化為空Dictionary，保留真Boss字典、prompt、pending-disable與原caller順序；不丟棄整個battle view。Sanji1507ms exact caster在原attack windup開始並於原480ms cast去重；Sabo650ms exact hit/impact及既有Kat mixed castAccent保留原phase，不延長原game/VFX/prepare timers。Native final Ready記錄Android raw67與iOS GDC69項component檢查；兩個原UI真input流程各scriptErrors=0、engineErrors=0，並各有18項受控null-guard/button矩陣檢查。矩陣為呈現狀態測試，不冒稱全Boss遊戲驗收。原Runtime/BGM manager/settings/signal/getAssets/native codec橋記錄按需三次請求、三次解碼共922340B，dispose後resident/raw bytes歸零；仍是同一原音樂manager。所有PASS、零錯誤與natural-ended/next-prepare邊界採用該Ready所pin的最終reports；本附錄沒有新增產品測試。保留Sabo長喊聲一次真邊界失敗及Blackbeard1250ms status不符的withheld資料，不用重跑通過掩蓋。這些是Windows Godot執行Android raw/iOS GDC consumer、Dummy audio/真codec與受控存檔/loopback的證據，非實體手機、iOS OS、正式帳號、human listening或完整自然戰役；本候選亦未完成新版本公開updater/實際下載驗收。
 
 Board audio candidate is separate from the already public critical recovery/text release package-e6eaf019c04ec64f/A14/I19 (host71). Final implementation and exact adopted evidence are pinned by the two Root-selected final owner Ready receipts in this DRAFT handoff. Preserve the prior30fc announcement and DEV entries; append only. No App installer, account/save namespace or Socket event-name/control-rule change. Publisher must allocate fresh game-only pointers and verify installed-previous-version downloads/bytes, cold restart and save continuity separately from these local tests.
+
+
+## 2026-11-14：航海錄招式音效與場景配樂發布
+
+公開驗證完成時間：2026-11-14T03:17:45.314Z。唯一 owner READY 3ac9460f；原始來源 fad88a70589e17067e7d3d23cc12813edf614796，runtime／metadata f5528a92af0d256ecdca82c3b8c2a73079e2e7c6；Windows package-2adbacb296a7ee87、Android Update 15、iOS Preview 20。只有 Root 完成真正 Live、Windows 五檔 normal-public 原 Response、手機四個公開啟用／冷啟動 phase 與七份保護讀回後才套用本追加。
+
+採唯一 Source v7 與 Native v8 READY，保留已發布神騎續接與文字嗆聲。撤回227個 blanket path overrides，恢復既有 authored 招式 cast/hit 音效路徑；精準保留薩波650ms短 hit、山治魔神風腳1507ms起手、卡塔克利既有混合 cast accent 的角色／型態／canonical move／phase 配對。不是三段新錄音、isolated voice、新語音庫或所有原作招式音效。被撤回的薩波／黑鬍子較長叫招與舊草稿原樣留存，沒有延長招式或戰鬥視覺時序。
+
+三首實際42秒 edited OGG 航海／一般戰鬥／Boss 配樂合計922340B，沿原 BgmManager、音量、靜音及焦點控制；手機 Core private bank metadata／single-ID payload 不新增第二個音樂管理器。原 Web codec／authored handler、raw及compiled Native、Boss字典／null及特殊按鈕回一般的受驗範圍見 owner READY；不據此宣稱人耳聽測、isolated音源、全部自然戰鬥或實體手機通過。
+
+Windows 完整6590筆：只替換兩支JS並新增三個OGG，共5403286B；6585既有記錄與全部6530舊媒體原樣保留。原安裝1.2.34 ASAR updater 的舊5→新8 fixture，本機118檢查與獨立程式／音檔損壞拒絕、LKG、cold、OGG MIME／HEAD／Range均通過；公開五個普通原Response及完整manifest證據分開保留。合成帳號／存檔哨兵未變不等於個人舊存檔遊玩。
+
+Android／iOS host71各四變更targets：Core、Runtime、Stage與Timeline。25允許targets推導10PCK／15HOST，21列保留；ModalBridge與嗆聲文字沿用已發布bytes。Timeline由原HOST轉更新覆蓋，兩份HOST回復保留本機body、原host來源且不造URL；另外六份舊PUBLIC回復及原簽章manifest保留。公開prepare／confirm／coldrestart與Root真實四phase接受結果以公開Gate所附原始證據為準。
+
+所有產品採唯一READY exact bytes，Battle whole-file patch因LF→CRLF，Root以process-only core.autocrlf=false提交後逐Git blob核SHA。原始default cached diff-check exit2及9012筆trailing-CR訊息留存；process-only指定whitespace規則exit0，未改canonical CRLF或Main既有空白，不宣稱default lint通過。原啟動器／App、帳號／存檔schema和namespace沿用；不需USB、APK重裝或IPA重簽。
+
+公開Gate：D:\Codex_QA\board-original-sfx-music-release-20261114\PUBLIC_VERIFICATION.json；SHA256 e17304c484772f50dc68d7e6cd798db02444a4973205fd15680ed58915ff5ae1。公告revision117只新增本次Board紀錄並保留其餘99則原內容與順序；最舊已發布Board紀錄封存QA／Git。Root最後公告提交只含newsconfig與本DEV追加，再另核真正Live與七份公開metadata。
