@@ -12968,6 +12968,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
     const battleRefreshRecovery = state.battleState && shouldRecoverInterruptedBattle
       ? restoreBattleRefreshRecoveryCheckpoint()
       : null;
+    repairFinalGateBlackTurnCrewMoves(battlePlayer(null, state.battleState), state.battleState);
     if (!preserveOpeningStory) {
       cancelOpeningStorySession();
       clearManualLoadModalSession();
@@ -35402,25 +35403,43 @@ function resolveImpelDownEventPrimary(player, context = null) {
   function finalGateBlackTurnMovesForCrew(card) {
     const unlocked = getUnlockedMoves(card).filter(Boolean);
     const damaging = unlocked.filter((moveEntry) => Number(moveEntry?.power || 0) > 0);
-    const sourceMoves = (damaging.length ? damaging : unlocked).slice(0, 3);
-    const moves = sourceMoves.map((moveEntry, index) => finalGateBlackTurnMoveFromCrew(card, moveEntry, index));
-    moves.push(enemyMove({
-      id: `final_black_turn_${finalGateBlackTurnKeyPart(card?.id || card?.name)}_domi_reversi`,
-      name: "Domi Reversi・黑轉支配",
-      type: "control",
-      pp: 8,
-      power: 0,
-      accuracy: 95,
-      target: "enemy",
-      attribute: "技",
-      kind: "status",
-      effectText: "黑霧壓迫意志，降低命中與意志。",
-      effects: { enemyStages: { accuracy: -1, sdef: -1 } },
-    }));
+    const sourceMoves = (damaging.length ? damaging : unlocked).slice(0, 4);
+    const moves = sourceMoves.map((moveEntry, index) => finalGateBlackTurnMoveFromCrew(card, moveEntry, index));
     if (!moves.length) {
       moves.push(enemyMove(`final_black_turn_${finalGateBlackTurnKeyPart(card?.id || card?.name)}_basic`, "黑轉打擊", "attack", 99, 72, "黑轉支配下的普通攻擊。", {}, { attribute: card?.attribute || "無" }));
     }
     return moves.slice(0, 4);
+  }
+
+  function repairFinalGateBlackTurnCrewMoves(player, battle) {
+    if (!player || !isFinalGateBlackTurnBattle(battle) || !battle.enemyCombatant) return false;
+    if (!battle.isFinalGateBlackTurn && battle.islandKind !== "final_gate_black_turn") return false;
+    const crewId = String(battle.blackTurnCrewId || battle.blackTurnCrewSnapshot?.id || "");
+    const savedIndex = Math.round(Number(battle.blackTurnCrewIndex ?? -1));
+    const savedCard = savedIndex >= 0 ? player.crew?.[savedIndex] : null;
+    const card = savedCard && (!crewId || String(savedCard.id || "") === crewId)
+      ? savedCard
+      : player.crew?.find((entry) => crewId && String(entry?.id || "") === crewId);
+    const sourceId = String(card?.id || crewId);
+    if (!sourceId || String(battle.enemyCombatant.key || "") !== `final_black_turn_${finalGateBlackTurnKeyPart(sourceId)}`) return false;
+    const ownMoves = card ? finalGateBlackTurnMovesForCrew(card) : [];
+    const allowOwnMoveIds = new Set(ownMoves.map((entry) => entry.id));
+    const injectedMoveId = `final_black_turn_${finalGateBlackTurnKeyPart(sourceId)}_domi_reversi`;
+    const isInjectedMove = (entry) => String(entry?.id || "") === injectedMoveId && !allowOwnMoveIds.has(entry.id);
+    const existingMoves = battle.enemyCombatant.moveSet || [];
+    if (!existingMoves.some(isInjectedMove) && !(battle.enemyProfile?.moves || []).some(isInjectedMove) && !isInjectedMove({ id: battle.enemyAction?.moveId })) return false;
+    let moves = card ? ownMoves : existingMoves.filter((entry) => !isInjectedMove(entry));
+    if (!moves.length) moves = finalGateBlackTurnMovesForCrew(battle.blackTurnCrewSnapshot || { id: battle.blackTurnCrewId || "unknown" });
+    const previousById = new Map(existingMoves.map((entry) => [entry.id, entry]));
+    battle.enemyProfile ||= {};
+    battle.enemyProfile.moves = safeJsonClone(moves);
+    battle.enemyCombatant.moveSet = createEnemyMoveSet({ moves }).map((entry) => {
+      const saved = previousById.get(entry.id);
+      if (saved && Number.isFinite(Number(saved.currentPP))) entry.currentPP = Math.max(0, Math.min(Number(entry.pp || 0), Number(saved.currentPP)));
+      return entry;
+    });
+    if (isInjectedMove({ id: battle.enemyAction?.moveId })) battle.enemyAction = chooseEnemyAction(battle);
+    return true;
   }
 
   function finalGateBlackTurnProfileForCrew(card, index) {
@@ -36312,6 +36331,7 @@ function resolveImpelDownEventPrimary(player, context = null) {
     state.battleState.enemyProfile = safeJsonClone(profile);
     state.battleState.enemyCombatant.currentHp = pendingHp;
     state.battleState.enemyCombatant.maxHp = tempState.maxHp;
+    repairFinalGateBlackTurnCrewMoves(player, state.battleState);
     applyFinalGateBlackTurnPortraits(player, state.battleState);
     markBattleEntryTransition(state.battleState, "resume");
     syncActivePlayerStatusBag(player, state.battleState);

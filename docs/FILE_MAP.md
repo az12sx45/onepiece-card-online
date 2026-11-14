@@ -2537,3 +2537,15 @@ Board audio Source targets: public/js/board_game.js, public/js/board_battle.js a
 Native8/Source7交接allowlist：Android為original-core.js、native-game-runtime.js、native_app_stage.gd、native_battle_timeline.gd；iOS為original-core.js、native-game-runtime.js、native_app_stage.gdc、native_battle_timeline.gdc。每平台四項都在既有host71的25-target清單。iOS raw native_app_stage.gd只作編譯與review來源，不假列為iOS下載target。native-modal-bridge.js SHA d90932411631a4e82d761afebe958f23b92df3a56c5ec45b73517cdfc3fca58a及文字Data eea63e40原樣保留。Android/iOS候選changed body分別8345932B／8310300B，這不是正式更新器實際下載量。封裝分類overlay10/HOST15只是待publisher核實的預期，未在此當成實測。Native最終matrix、真input流程、BGM橋、compile與forward/inverse證據全部由final Native Ready引用；publisher應按exactbytes/SHA驗base及新檔，不帶入舊voice/music drafts。
 
 Audio integration changed-target allowlist is Windows5 (Main/Battle/3regular music), Android4 (Core/Runtime/StageGD/TimelineGD), iOS4 (Core/Runtime/StageGDC/TimelineGDC). ModalBridge and prebattle text data are retained byte-identical and excluded from changed-target totals; iOS raw Stage is compile/review source only. New short SFX are embedded in Main/Core, not extra standalone mobile download targets.
+
+
+## 2026-11-14 黑轉招式修正候選來源
+
+- `public/js/board_game.js`：共用 `finalGateBlackTurnMovesForCrew` 只從被捕船員取得招式；新增私有 `repairFinalGateBlackTurnCrewMoves`，在原讀檔 checkpoint 還原後及黑轉暫存續戰時，精準修復舊版外加的伊姆招式。其餘原戰鬥與美術／音訊路徑不改。
+- 行動版 `original-core.js`：與上述共用邏輯的同範圍修補，由既有遊戲更新流程整合，不變更宿主 App、帳號或存檔命名空間。
+- `D:/Codex_QA/board-imu-controlled-crew-20261114/source-candidate/`：候選 v3、正反可攜修補、受控 Core 舊存檔／實出招／解除支配證據；完整 Desktop 頁面及 Native 證據由對應 owner 另附。候選與 Ready 不等於已發布。
+
+
+## 2026-11-14 黑轉／伊姆角色圖更新覆蓋
+
+`native_portrait_card.gd`（Android）／`native_portrait_card.gdc`（iOS）：既有允許更新目標，包含繼承原 `native_demon_frame.gd` 與 `native_css_ordered_image.gd` 的狹窄 DPI 身體圖層實作；原宿主依賴保留。Source `original-core.js` 與桌面 `public/js/board_game.js` 的黑轉自身招式修正須同批發布，沒有新增素材檔、存檔欄位、命名空間或網路協定。

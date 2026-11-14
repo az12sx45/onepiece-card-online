@@ -3269,3 +3269,13 @@ Board audio remains a game-only integration candidate until the launcher owner p
 這次Native音效/配樂與nullable-mechanic呈現補強是已公開critical恢復/純文字版本之後的獨立候選，不改App installer/host71、帳號ID、存檔namespace或Socket事件/控制規則。沿用原BGM manager，Core僅提供三檔private metadata index及一次一ID lazy payload；SFX與music bank分開。原關鍵劇情continuation、缺圖有界fallback及owner-safe畫面移除保護保留。兩平台raw/GDC consumer的component、原UI真input及受控guard矩陣，與實體手機、human listening、個人舊存檔/正式登入、公開updater及安裝舊版升級的驗收分開。Native final Ready狀態只是READY_FOR_INTEGRATION_NOT_RELEASED；Root親審及唯一launcher publisher的簽署、fresh sequence、部署/public readback完成前，不能把此附錄或handoff DRAFT當發布。保留所有失敗、withheld與rollback/原素材/QA，清理0；LATTICE API未曝露，不聲稱task/SQL/Graphify持久成功。
 
 Preserve final critical recovery/text behavior and existing game-only host71 flow. Six nullable outer-mechanic guards in the new native candidate normalize only valid absence; no whole battle view or gameplay callback is dropped. Audio/codec/component, actual-control mainflow, human listening, physical phones and public updater acceptance are distinct evidence. The Root DRAFT is not a release.
+
+
+## 2026-11-14 黑轉受控船員招式修正候選
+
+最終戰的黑轉演出先抽離一名船員，進入該船員的黑轉子戰；擊倒後解除支配，再回到伊姆本戰。共用電腦／行動版邏輯改為只取被捕船員自身既有已解鎖招式，不外加伊姆的 Domi Reversi。舊子戰讀檔與暫存續戰會依被捕船員索引及身分修復該外加招式，保留 HP、PP、能力階級、異常狀態與回合。此為 DRAFT 整合候選，不變更原傷害轉換、黑轉能力增幅、AI、演出時長或恢復規則。
+
+
+## 2026-11-14 黑轉／伊姆角色圖取樣
+
+手機黑轉／伊姆角色圖的離屏身體圖層改依實際顯示縮放取樣，修正低解析度中間圖層再放大造成的線條破碎。原圖與框飾不換，保留一般角色圖的既有顯示方式；每邊2048與密度4的表面預算適用，極端縮放不保證完全對應輸出像素。沿用既有 host71 遊戲更新，不新增 App／安裝器需求。

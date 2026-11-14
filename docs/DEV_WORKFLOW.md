@@ -9624,3 +9624,17 @@ Android／iOS host71各四變更targets：Core、Runtime、Stage與Timeline。25
 所有產品採唯一READY exact bytes，Battle whole-file patch因LF→CRLF，Root以process-only core.autocrlf=false提交後逐Git blob核SHA。原始default cached diff-check exit2及9012筆trailing-CR訊息留存；process-only指定whitespace規則exit0，未改canonical CRLF或Main既有空白，不宣稱default lint通過。原啟動器／App、帳號／存檔schema和namespace沿用；不需USB、APK重裝或IPA重簽。
 
 公開Gate：D:\Codex_QA\board-original-sfx-music-release-20261114\PUBLIC_VERIFICATION.json；SHA256 e17304c484772f50dc68d7e6cd798db02444a4973205fd15680ed58915ff5ae1。公告revision117只新增本次Board紀錄並保留其餘99則原內容與順序；最舊已發布Board紀錄封存QA／Git。Root最後公告提交只含newsconfig與本DEV追加，再另核真正Live與七份公開metadata。
+
+
+## 2026-11-14 黑轉受控船員招式修正候選
+
+範圍：共用 `public/js/board_game.js` 與由同一邏輯產生的行動版 `original-core.js`。黑轉子戰改用該船員最多四個自身既有已解鎖攻擊技，不再外加伊姆的 Domi Reversi；保留原黑轉傷害轉換、能力增幅、AI、8400ms 演出與擊倒後回復／伊姆回接流程。舊黑轉子戰存檔及暫存戰鬥只辨識生成的 `final_black_turn_*_domi_reversi`，從同一被捕船員重建招式並保留既有 PP、HP、狀態、能力階級及回合；尚未施放的舊排程改選合法自身招式，已生效的歷史負面狀態不追溯取消。
+
+驗證證據與限制由 `D:/Codex_QA/board-imu-controlled-crew-20261114/source-candidate/` 封存。此段為 DRAFT，候選及可攜修補未套入正式來源；電腦完整頁面及原生兩平台回歸由各負責人另附真實結果，不能將受控 Core 測試當成實機驗收。
+
+
+## 2026-11-14 黑轉／伊姆角色圖渲染修正
+
+原始角色 WEBP 圖片不變。Android `native_portrait_card.gd`／iOS `native_portrait_card.gdc` 在既有25個允許目標內，由 HOST71 改為遊戲更新覆蓋；未擴大宿主允許清單。只提高黑轉／伊姆身體離屏圖層的取樣密度，計入父層縮放與 viewport stretch；完整含 padding 表面每邊上限2048、密度上限4，所以極端縮放仍可能受預算限制。一般角色圖、原框飾、裁切、濾鏡順序、陰影卷積、動畫與全域解析度保持原樣。原 attack／KO 使用 resting raster，近似相同浮點尺寸與密度沿用既有圖層，避免動畫中反覆重配。
+
+最終候選與有界驗證由 `D:/Codex_QA/board-imu-controlled-crew-20261114/COMBINED_READY.json` 統一指定；Windows／原生宿主、GPU 元件、發布更新驗證各有獨立證據。自動化宿主與 GPU 檢查不等於使用者個人手機／存檔或全部自然戰役驗收。正式部署與公開更新結果須另見啟動器發布紀錄。
