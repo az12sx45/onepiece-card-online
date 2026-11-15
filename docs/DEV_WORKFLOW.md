@@ -9727,3 +9727,37 @@ Publisher從真上一版W917882/A17/I22獨立實體QA副本起測；Windows全65
 四MD原byte前綴保留，Source/Native共8block各append一次；Source defaultCRLF診斷與CRLF-aware結果如實分開。無實體手機、人耳、私人正式帳號/save、全自然戰役、FPS或完整Windows媒體安裝驗收。沿用App與account/save namespace，不USB、不重簽重裝。
 
 公開Gate：D:\Codex_QA\board-postgame-parity-release-20261115/PUBLIC_VERIFICATION.json；SHA256 7da7133bf8685e113f502dd9d0d1917f0f128e5f9489fed26d070cd2f287cdd5。公告revision120保其餘99則內容順序，最舊Board封存；最後僅公告config與DEV追加。LATTICE API缺席，不宣稱ledger/graph；清理只保護0刪。
+
+
+<!-- board-ko-source-readonly-20261115 -->
+
+### 2026-11-15 KO 卡面接續：Source 唯讀回歸
+
+本輪桌面原版 `public/js/board_battle.js` 維持 SHA256 `cc15fd92b1606ca0d655d83757d5e99bc07979bc3eb03227662f72f37a3cef47`；Main／Core、遊戲數值、事件、存檔欄位與計時亦未修改。真整頁／原 iframe 以有界最後一擊 fixture 操作原按鈕，記錄實際 img src 與逐幀 pose：敵方及我方皆由 hit 直接接 dizzy，中間無 normal／weak。另驗非致命受擊回正常、KO 後原換人按鈕清除舊身份的 KO 狀態、結果／線索／返回地圖與存讀。
+
+證據：`D:/Codex_QA/board-ko-lineage-size-20261115/source-audit/SOURCE_READ_ONLY_REGRESSION.json`。隔離 101 個當前程式檔的實際 `npm start` 及三頁／程式 HTTP 回應通過；移除正式 DB 環境，DB-disabled 警告保留。初次 startup deadline、QA scenario ENOENT、過早換人點擊失敗全部留存。未以此宣稱實體手機、全角色缺圖 fallback、同一角色道具復活或新雙瀏覽器同步驗收。手機原生 Timeline 修補及 raw／GDC 證據由其 owner 另列；Source 不產生新 Windows body。
+
+
+<!-- board-ko-native-ui-20261115-v1 -->
+
+2026-11-15：手機 KO 圖與血統因子抽取排版。
+
+### 手機 KO 連接與血統因子抽取介面
+
+本輪手機更新使用既有公開 Runtime、AppStage、BattleTimeline，每平台三個可獨立更新目標；不改 Core、Windows、角色原圖、十四個宿主目標或 App 安裝包。
+
+致命受擊的 hit/hitPlayerSide/hitEnemySide 在顯示總 HP 為零時保留到原 KO 事件接手，避免受擊與瀕死圖之間切回一般／虛弱圖。攻擊姿勢、非致命回復、原事件與等待時間、換人／復活清除、五檔特殊保留規則沿用原流程。伊姆分條血條只是顯示投影，判斷讀取總 HP。
+
+抽取介面以既有公開 AppStage 子類調整安全區、原圖／資訊比例、直向捲動與操作區；原控制器、三階段規則、360 毫秒鎖定、抽取器消耗和回呼不變。鎖定中保留原取消 UID 與原處理器。原素材不重畫、不重壓。
+
+Runtime 補齊原 CPU 使用的 `.final-ending-btn.primary:not(:disabled)` 查詢：依當前故事原始標記的 class 與順序映射同一個穩定 key 的原節點，讀取即時 disabled／hidden 與真實可見範圍，保留既有 current／disposed／節點身分檢查及原 click 處理器。未改 CPU 決策或時間。
+
+原生引擎 raw／實際 GDC、GPU 介面與原始 UI 回呼的版本和範圍以本輪 NATIVE_READY、UI owner receipt 為準。這些隔離自動驗證不等於手機實機、真帳號或人工音畫驗收；歷史失敗、QA 操作與初始化限制另保留，不將候選交接宣稱為已發布。
+
+
+手機血統因子提取介面依橫直向與可用安全區重新排列，放大操作角色框、抽取設備與說明文字，主要決定／結果按鈕保留至少44px高度。窄畫面的長說明可在固定區域內捲動。鎖定抽取器時，同一圓框在原360ms取消窗口內可再次點選取消；未取消則沿原庫存確認與三階段抽取流程繼續。原美術、規則、判定難度、計時及桌機版維持原樣。
+
+驗證採Godot4.7.2實際GPU、原Core／Native控制器及ScreenTouch；8個viewport包含568×320、320×568、852×393、393×852、932×430、430×932，另兩組安全區為明示QA模擬。58張畫面與實際控制項幾何覆蓋offer、cylinder、三階段ready、outcome-next、result，並實際取消、再次鎖定、完成與關閉。此為Windows引擎驗證，不宣稱Android／iOS實機或公開更新已接受。
+
+
+證據依本輪 source-audit/SOURCE_READY.json、native-audit/NATIVE_READY.json、lineage-ui/UI_READY.json 與各自版本界線採納。Desktop 原兩側致命受擊及換人、存讀、npm 頁面回歸維持正常，故 Windows package-207149b3862e8526／Main d64ffa74／Battle cc15fd92 不變。GPU 58 張是 V4 layout 在當時 Runtime f7f 的有界測試；最終新 Runtime f3b 與 Timeline／Stage 的原生整合另外列證，不把舊結果重標。Runtime 完整 portable 逆補丁含 LF／CRLF；不能把刪單一新 hunk 說成原 bytes 復原。QA 失敗、候選圖片、原圖與回復包保留，清理 0 刪。LATTICE API 未提供，不宣稱資料庫／圖譜持久寫入。

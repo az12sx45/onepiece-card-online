@@ -2570,3 +2570,17 @@ Audio integration changed-target allowlist is Windows5 (Main/Battle/3regular mus
 <!-- board-postgame-native-story-port-20261115-v3 -->
 
 手機既有 `native-game-runtime.js` 的 `bindNativeStoryControls`，為目前故事節點補上原 CPU 所需的 click、實際範圍與可見狀態；身份比對與原委派處理使用穩定的 story.nodes Map key，Source 自行管理的 DOM id 仍可變更。Android `native_app_stage.gd`／iOS `native_app_stage.gdc` 新增 `story_node_state_json`，在未顯示、換頁、封鎖或既有換手橫幅可見時拒絕提供可點範圍。固定宿主故事模組、Core、Portrait、Timeline 與原素材均保留。可逆補丁、原 raw／GDC、編譯來源和實跑版本見同輪 Native Ready；發布目標仍為每個手機平台的兩個既有 allowlist 項目。
+
+
+<!-- board-ko-source-readonly-20261115 -->
+
+`public/js/board_battle.js` 的 `playPortraitAction`／`showKnockoutPose` 與 `resetChangedCombatants` 本輪維持原始 bytes；`effectivePortraitState` 的零 HP fallback 僅讀查，真頁面未重現桌面致命受擊中間閃回，因此不增添守衛。`D:/Codex_QA/board-ko-lineage-size-20261115/source-audit/SOURCE_READ_ONLY_REGRESSION.json` 收錄兩方實際 src 時序、原換人清除、結果接續及隔離 npm 證據。手機 Native Timeline 為另一 owner 的最小產品範圍，不由 Source 文件把桌面標成已修改。
+
+
+<!-- board-ko-native-ui-20261115-v1 -->
+
+2026-11-15：手機 KO 圖與血統因子抽取排版。
+
+手機既有公開 native_battle_timeline.gd／.gdc：_pose 到期只對總 HP<=0 的 hit 類保留圖片，原 epoch／heartbeat 與 KO 時長沿用。native_app_stage.gd／.gdc：RecoverableLineage 追加 V4 responsive 方法，共用 safe rect、_enemy／_showcase／source_bounds，包含文字捲動、44px 按鈕與原 lock UID 取消。native-game-runtime.js：只補 .final-ending-btn.primary:not(:disabled) 的當前原故事查詢。
+
+Android／iOS 各三個既有 PUBLIC 目標；十四個 HOST、Core、Portrait、原 artwork 與 APK／IPA 不改。iOS Stage 保留獨立原始碼，實際 GDC 來源與編譯收據由 Native Ready 指定；Runtime 換行與 full-byte portable scope 另記。來源／測試位於 D:/Codex_QA/board-ko-lineage-size-20261115/；Source Ready 與 source-audit/*peer-readonly 為唯讀證據，Native Ready 為最終產品 authority，UI Ready 為 V4 視覺／幾何與原控制器證據。

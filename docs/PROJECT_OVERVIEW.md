@@ -3299,3 +3299,17 @@ Preserve final critical recovery/text behavior and existing game-only host71 flo
 <!-- board-postgame-native-story-port-20261115-v3 -->
 
 手機原生遊戲的戰後 CPU 劇情推進，使用與手動觸控共用的原始故事處理函式。程式以目前故事及穩定控制項角色核對節點，並讀取實際原生 Control 的可見範圍；合法的網頁 DOM id 改名不會使原生控制項失聯。回合公告與換頁遮罩仍依原本流程等待。僅更新既有遊戲程式目標，主遊戲規則、素材與 App 宿主不變。
+
+
+<!-- board-ko-source-readonly-20261115 -->
+
+桌面戰鬥頁原本在致命受擊圖停留後直接切至瀕死圖；本輪以實際 img src 與原事件計時確認雙方致命受擊接續，保留其原程式。手機原生 Timeline 的同等接續修補由原生呈現層處理，與桌面 Main／Core 規則及資料分開。後段抽取需要重新顯示卡面時，仍依原有階段呈現。
+
+
+<!-- board-ko-native-ui-20261115-v1 -->
+
+2026-11-15：手機 KO 圖與血統因子抽取排版。
+
+手機戰鬥的致命受擊圖接續至原 KO／瀕死圖，中間不再因受擊計時到期切回一般或虛弱圖。橫向血統因子抽取放大操作區、角色與設備；直向上下排列，長提示可捲動，主要決定／結果按鈕至少 44px。CPU 劇情沿當前原按鈕 class、disabled、可見範圍與原 click 接續。
+
+每平台只更新既有公開 Runtime、AppStage、BattleTimeline，保留 host71、帳號／存檔、Core 與原素材。Windows 已唯讀回歸並保留原 W207149；原生引擎與安全區模擬驗證不等於手機實機驗收。
