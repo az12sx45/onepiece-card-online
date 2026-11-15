@@ -9761,3 +9761,18 @@ Runtime 補齊原 CPU 使用的 `.final-ending-btn.primary:not(:disabled)` 查�
 
 
 證據依本輪 source-audit/SOURCE_READY.json、native-audit/NATIVE_READY.json、lineage-ui/UI_READY.json 與各自版本界線採納。Desktop 原兩側致命受擊及換人、存讀、npm 頁面回歸維持正常，故 Windows package-207149b3862e8526／Main d64ffa74／Battle cc15fd92 不變。GPU 58 張是 V4 layout 在當時 Runtime f7f 的有界測試；最終新 Runtime f3b 與 Timeline／Stage 的原生整合另外列證，不把舊結果重標。Runtime 完整 portable 逆補丁含 LF／CRLF；不能把刪單一新 hunk 說成原 bytes 復原。QA 失敗、候選圖片、原圖與回復包保留，清理 0 刪。LATTICE API 未提供，不宣稱資料庫／圖譜持久寫入。
+
+
+## 2026-11-15：手機KO接續與血統因子抽取介面更新發布
+
+公開驗證：2026-11-15T00:47:18.478Z；唯一Combined24e73284／NativeReadyc5b96214。文件Source 4417b27f44560db29556b5a2b81960db03ccc3dc，當時正式Runtime 6fb0c831b9eb799c49e56d1d87a9623a725fbdde保留無程式或catalog變更；本輪僅手機Android 19／iOS 24，host71／launcher1.2.34不變。Windows package-207149b3862e8526／Main d64ffa74／Battle cc15fd92完整保留，不為文件另造包。
+
+手機三個既有PUBLIC：Runtime32943/f3b8018f（actual factory32462/e6b7bf57）、Stage A126686/416cb217／I95550/0a42ae73、Timeline A26700/c363f23a／I20599/30efb1e1。Timeline只讓HP0受擊圖保留到原KO接手；非致命、攻擊、epoch/heartbeat與原事件時間不變。AppStage追加V4 responsive lineage子類，橫直向安全區、目標與文字、44px主要按鈕、scroll與原360ms鎖定取消；不改HOSTlineage。Runtime精準補enabled-primary原query，保currentrole/class/order/disabled/hidden/stale/原callback。Runtime全檔LF→CRLF與selectorblock的完整byte逆還原、Stage單hunkbyteexact等界線見RootByteScope，不聲稱Runtime單hunk可還原原bytes。
+
+Owner四條最終raw/GDC三產品合測：KO、非致命連擊→真CPU回玩家→終擊→原抽取略過，與玩家KO→原換人→奇蹟帶骨肉復活/原co-opactive回接，皆0ERROR。58張/8size GPU保當時f7f Runtime版本、同V4 layout hunk；不能重標f3，新三產品combined與primary liveNext/disabled/hidden/stale原helper→Next→Skip合同分別採納。Source Desktop雙方hit→dizzy/非致命/換人/結果存讀/npm唯讀回歸，原Source沒有產品改動；受控fixture及QA安全區/touchscreen emulation不是自然全戰役或硬體測試。
+
+Publisher真A18/I23已確認state/PCK/source-index起跑，本機與正常公開各4phase/100reads；25=11PCK14HOST，改3PUBLIC/22retained=8PUBLIC14HOST，raw下載A186329B/I149092B，6keys/5uniquehash，回復各3PUBLIC/0HOST。原mount早於scene/require、實factory與Stage/Timeline/retainedCorePortraitModal41SFX3BGM、startup/confirm/cold、rewardHUD→CPU→human與合成帳號/save哨兵均驗證。每phase同Runtime另以原load-save/current story helper/真Skip callback，唯讀exactprimaryquery返回原MapNext/真rectstyle、fallbackDialogue/actualquerycapture、閉合stale0；publisher不切disabled/hidden flags或改timer，採owner final6601該排除矩陣，不重新跑Owner大矩陣。
+
+所有舊錯誤/草稿/版本界線保留。無實體手機、私人正式save/login、人耳、自然全戰役或FPS驗收；App/account/save namespace/原圖/音效配樂不變。4MD8block保前綴各append一次，source default與CRLFaware style分開保存。公告後單次Git推送/部署，actualLive與7公開metadata/fullmanifest/6PUBLIC回復讀回後封RELEASED。
+
+公開Gate D:\Codex_QA\board-ko-lineage-size-release-20261115/PUBLIC_VERIFICATION.json；SHA256 a6d2c2d1342c8d6413a47e5b2e6d7f221e0af8dbb1eec12a17638ab267a26936。revision121保其餘99則內容順序、封存最舊Board，公告僅config+DEV追加。LATTICE API缺席不假ledger/Graph，清理只保護0刪。

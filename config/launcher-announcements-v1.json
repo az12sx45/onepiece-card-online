@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 120,
+  "revision": 121,
   "announcements": [
+    {
+      "id": "board-20261115-ko-lineage-interface-update",
+      "status": "published",
+      "scope": "board",
+      "category": "update",
+      "version": "Android Update 19／iOS Preview 24（Windows內容維持）",
+      "title": "新世界航海錄｜手機 KO 圖接續與血統因子抽取介面改善",
+      "summary": "修正手機倒地圖像閃回，放大血統因子抽取介面，並補齊劇情操作接續。",
+      "body": [
+        "手機角色被擊倒時，受擊圖直接接到瀕死圖，不再中途閃回一般或虛弱圖。",
+        "放大血統因子抽取的遊戲區、設備與文字；直向上下排列，改善小螢幕、安全區、結果出口與原鎖定取消操作。",
+        "補齊 CPU 劇情推進的原按鈕查詢，保留停用、隱藏及過期畫面的保護。",
+        "本次只更新手機遊戲；原 App、帳號與存檔保留，下載後完整關閉再開啟。Windows 原版已核對，內容維持。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-207149b3862e8526"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      },
+      "publishedAt": "2026-11-15T00:47:43.853Z"
+    },
     {
       "id": "board-20261115-postgame-story-continuation-update",
       "status": "published",
@@ -52,32 +76,6 @@
         "gameId": "board"
       },
       "publishedAt": "2026-11-14T15:55:16.363Z"
-    },
-    {
-      "id": "board-20261114-controlled-crew-portrait-update",
-      "status": "published",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 16／iOS Preview 21",
-      "title": "新世界航海錄｜受控船員技能與手機頭像修正",
-      "summary": "修正受控船員多出的支配招式，保留自己的已解鎖技能；改善手機魔轉頭像的繪製密度。",
-      "body": [
-        "受控船員沿用自己的已解鎖技能，修正原本沒有該招式卻多出「Domi Reversi」的問題。",
-        "修正受影響的舊中途存檔與待續戰鬥，保留當時的血量、PP、狀態及回合。",
-        "手機魔轉頭像會依畫面顯示密度繪製，保留原始立繪、外框與既有戰鬥動畫。",
-        "音效與配樂沿用已發布版本，原有音量與靜音設定保留。",
-        "在原啟動器或 App 的下載管理檢查「新世界航海錄」更新，套用後完整關閉再重新開啟。",
-        "沿用原帳號與存檔，不需重裝啟動器、APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-3458e718078e5bf4"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      },
-      "publishedAt": "2026-11-14T12:58:59.066Z"
     },
     {
       "id": "marineford-20261107-cpu-seat-memory",
