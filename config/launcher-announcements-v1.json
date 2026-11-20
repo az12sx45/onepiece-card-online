@@ -1,7 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 121,
+  "revision": 122,
   "announcements": [
+    {
+      "id": "board-20261120-ngplus-lineage-services-update",
+      "status": "published",
+      "scope": "board",
+      "category": "update",
+      "version": "Windows／Android Update 20／iOS Preview 25",
+      "title": "新世界航海錄｜二周目島嶼服務與抽取操作修正",
+      "summary": "修正研究所與競技場的轉換，改善手機抽取畫面與點擊時機。",
+      "body": [
+        "修正二周目敵人島通關後，臨時醫療與酒館服務沒有轉成研究所、競技場的問題；保留原本三回合期限，舊存檔可續玩。",
+        "重排手機血統因子抽取畫面，保留持有數量、加成與取消操作；修正裝置轉向、雷射接合與殘留特效。",
+        "讓第一階段縮圈顯示與原點擊判定共用起算時間，保留原判定門檻、消耗及獎勵。",
+        "Windows、Android、iOS 只更新遊戲檔，保留原啟動器或 App、帳號與存檔。"
+      ],
+      "requiredRelease": {
+        "kind": "board",
+        "releaseId": "package-3c19374b974a5dc5"
+      },
+      "cta": {
+        "kind": "game",
+        "gameId": "board"
+      },
+      "publishedAt": "2026-11-20T08:27:19.874Z"
+    },
     {
       "id": "board-20261115-ko-lineage-interface-update",
       "status": "published",
@@ -50,32 +74,6 @@
         "gameId": "board"
       },
       "publishedAt": "2026-11-14T18:07:11.102Z"
-    },
-    {
-      "id": "board-20261114-all-controlled-crew-moves-ko-update",
-      "status": "published",
-      "scope": "board",
-      "category": "update",
-      "version": "Windows 遊戲更新／Android Update 17／iOS Preview 22",
-      "title": "新世界航海錄｜受控角色招式與手機倒地修正",
-      "summary": "修正部分受控角色施放錯招、舊變身狀態的名稱與圖片，以及手機倒地去色與頭像位置。",
-      "body": [
-        "全面檢查可捕獲角色與永久型態的招式對應及原圖，另含山治戰鬥服狀態。",
-        "修正部分獄卒獸與卡塔克利受控後，選擇招式卻施放另一招的問題。",
-        "保留受控角色捕獲時的變身名稱與圖片，修正受影響舊存檔的招式 PP、排程與變身狀態對應。",
-        "修正手機倒地去色同步與特定獄卒獸頭像位置，沿用原圖及既有動畫節奏。",
-        "在原啟動器或 App 的下載管理更新「新世界航海錄」，套用後完整關閉再重新開啟。",
-        "沿用原帳號、存檔、音量與靜音設定，不需重裝啟動器、APK 或 IPA。"
-      ],
-      "requiredRelease": {
-        "kind": "board",
-        "releaseId": "package-91788250a6bbda14"
-      },
-      "cta": {
-        "kind": "game",
-        "gameId": "board"
-      },
-      "publishedAt": "2026-11-14T15:55:16.363Z"
     },
     {
       "id": "marineford-20261107-cpu-seat-memory",

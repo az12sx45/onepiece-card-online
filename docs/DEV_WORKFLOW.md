@@ -9790,3 +9790,14 @@ Publisher真A18/I23已確認state/PCK/source-index起跑，本機與正常公開
 手機 host71 的 Android 與 iOS library 均確認為 QuickJS-NG 0.14.0。本輪以相同後端與版本的 Windows QA 套件重驗原生流程，實際載入的 DLL 路徑與 SHA 另有程序模組證據；API 資料相同不代表 JavaScript 引擎相同。先前 Windows V8 的研究所重連崩潰及兩項未成功試驗均保留，不採入產品，也不直接推論為手機崩潰。官方套件與手機 library 非完全相同建置，仍保留真機驗收界線。
 
 本輪保留原 App、帳號與存檔 namespace、十四個宿主目標、Timeline、音效和原始圖片。LATTICE API 未提供，未宣稱資料庫或圖譜寫入。清理零刪除，候選、測試依賴及失敗證據暫留供查錯。
+
+
+## 2026-11-20：二周目島嶼服務與手機抽取修正正式發布
+
+唯一Owner READY a107939c；source 63effc73db344b898c6d55650d239878c9aab214；runtime metadata 2d572a2e74962a9f87070e715c524d78e590d729。Windows package-3c19374b974a5dc5，6590只換Main3995544/e6524d28、保6589含6533媒體；Android Update 20／iOS Preview 25，host71／launcher1.2.34與安裝器、App、namespace維持。手機各換Core1354/Runtime68/Stage A0c31或IGDC0aa1三個既有PUBLIC，25=11PCK14HOST，保22=8PUBLIC14HOST，6URL4unique，實際下載與舊save/account哨兵詳公開Gate。
+
+Main/Core六logical edits、五diffblocks精確逆回原bytes，原三回合期限/RNG/存檔欄位不變。手機原圖、Timeline、音效配樂與判定門檻/消耗/獎勵不改；選擇持有數及加成說明保留，裝置轉向/雷射/同時鐘顯示修正。UI舊84/352、舊GDC49/219、final14/119按版本採納。Owner同QuickJS0.14 canonical冷讀8/136、warm28、input各43，原Core138/controller411與npm4HTTP證據保持原範圍。
+
+Publisher從真confirmed A19/I24 state/PCK/source-index起跑，在匹配QJS QA與實際載入module path/hash門檻下完成原Updater本機/正常公開stage-trial-confirm-cold與factory/mount/合成舊帳號save哨兵；Windows actual stock1.2.34隔離更新器及全6590manifest diff分別列證。bounded fixture與fullgame界線詳Gate，不宣稱實裝完整1.6GB、私人正式帳號/存檔、實體手機或自然完整戰役。官方QJS QA後端版本匹配，不宣稱精確手機library逐byte相同。所有V8錯backend C0005、失敗試驗a264/c293、QA adapter首輪時間欄錯誤與歷史FAIL保留。
+
+公開Gate D:\Codex_QA\board-ngplus-lineage-release-20261120/PUBLIC_UPDATE_VERIFIED.json；SHA256 6108448627fdae83ce070ae1059ea0000a94765dda010b2b5ad16a0effc090e6。Runtime provider已Live，公告後仍核最終公告Live/公開metadata再封唯一RELEASED。公告revision122保99則deeporder，最舊Board原記錄封存。原DEV完整prefix只追加本段。LATTICE API缺席，不宣稱持久任務/SQL/Graph，清理零刪且保護原版、回復、compiler/SDK/QA。
