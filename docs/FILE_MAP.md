@@ -2584,3 +2584,12 @@ Audio integration changed-target allowlist is Windows5 (Main/Battle/3regular mus
 手機既有公開 native_battle_timeline.gd／.gdc：_pose 到期只對總 HP<=0 的 hit 類保留圖片，原 epoch／heartbeat 與 KO 時長沿用。native_app_stage.gd／.gdc：RecoverableLineage 追加 V4 responsive 方法，共用 safe rect、_enemy／_showcase／source_bounds，包含文字捲動、44px 按鈕與原 lock UID 取消。native-game-runtime.js：只補 .final-ending-btn.primary:not(:disabled) 的當前原故事查詢。
 
 Android／iOS 各三個既有 PUBLIC 目標；十四個 HOST、Core、Portrait、原 artwork 與 APK／IPA 不改。iOS Stage 保留獨立原始碼，實際 GDC 來源與編譯收據由 Native Ready 指定；Runtime 換行與 full-byte portable scope 另記。來源／測試位於 D:/Codex_QA/board-ko-lineage-size-20261115/；Source Ready 與 source-audit/*peer-readonly 為唯讀證據，Native Ready 為最終產品 authority，UI Ready 為 V4 視覺／幾何與原控制器證據。
+
+
+<!-- board-ngplus-lineage-20261120 -->
+### 2026-11-20 二周目／手機抽取修正入口
+
+- public/js/board_game.js：getEffectiveIslandKind、activateTemporaryEnemyIslandService、islandArrivalBadgeInfo、inspectIsland、processTemporaryEnemyIslandServices；六個最小修補，手機 original-core.js 同步。
+- 手機既有 native-game-runtime.js：bindNativeLineageClock，將原控制器第一階段的時鐘原值按當前 target UID 同步給原生呈現，保留 scope／dispose 清除。
+- 手機既有 native_app_stage.gd／iOS native_app_stage.gdc：RecoverableLineage 與 AlignedLineageOutcome，安全區排版、原圖取景、單一裝置、九十度轉向、即時雷射和同時鐘縮圈；兩平台原有差異保留。
+- 候選／測試／產品與未測限制：D:/Codex_QA/board-ngplus-lineage-tomes-20261120/COMBINED_READY.json；正式版本以 publisher RELEASED 收據為準。此資料夾名稱中的 tomes 是最初誤解的歷史名稱，本輪不修改典籍或角色技能。

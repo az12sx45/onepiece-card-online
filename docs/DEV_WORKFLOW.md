@@ -9776,3 +9776,17 @@ Publisher真A18/I23已確認state/PCK/source-index起跑，本機與正常公開
 所有舊錯誤/草稿/版本界線保留。無實體手機、私人正式save/login、人耳、自然全戰役或FPS驗收；App/account/save namespace/原圖/音效配樂不變。4MD8block保前綴各append一次，source default與CRLFaware style分開保存。公告後單次Git推送/部署，actualLive與7公開metadata/fullmanifest/6PUBLIC回復讀回後封RELEASED。
 
 公開Gate D:\Codex_QA\board-ko-lineage-size-release-20261115/PUBLIC_VERIFICATION.json；SHA256 a6d2c2d1342c8d6413a47e5b2e6d7f221e0af8dbb1eec12a17638ab267a26936。revision121保其餘99則內容順序、封存最舊Board，公告僅config+DEV追加。LATTICE API缺席不假ledger/Graph，清理只保護0刪。
+
+
+<!-- board-ngplus-lineage-20261120 -->
+## 2026-11-20：二周目臨時服務與手機血統因子抽取
+
+候選修正由原始發布 Main d64ffa74／Core 133f40ed 起算。敵人島通關的原始 hospital／tavern 狀態先解析，再依既有 researchLabsActive 升級為研究所／競技場；勝利、抵達徽章、舊待選服務、島嶼情報和到期訊息一致。保留原三回合期限、RNG、原存檔欄位及敵人重生。
+
+手機僅更新既有 Core、Runtime、AppStage。抽取裝置的選擇彈巢與操作顯示分開，使用原圖的 AtlasTexture 取景；裝置完成原九十度旋轉後發射，依即時幾何繪製水平雷射及命中效果，離開時清除繪圖。第一階段原控制器的單調時鐘原值同步給原生縮圈，修正首次繪製晚於原判定起算的落差，不改判定門檻、耗材、獎勵或三階段規則。
+
+證據與版本界線見 D:/Codex_QA/board-ngplus-lineage-tomes-20261120/COMBINED_READY.json。Node 原控制器／Core factory、Godot 原生組件及畫面測試分開列證；受控存檔和觸控模擬不代表私人存檔、自然完整戰役或 Android／iOS 實體手機驗收。舊原生測試因已失效 GDExtension 路徑而失敗的紀錄保留；本輪新官方 Windows QA 依賴只用於測試，不放入遊戲更新。正式發布、版本、下載量與公開讀回由 publisher 另立收據。
+
+手機 host71 的 Android 與 iOS library 均確認為 QuickJS-NG 0.14.0。本輪以相同後端與版本的 Windows QA 套件重驗原生流程，實際載入的 DLL 路徑與 SHA 另有程序模組證據；API 資料相同不代表 JavaScript 引擎相同。先前 Windows V8 的研究所重連崩潰及兩項未成功試驗均保留，不採入產品，也不直接推論為手機崩潰。官方套件與手機 library 非完全相同建置，仍保留真機驗收界線。
+
+本輪保留原 App、帳號與存檔 namespace、十四個宿主目標、Timeline、音效和原始圖片。LATTICE API 未提供，未宣稱資料庫或圖譜寫入。清理零刪除，候選、測試依賴及失敗證據暫留供查錯。

@@ -14372,7 +14372,7 @@ function buildFixedFiveTileRoute(fromCol, fromRow, toCol, toRow) {
       islandState.shopStock = [];
       islandState.shopStockUnlockStage = "";
     }
-    return serviceKind;
+    return getEffectiveIslandKind(island, islandState);
   }
 
   function playerCrewHighestLevel(player) {
@@ -16457,9 +16457,10 @@ const BOARD_STORY_BGM_PROFILES = Object.freeze({
 
   function getEffectiveIslandKind(island, islandState = getIslandState(island?.id)) {
     if (!island) return "";
-    if (state.gameState?.postgameWorld?.researchLabsActive && island.kind === "hospital") return "research_lab";
-    if (state.gameState?.postgameWorld?.researchLabsActive && island.kind === "tavern") return "arena";
-    return islandState?.currentKind || island.kind;
+    const kind = islandState?.currentKind || island.kind;
+    if (state.gameState?.postgameWorld?.researchLabsActive && kind === "hospital") return "research_lab";
+    if (state.gameState?.postgameWorld?.researchLabsActive && kind === "tavern") return "arena";
+    return kind;
   }
 
   function normalizeTemporaryEnemyIslandServices(game = state.gameState) {
@@ -35251,9 +35252,9 @@ function resolveImpelDownEventPrimary(player, context = null) {
     if (kind === "tavern") return { label: "酒館", symbol: "酒", theme: "island-tavern" };
     if (kind === "arena") return { label: "競技場", symbol: "競", theme: "island-enemy" };
     if (kind === "mission") return { label: "任務", symbol: "任", theme: "island-mission" };
-    if (kind === "enemy" || baseKind === "enemy" || kind === "yonko" || baseKind === "yonko") return { label: "敵島", symbol: "敵", theme: "island-enemy" };
     if (kind === "hospital") return { label: "醫院", symbol: "醫", theme: "island-supply" };
     if (kind === "research_lab") return { label: "研究所", symbol: "研", theme: "island-supply" };
+    if (kind === "enemy" || baseKind === "enemy" || kind === "yonko" || baseKind === "yonko") return { label: "敵島", symbol: "敵", theme: "island-enemy" };
     if (["judicial", "impel_down", "marineford"].includes(kind)) return { label: "副本", symbol: "戰", theme: "island-enemy" };
     if (kind === "final") return { label: "最終島", symbol: "終", theme: "island-final" };
     if (kind === "reverse-mountain") return { label: "顛倒山", symbol: "山", theme: "island-route" };
@@ -60427,7 +60428,7 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
       const islandState = getIslandState(island.id);
       if (!isTemporaryEnemyIslandService(island, islandState)) return;
       if (Number(islandState.temporaryServiceExpiresAtRound || 0) > round) return;
-      const oldServiceKind = islandState.currentKind;
+      const oldServiceKind = getEffectiveIslandKind(island, islandState);
       const profile = refreshEnemyIslandProfile(island, islandState);
       addLog(`${island.name} 的${serviceIslandLabel(oldServiceKind)}結束，新的敵人 ${profile?.name || "未知敵人"} 佔據了島嶼。`);
     });
@@ -62744,13 +62745,17 @@ function sparApplySwitch(battle, participant, nextIndex, reason = "switch") {
         ? `臨時醫院，可恢復 HP / PP / 狀態；剩 ${temporaryEnemyIslandTurnsLeft(islandState)} 回合後敵人會換人回來`
         : "醫院島，可恢復 HP / PP / 狀態";
     } else if (islandKind === "research_lab") {
-      extra = "正式研究所，可免費恢復全隊，並管理角色收藏與六名登船成員";
+      extra = isTemporaryEnemyIslandService(island, islandState)
+        ? `臨時研究所，可免費恢復全隊並使用血統研究功能；剩 ${temporaryEnemyIslandTurnsLeft(islandState)} 回合後敵人會換人回來`
+        : "正式研究所，可免費恢復全隊，並管理角色收藏與六名登船成員";
     } else if (islandKind === "tavern") {
       extra = isTemporaryEnemyIslandService(island, islandState)
         ? `臨時酒館，可花錢招募新夥伴；剩 ${temporaryEnemyIslandTurnsLeft(islandState)} 回合後敵人會換人回來`
         : "酒館島，可花錢招募新夥伴";
     } else if (islandKind === "arena") {
-      extra = "競技場島，可從 51 名 Lv.99 最高型態對手中指定一名，選兩名船員挑戰並取得研究點數";
+      extra = isTemporaryEnemyIslandService(island, islandState)
+        ? `臨時競技場，可選兩名船員挑戰並取得研究點數；剩 ${temporaryEnemyIslandTurnsLeft(islandState)} 回合後敵人會換人回來`
+        : "競技場島，可從 51 名 Lv.99 最高型態對手中指定一名，選兩名船員挑戰並取得研究點數";
     } else if (islandKind === "mission") {
       extra = "任務島，可接委託賺取貝里、EXP 與懸賞；船內可查看已接任務進度";
     } else if (island.kind === "yonko" && islandState?.isYonkoDefeated) {

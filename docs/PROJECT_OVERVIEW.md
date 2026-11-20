@@ -3313,3 +3313,11 @@ Preserve final critical recovery/text behavior and existing game-only host71 flo
 手機戰鬥的致命受擊圖接續至原 KO／瀕死圖，中間不再因受擊計時到期切回一般或虛弱圖。橫向血統因子抽取放大操作區、角色與設備；直向上下排列，長提示可捲動，主要決定／結果按鈕至少 44px。CPU 劇情沿當前原按鈕 class、disabled、可見範圍與原 click 接續。
 
 每平台只更新既有公開 Runtime、AppStage、BattleTimeline，保留 host71、帳號／存檔、Core 與原素材。Windows 已唯讀回歸並保留原 W207149；原生引擎與安全區模擬驗證不等於手機實機驗收。
+
+
+<!-- board-ngplus-lineage-20261120 -->
+### 2026-11-20 二周目服務與抽取操作候選
+
+研究系統開放後，打倒敵人島所產生的臨時醫療服務／酒館服務，同樣使用研究所／競技場畫面與入口；商店維持商店。既有舊存檔直接依有效島嶼類型解析，原三回合重生規則不變。Windows 與手機共用此規則修正。
+
+Android／iOS 抽取畫面重排選擇彈巢、裝置、目標和文字；雷射接合即時槍口，發射前完成九十度旋轉，消除重複裝置與殘留特效。第一階段縮圈與原判定共用原始時鐘。平台測試、發布狀態以本輪 COMBINED_READY 及 publisher 正式收據為準，非要求重裝 App。
