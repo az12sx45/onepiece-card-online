@@ -184,7 +184,9 @@
   function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,4500);}
   function setPaused(value){
     value=Boolean(value);if(paused===value)return;
-    paused=value;clearTimeout(timer);if(busy)animations.forEach(a=>paused?a.pause():a.play());updateStatus();schedule();
+    // Stop automatic advances at a complete printed page, never freeze the
+    // physical leaf halfway across the couple photograph and QR code.
+    paused=value;clearTimeout(timer);updateStatus();schedule();
   }
   function replay(){
     if(busy)return;

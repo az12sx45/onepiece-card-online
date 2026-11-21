@@ -107,3 +107,5 @@ D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不�
 部署前必須先套用 `migrations/0002_playback_control.sql`。本次真正D1已成功套用並讀回；既有祝福與頭像筆數不變。`GET /api/playback` 初次回傳paused、latest、nextCursor且不重播歷史命令；之後使用 `?after=<nextCursor>&limit=100`，有hasMore時繼續讀。每個TV約2秒輪詢，使用nextCursor而不是自行猜序號；暫停狀態耐久保存、60秒以前的前後頁命令不補播。`POST /api/admin/playback` 必須Bearer原管理金鑰，JSON為action（pause/resume/next/prev/replay）及穩定requestId；相同key重試不重複新增指令。
 
 `name-lookup.js` 支援輸入名字查詢既有姓名雜湊，不附帶明文邀請名單；相同名字多身分時請補姓氏。原PAYLOAD與五張PIC完全保留。非漢字或未列入官方公開資料的特殊多字姓若無既有映射，仍應輸入完整姓名。
+
+暫停操作會讓當次紙葉先完整落頁，再停住自動播放；暫停時仍可用前後頁手動閱讀。部署時可使用已驗收API版本搭配後續純展示程式更新，實際服務提交另以各自部署紀錄為準。
