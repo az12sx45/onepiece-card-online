@@ -9822,3 +9822,5 @@ LATTICE API 未出現在本階段工具清單；官方 serve 接入未在期限�
 婚禮翻頁補充：翻頁前解碼即將顯示的實際頭像 DOM，翻頁完成時移動同一張紙面而不重建 no-store 圖片；每分鐘同步若內容未改則保留當前頁，避免背景重取造成頭像跳動。驗證仍使用相同 Playwright 整合流程。
 
 婚禮部署補充：正式建置 audit 發現 sharp 0.34.5 上游解碼器弱點，更新鎖定 0.35.5／Node >=20.9.0；針對婚禮 API npm audit 為 0、8 項 API 測試重新通過。Render API 根目錄調整為 photo-groups-api，使用 npm ci 與 node server.js，只打包婚禮服務。
+
+婚禮正式驗收：應用程式 ccc9a30，原靜態站與 API 均 Live；正式 D1 五筆送出／SSE 排隊／五階段 3D 截圖／原速影片、WebKit 手機自拍送到電視、刷新、管理授權與隱藏、CSV／含頭像 JSON 備份皆通過。台北 02:20:02 執行 Render Restart service，02:20:56 讀回 6 筆系統紀錄及 480 頭像，系統留言全部隱藏。main 及遊戲 Live 仍 cf296d；未增加付費資源。實體 iPhone／電視和缺少的 10 款 AI PNG 仍有驗收／素材界線，詳 SETUP。
