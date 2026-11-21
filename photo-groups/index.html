@@ -101,8 +101,8 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
       <label class="wishLabel" for="wishAuthor">你的署名（會出現在電視上）</label>
       <input id="wishAuthor" class="wishInput" type="text" maxlength="20" placeholder="例如：第5組的朋友" autocomplete="off">
       <label class="wishLabel" for="wishMessage">你的祝福</label>
-      <textarea id="wishMessage" class="wishInput" rows="3" maxlength="120" placeholder="祝仁鈞與姮儒永遠幸福，手牽手走過每個春夏秋冬 ♡"></textarea>
-      <div class="wishCount" id="wishLength">0 / 120 字</div>
+      <textarea id="wishMessage" class="wishInput" rows="3" maxlength="30" placeholder="祝仁鈞與姮儒永遠幸福，手牽手走過每個春夏秋冬 ♡"></textarea>
+      <div class="wishCount" id="wishLength">0 / 30 字</div>
       <div class="wishLabel" id="wishStyleTitle">選一款你喜歡的祝福框（10 種）</div>
       <div class="wishChoices" id="wishChoices" role="group" aria-labelledby="wishStyleTitle"></div>
       <div class="wishPreviewLabel">✦ 電視上的祝福預覽 ✦</div>
@@ -167,7 +167,7 @@ function updatePreview(){
  const sign=document.createElement('div');sign.className='wishSignature';sign.textContent='第 '+(currentGroup||'?')+' 組 · '+(authorInput.value.trim()||'來賓');
  frame.append(icon,body,sign);
  preview.replaceChildren(frame);
- document.getElementById('wishLength').textContent=String(wishInput.value.length)+' / 120 字';
+ document.getElementById('wishLength').textContent=String(wishInput.value.length)+' / 30 字';
 }
 authorInput.addEventListener('input',updatePreview);
 wishInput.addEventListener('input',updatePreview);
@@ -178,7 +178,7 @@ sendWishBtn.addEventListener('click',async()=>{
  const author=authorInput.value.trim()||'賓客';
  const message=wishInput.value.trim();
  if(message.length<2){statusWish.textContent='寫至少兩個字的祝福，讓大家一起分享幸福 ♡';wishInput.focus();return}
- if(message.length>120){statusWish.textContent='祝福文字最多120個字。';return}
+ if(message.length>30){statusWish.textContent='祝福文字最多30個字。';return}
  if(author.length>20){statusWish.textContent='署名請控制在20字以內。';return}
  isSending=true;sendWishBtn.disabled=true;sendWishBtn.textContent='正在傳送祝福…';statusWish.textContent='';
  try{
