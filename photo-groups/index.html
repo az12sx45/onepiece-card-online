@@ -1,50 +1,65 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#fcfaf8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fcfaf8">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>拍照分組｜查詢你的拍照組別</title>
+<title>拍照分組</title>
 <style>
-:root{color-scheme:light;--ink:#2e3341;--sub:#667181;--pink:#c86876;--peach:#f8dacb;--line:#eae5e4;--shadow:0 18px 60px rgba(87,65,71,.13)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% -1%,#fff1df 0,transparent 45%),radial-gradient(ellipse at 95% 10%,#fce0df 0,transparent 41%),linear-gradient(#fcfaf8,#f9f4ef);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}button,input{font:inherit}button{cursor:pointer}
-.frame{width:min(100%,640px);margin:0 auto;padding:36px 18px 44px}
-.decor{display:flex;justify-content:center;align-items:center;gap:9px;font-size:13px;letter-spacing:.22em;font-weight:700;color:#a68179}.decor:before,.decor:after{content:'';width:43px;height:1px;background:#d5b6af}
-header{text-align:center;margin:17px 0 24px}h1{margin:12px 0 8px;font-family:Georgia,"Noto Serif TC","Songti TC",serif;font-size:clamp(36px,9vw,58px);font-weight:800;letter-spacing:.11em;line-height:1.24}header p{margin:10px auto 0;color:#686e7b;font-size:15px;line-height:1.9;max-width:370px} .spark{color:#c28080}
-.shell{background:#fff;border:1px solid #f5eded;border-radius:28px;box-shadow:var(--shadow);overflow:hidden;padding:26px 22px 22px}
-.step{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:0 0 19px;margin:0 0 18px;border-bottom:1px solid #f2eeee}.step:last-child{border:0;margin:0;padding:0}.stepnum{display:grid;flex:none;place-items:center;width:32px;height:32px;border-radius:100%;background:#faeeea;color:#b96e75;font-weight:800}.step strong{display:block;font-size:15px;margin:4px 0 1px}.step p{margin:0;color:#83909b;font-size:13px;line-height:1.8}
-.formtitle{font-weight:800;letter-spacing:.07em;font-size:16px;margin:0 0 12px}form{display:flex;gap:10px}.field{min-width:0;flex:1;background:#fffcfb;border:1.5px solid #e7dedc;border-radius:14px;padding:15px 16px;font-size:18px;outline:none;appearance:none;-webkit-appearance:none}.field:focus{border-color:#ca8389;box-shadow:0 0 0 4px #fae5e3}.btn{flex:none;background:#bd7377;color:#fff;border:0;border-radius:14px;padding:0 23px;font-weight:800;letter-spacing:.03em;font-size:16px;min-height:54px}.btn:active{transform:translateY(1px)}.help{font-size:13px;color:#8c919e;margin:13px 2px 2px;line-height:1.8}
-.status{display:none;margin:18px 0 0;padding:15px 16px;background:#fff5f2;border:1px solid #f2d9d4;border-radius:14px;color:#8e555d;font-size:14px;line-height:1.8}.status.show{display:block}
-.result{display:none;margin:24px 0 0;opacity:0;transform:translateY(8px);transition:opacity .28s,transform .28s}.result.show{display:block;opacity:1;transform:translateY(0)}.resultPanel{overflow:hidden;background:#fff;border:1px solid #f3e8e3;border-radius:26px;box-shadow:0 16px 46px rgba(81,68,70,.12)}
-.photoStage{position:relative;overflow:hidden;background:#eee7e2;text-align:center}.photoStage:before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--ph);background-position:center;background-size:cover;filter:blur(20px) brightness(1.1);opacity:.4;transform:scale(1.14)}.photoStage img{position:relative;z-index:1;display:block;width:100%;height:clamp(280px,65vw,415px);object-fit:contain}
-.groupInfo{text-align:center;padding:24px 20px 30px}.found{font-size:13px;letter-spacing:.18em;font-weight:700;color:#b77a7e}.big{font-family:Georgia,"Noto Serif TC","Songti TC",serif;letter-spacing:.04em;font-size:clamp(64px,17vw,104px);line-height:1.18;font-weight:900;margin:9px 0 3px;color:#ad5765}.big small{font-size:.33em;color:#745c62;vertical-align:14px;margin-left:8px}.nm{font-size:18px;font-weight:800;margin:12px 0 3px;overflow-wrap:anywhere}.meta{font-size:15px;line-height:1.9;color:#68717e;margin:0 auto;max-width:440px}.endmark{display:block;width:85px;height:1px;background:#d6a2a5;margin:21px auto 0}
-.footer{text-align:center;margin-top:23px;color:#a2a1a7;font-size:12px;line-height:2}.footer a{color:#aa7277;text-decoration:underline}.noscript{border-radius:14px;padding:14px;background:#fff0ee;color:#8b4e5b}
-@media(max-width:550px){.frame{padding:24px 13px 30px}header{margin:12px 0 19px}.shell{padding:23px 17px 20px;border-radius:23px}form{flex-direction:column}.btn{width:100%}.field{width:100%}.photoStage img{height:min(105vw,415px)}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.result{transition:none}}
+:root{color-scheme:light;--ink:#302f37;--rose:#b85f70;--shadow:0 16px 55px rgba(87,65,71,.12)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100dvh;background:radial-gradient(circle at 8% 0%,#fff0e8 0,transparent 44%),radial-gradient(circle at 96% 15%,#f8e0e6 0,transparent 40%),#fcfaf8;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.frame{width:min(100%,620px);margin:auto;padding:clamp(45px,11vh,110px) 17px 45px}
+header{text-align:center;margin:0 0 26px}
+h1{font-family:Georgia,"Noto Serif TC","Songti TC",serif;margin:0;font-size:clamp(38px,10vw,54px);letter-spacing:.1em;font-weight:800}
+.spark{color:#c5848b;font-size:18px;margin-bottom:10px}
+.shell{background:#fff;border:1px solid #f1e9e8;border-radius:26px;box-shadow:var(--shadow);padding:26px 23px}
+form{display:flex;gap:10px}
+.field{min-width:0;flex:1;appearance:none;-webkit-appearance:none;background:#fffdfc;border:1.5px solid #e6dadb;border-radius:15px;padding:15px;font-size:18px;outline:none}
+.field:focus{border-color:var(--rose);box-shadow:0 0 0 4px #f8e6e8}
+.btn{flex:none;min-height:56px;padding:0 22px;border:none;border-radius:15px;background:var(--rose);color:#fff;font-size:17px;font-weight:800}
+.btn:active{transform:translateY(1px)}
+.status{display:none;margin:17px 0 0;padding:13px 15px;background:#fff6f3;border:1px solid #f0dcd6;border-radius:13px;color:#995a61;font-size:15px;line-height:1.7}
+.status.show{display:block}
+.result{display:none}
+.result.show{display:block}
+.resultPanel{overflow:hidden;background:#fff;border:1px solid #f1e9e8;border-radius:26px;box-shadow:var(--shadow)}
+.photoStage{position:relative;overflow:hidden;background:#eee7e2}
+.photoStage:before{content:"";position:absolute;inset:0;background-image:var(--ph);background-position:center;background-size:cover;filter:blur(20px) brightness(1.1);opacity:.38;transform:scale(1.14)}
+.photoStage img{position:relative;display:block;width:100%;height:clamp(320px,75vw,470px);object-fit:contain}
+.groupInfo{text-align:center;padding:28px 16px 32px}
+.groupInfo .big{font-family:Georgia,"Noto Serif TC","Songti TC",serif;color:#a94f62;font-size:clamp(50px,13vw,82px);font-weight:900;line-height:1.25;letter-spacing:.04em}
+.reset{display:block;width:fit-content;margin:18px auto 0;border:0;background:transparent;color:#9a7780;text-decoration:underline;text-underline-offset:4px;font-size:14px;padding:12px 18px}
+.is-found .frame{padding:15px 13px 28px}
+.is-found header,.is-found .shell{display:none}
+noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
+@media(max-width:550px){.frame{padding:8vh 15px 30px}.shell{padding:21px 17px}form{flex-direction:column}.btn{width:100%}.photoStage img{height:min(109vw,465px)}.groupInfo{padding:23px 12px 28px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <main class="frame">
-  <div class="decor">TAN TAN & LILY</div>
-  <header><div class="spark" aria-hidden="true">✦　♡　✦</div><h1>拍照分組</h1><p>歡迎來到我們的幸福時刻<br>輸入你的名字，看看你是哪一組 ♡</p></header>
+  <header><div class="spark" aria-hidden="true">✦ ♡ ✦</div><h1>拍照分組</h1></header>
   <section class="shell" aria-label="拍照分組查詢">
-    <div class="step"><span class="stepnum">01</span><div><strong>輸入姓名</strong><p>輸入邀請名單上的姓名，同行親友可以一起查詢。</p></div></div>
-    <div class="step"><span class="stepnum">02</span><div><strong>查看組別</strong><p>按下「查詢組別」，就能看到你要前往的組別。</p></div></div>
-    <div class="step"><span class="stepnum">03</span><div><strong>留下美好合照</strong><p>依照組別集合，一起拍下珍貴的回憶！</p></div></div>
-  </section>
-  <section class="shell" style="margin-top:18px" aria-label="輸入姓名">
-    <p class="formtitle">你的名字</p>
-    <form id="lookupForm"><label for="name" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">請輸入姓名</label><input id="name" class="field" type="text" placeholder="請輸入姓名" autocomplete="name" enterkeyhint="search" maxlength="50"><button class="btn" type="submit">查詢組別</button></form>
-    <p class="help">例如同一筆名單包含數位親友，輸入其中一位有列名的人即可查詢。</p>
+    <form id="lookupForm">
+      <label for="name" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">請輸入姓名</label>
+      <input id="name" class="field" type="text" placeholder="請輸入你的名字" autocomplete="name" enterkeyhint="search" maxlength="50">
+      <button class="btn" type="submit">查詢組別</button>
+    </form>
     <div id="status" class="status" role="status" aria-live="polite"></div>
-    <noscript><p class="noscript">這個網頁需要 JavaScript 才能查詢，請用 Safari 或 Chrome 開啟正式網站網址。</p></noscript>
+    <noscript>請使用 Safari 或 Chrome 開啟正式網站以查詢組別。</noscript>
   </section>
   <section id="result" class="result" aria-live="polite" aria-label="查詢結果">
     <div class="resultPanel">
       <div class="photoStage" id="photoStage"><img id="photo" src="" alt="炭炭和莉莉的合照"></div>
-      <div class="groupInfo"><div class="found">YOUR PHOTO GROUP</div><div class="big"><span id="groupNum">05</span><small>組</small></div><p class="nm" id="greeting">找到你囉！</p><p class="meta" id="memo">請前往你的組別集合拍照。</p><span class="endmark"></span></div>
+      <div class="groupInfo"><div class="big" id="groupNum"></div></div>
     </div>
+    <button class="reset" id="resetBtn" type="button">重新查詢</button>
   </section>
-  <div class="footer">♡ 炭炭 & 莉莉　·　謝謝你來分享我們的幸福 ♡<br>查不到姓名？請洽現場工作人員</div>
 </main>
 <script>
 'use strict';
@@ -56,8 +71,6 @@ const status=document.getElementById('status');
 const result=document.getElementById('result');
 const resultImage=document.getElementById('photo');
 const groupNum=document.getElementById('groupNum');
-const greeting=document.getElementById('greeting');
-const memo=document.getElementById('memo');
 const photoStage=document.getElementById('photoStage');
 function norm(s){return (s||'').normalize('NFKC').toLowerCase().trim().replace(/\s+/g,'').replace(/[，,／/;；|]/g,'、')}
 function fnvHex(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++)h=Math.imul(h ^ s.charCodeAt(i),0x01000193);return (h>>>0).toString(16).padStart(8,'0')}
@@ -67,18 +80,17 @@ async function digest(s){
   }
   return null;
 }
-function setStatus(s){status.textContent=s;status.classList.add('show');result.classList.remove('show')}
+function setStatus(s){status.textContent=s;status.classList.add('show');result.classList.remove('show');document.body.classList.remove('is-found')}
 function clearStatus(){status.textContent='';status.classList.remove('show')}
 function showResult(n,group){
   clearStatus();
   const src=PIC[(group-1)%PIC.length];
   resultImage.src=src;
   photoStage.style.setProperty('--ph','url("'+src+'")');
-  groupNum.textContent=String(group).padStart(2,'0');
-  greeting.textContent='找到你囉，'+n+'！';
-  memo.textContent='你被分在第 '+group+' 組，請與同行親友一起前往集合拍照。';
+  groupNum.textContent='第 '+group+' 組';
   result.classList.add('show');
-  result.scrollIntoView({behavior:'smooth',block:'start'});
+  document.body.classList.add('is-found');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 let requestCounter=0;
 async function search(){
@@ -98,6 +110,15 @@ async function search(){
   setStatus('沒有找到這個名字。可以試試邀請名單上的姓名；如果家人只有列在「一家」或「家人」裡，請用該筆名單的主要姓名查詢，或請工作人員幫忙。');
 }
 form.addEventListener('submit',function(e){e.preventDefault();search()});
+document.getElementById('resetBtn').addEventListener('click',function(){
+  requestCounter++;
+  result.classList.remove('show');
+  document.body.classList.remove('is-found');
+  clearStatus();
+  u.value='';
+  window.scrollTo({top:0,behavior:'smooth'});
+  u.focus();
+});
 const params=new URLSearchParams(location.search);
 if(params.has('test')){u.value=params.get('test')||'';search();}
 </script>
