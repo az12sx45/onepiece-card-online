@@ -33,6 +33,11 @@ form{display:flex;gap:10px}
 .photoStage img{position:relative;display:block;width:100%;height:clamp(320px,75vw,470px);object-fit:contain}
 .groupInfo{text-align:center;padding:28px 16px 32px}
 .groupInfo .big{font-family:Georgia,"Noto Serif TC","Songti TC",serif;color:#a94f62;font-size:clamp(50px,13vw,82px);font-weight:900;line-height:1.25;letter-spacing:.04em}
+.found{color:#b77a7e;font-size:12px;font-weight:800;letter-spacing:.20em;margin-bottom:8px}
+.greeting{font-size:21px;font-weight:800;line-height:1.5;margin:15px 0 6px;overflow-wrap:anywhere}
+.memo{color:#68717e;font-size:16px;line-height:1.9;margin:0 auto;max-width:410px}
+.endmark{display:block;width:80px;height:1px;background:#d6a2a5;margin:21px auto 0}
+.loveLine{text-align:center;margin:15px auto 0;padding:0 12px;color:#9b8187;line-height:1.8;font-size:13px}
 .reset{display:block;width:fit-content;margin:18px auto 0;border:0;background:transparent;color:#9a7780;text-decoration:underline;text-underline-offset:4px;font-size:14px;padding:12px 18px}
 .is-found .frame{padding:15px 13px 28px}
 .is-found header,.is-found .shell{display:none}
@@ -56,8 +61,15 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
   <section id="result" class="result" aria-live="polite" aria-label="查詢結果">
     <div class="resultPanel">
       <div class="photoStage" id="photoStage"><img id="photo" src="" alt="仁鈞與姮儒的合照"></div>
-      <div class="groupInfo"><div class="big" id="groupNum"></div></div>
+      <div class="groupInfo">
+        <div class="found">YOUR PHOTO GROUP</div>
+        <div class="big" id="groupNum"></div>
+        <p class="greeting" id="greeting">找到你囉！</p>
+        <p class="memo" id="memo">請與同行親友一起前往集合拍照。</p>
+        <span class="endmark" aria-hidden="true"></span>
+      </div>
     </div>
+    <p class="loveLine">♡ 仁鈞 ＆ 姮儒 · 謝謝你來分享我們的幸福 ♡</p>
     <button class="reset" id="resetBtn" type="button">重新查詢</button>
   </section>
 </main>
@@ -71,6 +83,8 @@ const status=document.getElementById('status');
 const result=document.getElementById('result');
 const resultImage=document.getElementById('photo');
 const groupNum=document.getElementById('groupNum');
+const greeting=document.getElementById('greeting');
+const memo=document.getElementById('memo');
 const photoStage=document.getElementById('photoStage');
 function norm(s){return (s||'').normalize('NFKC').toLowerCase().trim().replace(/\s+/g,'').replace(/[，,／/;；|]/g,'、')}
 function fnvHex(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++)h=Math.imul(h ^ s.charCodeAt(i),0x01000193);return (h>>>0).toString(16).padStart(8,'0')}
@@ -88,6 +102,8 @@ function showResult(n,group){
   resultImage.src=src;
   photoStage.style.setProperty('--ph','url("'+src+'")');
   groupNum.textContent='第 '+group+' 組';
+  greeting.textContent='找到你囉，'+n+'！';
+  memo.textContent='你被分在第 '+group+' 組，請與同行親友一起前往集合拍照。';
   result.classList.add('show');
   document.body.classList.add('is-found');
   window.scrollTo({top:0,behavior:'smooth'});
