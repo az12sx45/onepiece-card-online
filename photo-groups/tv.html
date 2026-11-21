@@ -100,7 +100,7 @@ function buildWish(w){
  const frame=document.createElement('article');
  frame.className='wishFrame style-'+Number(w.style);
  const icon=document.createElement('div');icon.className='wishIcon';icon.textContent=icons[Number(w.style)]||'♡';
- const message=document.createElement('div');message.className='wishBody';message.textContent=String(w.message).slice(0,120);
+ const message=document.createElement('div');message.className='wishBody';message.textContent=String(w.message).slice(0,30);
  const signature=document.createElement('div');signature.className='wishSignature';
  signature.textContent='第 '+Number(w.group||1)+' 組 · '+String(w.author||'賓客').slice(0,20);
  frame.append(icon,message,signature);floating.append(frame);
