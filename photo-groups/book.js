@@ -56,26 +56,30 @@
       for(let size=p.classList.contains('empty-page')?26:37;size>=18;size--){message.style.fontSize=size+'px';if(message.scrollHeight<=142&&message.scrollWidth<=message.parentElement.clientWidth-48)break;}
     }
   }
-  function render(w) {
-    current=w||null; right.replaceChildren(page(current));
+  function render(w, preparedPage) {
+    current=w||null; right.replaceChildren(preparedPage||page(current));
     fitPrintedText(right);
     if(current) { pending=pending.filter(id=>id!==current.id); try{localStorage.setItem('renjun_hengru_book_current_v2',current.id);}catch{} }
     updateStatus();
   }
   function schedule() { clearTimeout(timer); if(!paused&&!busy&&wishes.size) timer=setTimeout(()=>navigate(1),DWELL); }
-  async function preload(w) {
-    if (!w) return;
-    const img=avatar(w);
-    await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,1200))]);
+  async function preload(preparedPage) {
+    const img=preparedPage.querySelector('.guest-avatar');
+    await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
+    if(!img.naturalWidth){img.src=DEFAULT_AVATAR;await img.decode().catch(()=>{});}
   }
   async function turnTo(next, direction=1) {
     if(busy || !next || current?.id===next.id) { schedule(); return; }
     busy=true; clearTimeout(timer); updateStatus();
-    await preload(next);
+    const nextPage=page(next);
+    await preload(nextPage);
     // A moderated item can disappear while its image is loading.
     if(!wishes.has(next.id)) { busy=false; updateStatus(); schedule(); return; }
-    front.replaceChildren(page(direction===1?current:next));
-    right.replaceChildren(page(direction===1?next:current));
+    // Move the decoded DOM image with its paper instead of creating a second
+    // no-store avatar request during the turn or at the resting-page commit.
+    const currentPage=right.firstElementChild;
+    front.replaceChildren(direction===1?currentPage:nextPage);
+    if(direction===1)right.replaceChildren(nextPage);
     sheet.hidden=false;
     fitPrintedText(front);fitPrintedText(right);
     const forward = [
@@ -93,7 +97,8 @@
     // Pause freezes the physical leaf as well as the dwell timer.
     if(paused && direction===0) animations.forEach(a=>a.pause());
     try { await activeAnimation.finished; } catch {}
-    render(wishes.get(next.id)||ordered()[0]||null);
+    const kept=wishes.get(next.id);
+    render(kept||ordered()[0]||null,kept?nextPage:undefined);
     // Commit the resting page before removing the leaf: no blank frame.
     sheet.hidden=true; animations.forEach(a=>a.cancel()); animations=[]; activeAnimation=null; busy=false;
     updateStatus(); schedule();
@@ -144,7 +149,7 @@
         cursor=Math.max(cursor,data.cursor);
         if(initial){initial=false;render(wishes.get(resumeId)||ordered()[0]||null);schedule();}
         else if(current&&!wishes.has(current.id)&&!busy){render(ordered()[0]||null);schedule();}
-        else if(current&&!busy){current=wishes.get(current.id)||null;render(current);}
+        else if(current&&!busy){current=wishes.get(current.id)||null;}
         updateStatus();
         if(!connected){$('linkStatus').textContent=data.persistent?'已同步 · 重新連接即時訊息中':'舊版服務 · 永久儲存待啟用';}
       } catch(e) { if(!connected)$('linkStatus').textContent='連線中斷 · 自動重試'; }

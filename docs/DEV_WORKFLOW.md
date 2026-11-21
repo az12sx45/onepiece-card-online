@@ -9818,3 +9818,5 @@ photo-groups-api 改為 D1 REST 主儲存，獨立 avatars/wishes/wish_events �
 使用者重新授權 Cloudflare 後，真正建立專用 D1 renjun-hengru-wedding-2026（e11044f8-2a73-47c0-9cd9-fa7d7927eeb3），遠端遷移與讀回 3 表／4 索引／2 觸發器，外鍵無異常，起始零紀錄。Render 婚禮 API Build 改為 npm ci --prefix photo-groups-api、Health Check /health，私密環境設定受限 D1 token 及獨立管理金鑰。正式部署／Live POST／重啟驗收應另以當次部署及公開讀回為準；不能用本段取代 Live 證據。操作、資料庫、備份與啟用流程見 photo-groups-api/SETUP.md。
 
 LATTICE API 未出現在本階段工具清單；官方 serve 接入未在期限內完成 initialize，未成功取得 runtime status／task API，不宣稱任務或圖譜持久寫入。
+
+婚禮翻頁補充：翻頁前解碼即將顯示的實際頭像 DOM，翻頁完成時移動同一張紙面而不重建 no-store 圖片；每分鐘同步若內容未改則保留當前頁，避免背景重取造成頭像跳動。驗證仍使用相同 Playwright 整合流程。
