@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#fcfaf8">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>仁鈞＆姮儒｜拍照分組</title>
+<link rel="stylesheet" href="./wishes.css">
 <style>
 :root{color-scheme:light;--ink:#302f37;--rose:#b85f70;--shadow:0 16px 55px rgba(87,65,71,.12)}
 *{box-sizing:border-box}
@@ -38,6 +39,31 @@ form{display:flex;gap:10px}
 .memo{color:#68717e;font-size:16px;line-height:1.9;margin:0 auto;max-width:410px}
 .endmark{display:block;width:80px;height:1px;background:#d6a2a5;margin:21px auto 0}
 .loveLine{text-align:center;margin:15px auto 0;padding:0 12px;color:#9b8187;line-height:1.8;font-size:13px}
+.wishSection{background:#fff;border:1px solid #f1e7e6;border-radius:25px;margin-top:22px;padding:23px 19px;box-shadow:var(--shadow)}
+.wishHeadline{text-align:center;color:#985766;font-size:24px;line-height:1.4;font-weight:900;letter-spacing:.04em;margin:0 0 9px}
+.wishIntro{text-align:center;color:#887a83;font-size:14px;line-height:1.9;margin:0 0 20px}
+.wishLabel{display:block;font-weight:800;color:#725e66;font-size:15px;margin:14px 0 8px}
+.wishInput{width:100%;box-sizing:border-box;background:#fffdfd;border:1.5px solid #eadadd;border-radius:14px;padding:13px 14px;color:#453a46;font-family:inherit;font-size:16px;line-height:1.6;outline:none}
+.wishInput:focus{border-color:#c98493;box-shadow:0 0 0 3px #f8e6e8}
+.wishInput[type=text]{min-height:47px}
+.wishInput[type=textarea]{min-height:110px}
+.wishCount{text-align:right;color:#9a8b95;font-size:12px;margin:5px 2px 0}
+.wishChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.wishChoice{padding:4px;border-radius:17px;border:2px solid transparent;background:transparent;cursor:pointer;text-align:center;transition:transform .15s,border-color .15s}
+.wishChoice.selected{border-color:#b95f70;background:#fff1f3;box-shadow:0 3px 17px #b8779120}
+.wishChoice:focus-visible{outline:3px solid #b8667b;outline-offset:3px}
+.wishChoice .wishFrame{min-height:104px;border-radius:13px;padding:12px 9px;gap:7px;box-shadow:none}
+.wishChoice .wishIcon{font-size:23px}
+.wishChoice .wishStyleName{font-size:13px}
+.wishPreviewLabel{font-size:13px;text-align:center;margin:20px 0 10px;color:#917d83;font-weight:700}
+.wishPreview .wishFrame{min-height:164px;padding:18px;gap:8px;font-size:17px}
+.wishPreview .wishBody{font-size:18px}
+.wishPreview .wishSignature{font-size:13px}
+.wishSend{display:block;margin-top:18px;width:100%;border:none;border-radius:15px;min-height:53px;background:linear-gradient(120deg,#b95f70,#d98f8e);box-shadow:0 9px 24px #b95f7035;color:#fff;font-weight:900;font-size:17px}
+.wishSend:disabled{opacity:.6;cursor:wait}
+.wishStatus{min-height:18px;margin:11px 0 0;text-align:center;color:#8d5663;font-size:14px;line-height:1.6}
+.wishNote{text-align:center;color:#9a8a91;font-size:12px;line-height:1.8;margin:8px 0 0}
+@media(max-width:400px){.wishSection{padding:18px 13px}.wishChoices{gap:6px}.wishChoice .wishFrame{padding:10px 6px}}
 .reset{display:block;width:fit-content;margin:18px auto 0;border:0;background:transparent;color:#9a7780;text-decoration:underline;text-underline-offset:4px;font-size:14px;padding:12px 18px}
 .is-found .frame{padding:15px 13px 28px}
 .is-found header,.is-found .shell{display:none}
@@ -69,6 +95,22 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
         <span class="endmark" aria-hidden="true"></span>
       </div>
     </div>
+    <section class="wishSection" aria-label="寫下祝福">
+      <h2 class="wishHeadline">把祝福送到幸福的天空 ♡</h2>
+      <p class="wishIntro">寫一句想對仁鈞與姮儒說的話，<br>挑一款喜歡的祝福框，就會飄上電視！</p>
+      <label class="wishLabel" for="wishAuthor">你的署名（會出現在電視上）</label>
+      <input id="wishAuthor" class="wishInput" type="text" maxlength="20" placeholder="例如：第5組的朋友" autocomplete="off">
+      <label class="wishLabel" for="wishMessage">你的祝福</label>
+      <textarea id="wishMessage" class="wishInput" rows="3" maxlength="120" placeholder="祝仁鈞與姮儒永遠幸福，手牽手走過每個春夏秋冬 ♡"></textarea>
+      <div class="wishCount" id="wishLength">0 / 120 字</div>
+      <div class="wishLabel" id="wishStyleTitle">選一款你喜歡的祝福框（10 種）</div>
+      <div class="wishChoices" id="wishChoices" role="group" aria-labelledby="wishStyleTitle"></div>
+      <div class="wishPreviewLabel">✦ 電視上的祝福預覽 ✦</div>
+      <div class="wishPreview" id="wishPreview" aria-live="polite"></div>
+      <button class="wishSend" type="button" id="wishSend">送出祝福，飛向電視 ♡</button>
+      <div class="wishStatus" id="wishStatus" role="status" aria-live="polite"></div>
+      <p class="wishNote">請避免輸入電話或其他個人資料；送出後會公開顯示在現場電視上。</p>
+    </section>
     <p class="loveLine">♡ 仁鈞 ＆ 姮儒 · 謝謝你來分享我們的幸福 ♡</p>
     <button class="reset" id="resetBtn" type="button">重新查詢</button>
   </section>
@@ -86,6 +128,72 @@ const groupNum=document.getElementById('groupNum');
 const greeting=document.getElementById('greeting');
 const memo=document.getElementById('memo');
 const photoStage=document.getElementById('photoStage');
+const WISH_API='https://renjun-hengru-wishes-live-2026.onrender.com';
+const STYLE_DATA=[
+  ['玫瑰情書','💗'],['星空誓言','✨'],['香檳金典','🥂'],['海洋泡泡','🫧'],['薰衣草夢','🪻'],
+  ['草莓奶霜','🍓'],['森林花園','🌿'],['彩虹糖果','🌈'],['復古底片','📸'],['璀璨煙火','🎆']
+];
+const authorInput=document.getElementById('wishAuthor');
+const wishInput=document.getElementById('wishMessage');
+const choices=document.getElementById('wishChoices');
+const preview=document.getElementById('wishPreview');
+const statusWish=document.getElementById('wishStatus');
+const sendWishBtn=document.getElementById('wishSend');
+let currentGroup=0,selectedStyle=1,isSending=false;
+function choiceUI(){
+ choices.innerHTML='';
+ STYLE_DATA.forEach(([label,emoji],index)=>{
+   const n=index+1,button=document.createElement('button');
+   button.type='button';
+   button.className='wishChoice'+(n===selectedStyle?' selected':'');
+   button.dataset.style=String(n);
+   button.setAttribute('aria-pressed',String(n===selectedStyle));
+   const frame=document.createElement('span');
+   frame.className='wishFrame style-'+n;
+   const i=document.createElement('span');i.className='wishIcon';i.textContent=emoji;
+   const title=document.createElement('span');title.className='wishStyleName';title.textContent=label;
+   frame.append(i,title);button.append(frame);
+   button.setAttribute('aria-label',label);
+   button.onclick=()=>{selectedStyle=n;for(const b of choices.children){const active=b===button;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))}updatePreview()};
+   choices.append(button);
+ });
+ updatePreview();
+}
+function updatePreview(){
+ const frame=document.createElement('div');
+ frame.className='wishFrame style-'+selectedStyle;
+ const icon=document.createElement('div');icon.className='wishIcon';icon.textContent=STYLE_DATA[selectedStyle-1][1];
+ const body=document.createElement('div');body.className='wishBody';body.textContent=wishInput.value.trim()||'幸福每一天，甜蜜直到永遠 ♡';
+ const sign=document.createElement('div');sign.className='wishSignature';sign.textContent='第 '+(currentGroup||'?')+' 組 · '+(authorInput.value.trim()||'來賓');
+ frame.append(icon,body,sign);
+ preview.replaceChildren(frame);
+ document.getElementById('wishLength').textContent=String(wishInput.value.length)+' / 120 字';
+}
+authorInput.addEventListener('input',updatePreview);
+wishInput.addEventListener('input',updatePreview);
+choiceUI();
+sendWishBtn.addEventListener('click',async()=>{
+ if(isSending)return;
+ if(!currentGroup){statusWish.textContent='請先查詢你的組別。';return}
+ const author=authorInput.value.trim()||'賓客';
+ const message=wishInput.value.trim();
+ if(message.length<2){statusWish.textContent='寫至少兩個字的祝福，讓大家一起分享幸福 ♡';wishInput.focus();return}
+ if(message.length>120){statusWish.textContent='祝福文字最多120個字。';return}
+ if(author.length>20){statusWish.textContent='署名請控制在20字以內。';return}
+ isSending=true;sendWishBtn.disabled=true;sendWishBtn.textContent='正在傳送祝福…';statusWish.textContent='';
+ try{
+   const response=await fetch(WISH_API+'/api/wishes',{
+     method:'POST',headers:{'Content-Type':'application/json'},
+     body:JSON.stringify({author,message,style:selectedStyle,group:currentGroup})
+   });
+   const data=await response.json().catch(()=>({}));
+   if(!response.ok)throw new Error(data.error||'連線失敗，請稍後重試');
+   statusWish.textContent='♡ 送出成功！你的祝福已送到電視彈幕牆。';
+   wishInput.value='';updatePreview();
+ }catch(err){statusWish.textContent='送出失敗：'+(err?.message||'請稍後再試') }
+ finally{isSending=false;sendWishBtn.disabled=false;sendWishBtn.textContent='再送一份祝福 ♡'}
+});
+
 function norm(s){return (s||'').normalize('NFKC').toLowerCase().trim().replace(/\s+/g,'').replace(/[，,／/;；|]/g,'、')}
 function fnvHex(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++)h=Math.imul(h ^ s.charCodeAt(i),0x01000193);return (h>>>0).toString(16).padStart(8,'0')}
 async function digest(s){
@@ -102,6 +210,10 @@ function showResult(n,group){
   resultImage.src=src;
   photoStage.style.setProperty('--ph','url("'+src+'")');
   groupNum.textContent='第 '+group+' 組';
+  currentGroup=group;
+  authorInput.value=n.slice(0,20);
+  statusWish.textContent='';
+  updatePreview();
   greeting.textContent='找到你囉，'+n+'！';
   memo.textContent='你被分在第 '+group+' 組，請與同行親友一起前往集合拍照。';
   result.classList.add('show');
@@ -128,6 +240,9 @@ async function search(){
 form.addEventListener('submit',function(e){e.preventDefault();search()});
 document.getElementById('resetBtn').addEventListener('click',function(){
   requestCounter++;
+  currentGroup=0;
+  statusWish.textContent='';
+  wishInput.value='';
   result.classList.remove('show');
   document.body.classList.remove('is-found');
   clearStatus();
