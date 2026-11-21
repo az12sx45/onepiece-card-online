@@ -1,0 +1,32 @@
+/* 仁鈞 ♡ 姮儒：十種祝福框（手機預覽與電視同款） */
+.wishFrame{--ink:#543b45;position:relative;isolation:isolate;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;min-height:132px;padding:20px 25px;text-align:center;border-radius:23px;border:2px solid transparent;background:#fff9f9;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;box-shadow:0 12px 30px rgba(29,27,39,.1)}
+.wishFrame .wishIcon{font-size:24px;line-height:1;position:relative;z-index:1}
+.wishFrame .wishBody{position:relative;z-index:1;max-width:100%;font-weight:800;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.wishFrame .wishSignature{position:relative;z-index:1;opacity:.75;font-size:.68em;line-height:1.5}
+.wishFrame .wishStyleName{position:relative;z-index:1;letter-spacing:.04em;font-weight:800;font-size:14px}
+.wishFrame.style-1{color:#8a4261;border-color:#f3afc7;background:linear-gradient(145deg,#fffafc 0%,#ffe2ed 100%);box-shadow:inset 0 0 0 5px #ffffff9c,0 12px 30px #e798b630}
+.wishFrame.style-1:before{content:"♡";position:absolute;top:3px;left:15px;font-size:35px;color:#edabbf60;transform:rotate(-18deg)}
+.wishFrame.style-1:after{content:"♡";position:absolute;bottom:0;right:13px;font-size:44px;color:#ee9cb35c;transform:rotate(19deg)}
+.wishFrame.style-2{color:#fff4d2;border-color:#d5c59f;background:radial-gradient(circle at 17% 20%,#f8dba6 0 2px,transparent 3px),radial-gradient(circle at 79% 33%,#f8dba6 0 2px,transparent 3px),radial-gradient(circle at 66% 83%,#f8dba6 0 2px,transparent 3px),linear-gradient(145deg,#12274b,#253d72)}
+.wishFrame.style-2:before{content:"✦  ⋆  ✧";position:absolute;top:4px;right:18px;color:#ffeac0b0;font-size:22px;letter-spacing:9px}
+.wishFrame.style-3{color:#75552f;border:6px double #d8b66e;background:radial-gradient(circle at 80% 2%,#fff6d2,transparent 50%),linear-gradient(145deg,#fffdf7,#f4e6c4);border-radius:10px}
+.wishFrame.style-3:before{content:"❧";position:absolute;top:-3px;left:15px;font-size:45px;color:#c7a36b65}
+.wishFrame.style-3:after{content:"❧";position:absolute;bottom:-8px;right:15px;font-size:45px;color:#c7a36b65;transform:rotate(180deg)}
+.wishFrame.style-4{color:#17576c;border-color:#73c2dc;background:radial-gradient(circle at 15% 20%,#ffffffb0 0 15px,transparent 16px),radial-gradient(circle at 88% 65%,#ffffff99 0 20px,transparent 21px),linear-gradient(145deg,#e1fcff,#b4e6f2)}
+.wishFrame.style-4:after{content:"◌  ○  ◌";position:absolute;bottom:3px;left:10px;color:#399bb973;font-size:30px}
+.wishFrame.style-5{color:#6c4d8d;border-color:#c7afeb;background:radial-gradient(circle at 10% 20%,#fff7ff,transparent 45%),linear-gradient(140deg,#f6efff,#e6dafa)}
+.wishFrame.style-5:before{content:"✿";position:absolute;top:-15px;right:10px;font-size:83px;color:#a88ed530}
+.wishFrame.style-5:after{content:"✿";position:absolute;bottom:-20px;left:-10px;font-size:96px;color:#a88ed52e}
+.wishFrame.style-6{color:#a05c4f;border:3px dashed #e8b4a7;background:radial-gradient(circle at 87% 10%,#fff7e7,transparent 52%),linear-gradient(145deg,#fff4e9,#ffd8c9);border-radius:25px}
+.wishFrame.style-6:before{content:"♥";position:absolute;top:4px;left:13px;font-size:29px;color:#e68d8b73}
+.wishFrame.style-7{color:#43674a;border:2px solid #8dbb93;background:linear-gradient(135deg,#f8fff1,#dcebd5);border-radius:8px;box-shadow:inset 0 0 0 5px #f9fff4,0 12px 30px #5d8a6730}
+.wishFrame.style-7:before{content:"❦";position:absolute;left:7px;top:-9px;color:#86af8580;font-size:64px}
+.wishFrame.style-7:after{content:"❦";position:absolute;right:7px;bottom:-9px;color:#86af8580;font-size:64px;transform:rotate(180deg)}
+.wishFrame.style-8{color:#654c87;border:4px solid transparent;background:linear-gradient(#fffdfd,#fff6fc) padding-box,linear-gradient(135deg,#ffacb9,#ffe49a,#b1ebd1,#a9c4ff,#dfb9f9) border-box}
+.wishFrame.style-8:before{content:"✦ ✧ ✦";position:absolute;top:4px;left:15px;color:#d39de4a3;letter-spacing:12px}
+.wishFrame.style-9{color:#3f3832;border:11px solid #393b40;border-radius:10px;background:linear-gradient(#f7ead1,#e7cfab);padding:24px 30px}
+.wishFrame.style-9:before,.wishFrame.style-9:after{content:"";position:absolute;top:-7px;bottom:-7px;width:8px;background:repeating-linear-gradient(to bottom,#eee2d3 0 8px,transparent 8px 24px);z-index:1}
+.wishFrame.style-9:before{left:-7px}.wishFrame.style-9:after{right:-7px}
+.wishFrame.style-10{color:#fff2fb;border:2px solid #f28ac5;background:radial-gradient(circle at 22% 22%,#ffdd8b 0 2px,transparent 3px),radial-gradient(circle at 70% 30%,#e5adff 0 2px,transparent 3px),radial-gradient(circle at 80% 75%,#c5ddff 0 2px,transparent 3px),linear-gradient(135deg,#210c3f,#532e7a)}
+.wishFrame.style-10:before{content:"✺";position:absolute;top:-34px;right:4px;font-size:126px;color:#e7a6ff2c}
+.wishFrame.style-10:after{content:"✹";position:absolute;bottom:-30px;left:-4px;font-size:110px;color:#ffdfab30}
