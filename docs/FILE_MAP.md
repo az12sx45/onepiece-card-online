@@ -2593,3 +2593,14 @@ Android／iOS 各三個既有 PUBLIC 目標；十四個 HOST、Core、Portrait�
 - 手機既有 native-game-runtime.js：bindNativeLineageClock，將原控制器第一階段的時鐘原值按當前 target UID 同步給原生呈現，保留 scope／dispose 清除。
 - 手機既有 native_app_stage.gd／iOS native_app_stage.gdc：RecoverableLineage 與 AlignedLineageOutcome，安全區排版、原圖取景、單一裝置、九十度轉向、即時雷射和同時鐘縮圈；兩平台原有差異保留。
 - 候選／測試／產品與未測限制：D:/Codex_QA/board-ngplus-lineage-tomes-20261120/COMBINED_READY.json；正式版本以 publisher RELEASED 收據為準。此資料夾名稱中的 tomes 是最初誤解的歷史名稱，本輪不修改典籍或角色技能。
+
+
+## 2026-11-22：獨立婚禮祝福書
+
+- photo-groups/index.html：原姓名雜湊查詢與五張新人照片、手機祝福入口。
+- photo-groups/mobile-wishes.js、mobile-wishes.css：自拍／相簿、EXIF、480 JPEG、Unicode 字數、公開同意、冪等重試與預覽。
+- photo-groups/tv.html、book.js、book.css：固定左頁、單人右頁、實體紙葉 3D 動畫、耐久事件游標與播放／管理控制。
+- photo-groups/assets/：原 PIC 抽出的 couple.jpg、真正正式網址 QR、紙紋／花卉／預設頭像 SVG；沒有原先十款 AI PNG。
+- photo-groups-api/server.js、storage.js、migrations/0001_wishes.sql：相容 API、D1／明確本機 SQLite、頭像、持久 SSE、授權審核與匯出。
+- photo-groups-api/test/api.test.js：持久化、EXIF、字數、授權、SSE、資料庫約束與實際 D1 明確開關。
+- photo-groups-api/scripts/d1-setup.js、SETUP.md、.env.example：遠端遷移、完整備份與安全環境設定。不保存實際權杖。

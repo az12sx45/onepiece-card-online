@@ -1,160 +1,25 @@
 <!doctype html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#241937">
-<meta name="robots" content="noindex,nofollow,noarchive">
-<title>仁鈞＆姮儒｜祝福彈幕電視牆</title>
-<link rel="stylesheet" href="./wishes.css">
-<style>
-:root{color-scheme:dark}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;overflow:hidden}
-body{color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:radial-gradient(circle at 18% 18%,#6844669d,transparent 31%),radial-gradient(circle at 86% 56%,#37567873,transparent 33%),linear-gradient(135deg,#140f27,#33203e 55%,#17243b);min-height:100vh}
-body:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#fff9 1px,transparent 1.5px),radial-gradient(#ffd7a8aa 1.5px,transparent 2px);background-size:87px 92px,163px 169px;background-position:25px 35px,85px 7px;opacity:.30}
-.top{position:absolute;inset:0 0 auto 0;text-align:center;padding:clamp(18px,4vh,44px) 20px 15px;background:linear-gradient(#171226ef,#17122600);z-index:2;pointer-events:none}
-.kicker{font-size:clamp(18px,2.2vw,29px);color:#f2cbd7;font-weight:700;letter-spacing:.24em}
-.title{font-family:Georgia,"Noto Serif TC",serif;font-weight:900;letter-spacing:.13em;font-size:clamp(34px,4.2vw,72px);margin:8px 0 5px;text-shadow:0 4px 24px #f0bce255}
-.subtitle{font-size:clamp(14px,1.5vw,24px);color:#ebdfeb;opacity:.85}
-.stage{position:absolute;inset:24vh 0 12vh;overflow:hidden}
-.stage:before,.stage:after{content:"";position:absolute;top:0;bottom:0;width:10%;z-index:1;pointer-events:none}
-.stage:before{left:0;background:linear-gradient(90deg,#1a182a9e,transparent)}.stage:after{right:0;background:linear-gradient(270deg,#1a182a9e,transparent)}
-.floating{position:absolute;left:100vw;top:0;will-change:transform;animation-name:floatFromRight;animation-timing-function:linear;animation-fill-mode:forwards;filter:drop-shadow(0 16px 22px #02010c66)}
-.floating .wishFrame{width:clamp(300px,32vw,590px);height:clamp(130px,14vh,190px);padding:15px 30px;gap:5px;font-size:clamp(17px,1.3vw,25px)}
-.floating .wishIcon{font-size:clamp(16px,1.4vw,29px)}
-.floating .wishSignature{font-size:clamp(13px,1vw,17px)}
-@keyframes floatFromRight{from{transform:translateX(0)}to{transform:translateX(calc(-100vw - 900px))}}
-.empty{position:absolute;inset:38% 14% auto;text-align:center;color:#ffeff8;font-size:clamp(20px,2.7vw,48px);letter-spacing:.08em;text-shadow:0 7px 33px #f0bce244}
-.footer{position:absolute;bottom:18px;left:0;right:0;text-align:center;z-index:3;color:#f7dfea;padding:0 15px;font-size:clamp(15px,1.4vw,23px);line-height:1.8}
-.footer strong{font-weight:900;color:#ffe2a9}
-.controls{position:absolute;top:16px;right:20px;z-index:5;display:flex;gap:8px}
-.controls button{background:#ffffff16;border:1px solid #ffffff4e;border-radius:12px;padding:9px 13px;color:#fffbff;font:600 14px/1.3 inherit;cursor:pointer;backdrop-filter:blur(7px)}
-.controls button:hover{background:#ffffff2f}
-.indicator{position:absolute;left:24px;top:20px;z-index:4;font-size:14px;color:#fff3f8;background:#ffffff12;border:1px solid #ffffff2f;border-radius:16px;padding:9px 14px;display:flex;gap:9px;align-items:center}
-.indicator .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ffe4a7;box-shadow:0 0 12px #fbe1ad}
-.indicator.live .dot{background:#66e6c5;box-shadow:0 0 12px #67edcd}
-.count{font-weight:800}
-@media(max-width:950px){.top{padding-top:12vh}.stage{inset:32vh 0 15vh}.floating .wishFrame{width:58vw;height:12vh}.indicator{top:10px;left:10px}.controls{top:10px;right:8px}}
-@media(prefers-reduced-motion:reduce){.floating{animation-duration:40s!important}}
-</style>
-</head>
-<body>
-<div class="indicator" id="indicator"><span class="dot"></span><span id="linkStatus">正在連線…</span><span>｜</span><span>祝福 <span class="count" id="wishCount">0</span> 則</span></div>
-<div class="controls">
-  <button type="button" id="pause">暫停</button>
-  <button type="button" id="replay">重播祝福</button>
-  <button type="button" id="export">匯出祝福</button>
-  <button type="button" id="fullscreen">全螢幕</button>
-</div>
-<header class="top">
-  <div class="kicker">♡ 仁鈞 ＆ 姮儒 ♡</div>
-  <h1 class="title">幸福祝福牆</h1>
-  <div class="subtitle">每一份祝福，都是我們珍藏的美好瞬間 ✨</div>
-</header>
-<main class="stage" id="stage" aria-live="off">
-  <div class="empty" id="empty">等待大家的第一句祝福 ♡</div>
-</main>
-<footer class="footer">📱 掃描原本的 <strong>拍照分組 QR Code</strong>，輸入姓名、挑選祝福框，讓你的祝福飄到電視上 ♡</footer>
-<script>
-'use strict';
-const API='https://renjun-hengru-wishes-live-2026.onrender.com';
-const icons=['','💗','✨','🥂','🫧','🪻','🍓','🌿','🌈','📸','🎆'];
-const CACHE='renjun_hengru_wishes_tv_v1';
-const stage=document.getElementById('stage');
-const empty=document.getElementById('empty');
-const count=document.getElementById('wishCount');
-const status=document.getElementById('linkStatus');
-const indicator=document.getElementById('indicator');
-const pending=[];
-const seen=new Set();
-let archive=[],replayIndex=0,paused=false,nextLane=0;
-let connected=false;
-try{
-  const data=JSON.parse(localStorage.getItem(CACHE)||'[]');
-  if(Array.isArray(data))archive=data.filter(x=>x&&typeof x==='object'&&typeof x.message==='string'&&Number(x.style)>=1&&Number(x.style)<=10).slice(-300);
-}catch{}
-function key(w){return [w.at,w.author,w.message,w.style].join('|')}
-for(const w of archive){seen.add(key(w));pending.push(w)}
-count.textContent=String(archive.length);
-if(archive.length)empty.style.display='none';
-function cache(){
- try{localStorage.setItem(CACHE,JSON.stringify(archive.slice(-300)))}catch{}
-}
-function addWish(w){
- if(!w||typeof w.message!=='string'||!w.message.trim()||!(w.style>=1&&w.style<=10))return;
- const k=key(w);
- if(seen.has(k))return;
- seen.add(k);
- if(seen.size>1000)seen.clear();
- archive.push(w);
- if(archive.length>300)archive.shift();
- count.textContent=String(archive.length);
- empty.style.display='none';
- pending.push(w);
- cache();
-}
-function buildWish(w){
- const floating=document.createElement('div');
- floating.className='floating';
- const frame=document.createElement('article');
- frame.className='wishFrame style-'+Number(w.style);
- const icon=document.createElement('div');icon.className='wishIcon';icon.textContent=icons[Number(w.style)]||'♡';
- const message=document.createElement('div');message.className='wishBody';message.textContent=String(w.message).slice(0,30);
- const signature=document.createElement('div');signature.className='wishSignature';
- signature.textContent='第 '+Number(w.group||1)+' 組 · '+String(w.author||'賓客').slice(0,20);
- frame.append(icon,message,signature);floating.append(frame);
- return floating;
-}
-function show(w){
- const el=buildWish(w);
- const lanes=5;
- const usable=Math.max(340,stage.clientHeight);
- const laneH=Math.max(80,(usable-20)/lanes);
- const lane=nextLane++%lanes;
- el.style.top=(10+lane*laneH)+'px';
- const dur=23+Math.min(10,String(w.message).length/12);
- el.style.animationDuration=dur+'s';
- stage.append(el);
- el.addEventListener('animationend',()=>el.remove(),{once:true});
-}
-setInterval(()=>{
- if(paused)return;
- if(pending.length===0&&archive.length){
-   pending.push(...archive.slice(Math.max(0,archive.length-50)));
- }
- if(pending.length)show(pending.shift());
-},1950);
-async function sync(){
- try{
- const r=await fetch(API+'/api/wishes?after=0',{cache:'no-store',mode:'cors'});
- if(!r.ok)throw new Error('HTTP '+r.status);
- const d=await r.json();
- for(const w of d.wishes||[])addWish(w);
- if(!connected){status.textContent='即時連線';indicator.classList.add('live')}
- }catch(e){if(!connected){status.textContent='連線中…';indicator.classList.remove('live')}}
-}
-function stream(){
- const eventSource=new EventSource(API+'/api/stream?after=0');
- eventSource.addEventListener('open',()=>{connected=true;status.textContent='LIVE 即時播放';indicator.classList.add('live')});
- eventSource.addEventListener('wish',e=>{try{addWish(JSON.parse(e.data))}catch{}});
- eventSource.addEventListener('error',()=>{connected=false;status.textContent='重新連線中…';indicator.classList.remove('live')});
-}
-sync();stream();setInterval(sync,6500);
-document.getElementById('pause').onclick=function(){
- paused=!paused;
- this.textContent=paused?'繼續播放':'暫停';
- for(const el of stage.querySelectorAll('.floating'))el.style.animationPlayState=paused?'paused':'running';
-};
-document.getElementById('replay').onclick=function(){pending.unshift(...archive.slice(-50));empty.style.display=archive.length?'none':''};
-document.getElementById('fullscreen').onclick=()=>{if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().catch(()=>{})}else document.exitFullscreen?.()};
-document.getElementById('export').onclick=()=>{
- const safe=v=>{let s=String(v??'');if(/^[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};
- const lines=[['時間','組別','署名','祝福內容','樣式'].map(safe).join(',')];
- for(const w of archive)lines.push([new Date(w.at).toLocaleString('zh-TW'),w.group,w.author,w.message,w.style].map(safe).join(','));
- const blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
- const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='仁鈞姮儒_祝福彈幕備份.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000);
-};
-</script>
-</body>
-</html>
+<html lang="zh-Hant"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f2e7dd"><meta name="robots" content="noindex,nofollow,noarchive">
+<title>仁鈞＆姮儒｜幸福祝福冊</title><link rel="stylesheet" href="./book.css"><script src="./book.js" defer></script>
+</head><body>
+<header class="masthead"><div class="wordmark">R <span>&</span> H</div><div class="masthead-title">我們的幸福，因你而完整</div><div class="connection" id="indicator" role="status"><i></i><span id="linkStatus">正在連線…</span></div></header>
+<main class="book-viewport" aria-label="仁鈞與姮儒的婚禮祝福紀念冊"><div class="book-scale" id="bookScale">
+<div class="book-cover"></div><div class="paper-stack stack-left"></div><div class="paper-stack stack-right"></div>
+<div class="book" id="book">
+<section class="paper left-page" id="leftPage" aria-label="新人合照與拍照分組 QR Code">
+<span class="page-ornament ornament-top" aria-hidden="true"></span><div class="eyebrow">THE BEGINNING OF FOREVER</div>
+<figure class="couple-photo"><img src="./assets/couple.jpg" alt="仁鈞與姮儒的真實合照" width="1000" height="750"></figure>
+<h1>仁鈞 <span>♡</span> 姮儒</h1><p class="couple-note">謝謝你，成為我們故事裡的一頁。</p>
+<div class="join-us"><a class="qr-link" href="https://tantan-lily-photo-groups-2026.onrender.com/" target="_blank" rel="noopener" aria-label="開啟拍照分組查詢網站"><img id="lookupQR" src="./assets/lookup-qr.svg" alt="掃描前往拍照分組與祝福填寫網站" width="210" height="210"></a><div class="join-copy"><span class="mini-label">JOIN OUR MEMORIES</span><h2>拍照分組</h2><p>掃描 QR Code，<br>查詢組別並留下祝福</p><span class="tiny-heart" aria-hidden="true">— ♡ —</span></div></div>
+<span class="page-ornament ornament-bottom" aria-hidden="true"></span><div class="paper-footer">WITH LOVE, RENJUN & HENGRU</div></section>
+<section class="paper right-page" id="rightPage" aria-label="當前賓客祝福"></section>
+<div class="page-turn-shadow" id="pageTurnShadow" aria-hidden="true"></div>
+<div class="turning-sheet" id="turningSheet" aria-hidden="true" hidden><div class="sheet-face sheet-front" id="sheetFront"></div><div class="sheet-face sheet-back"><div class="reverse-border"><span class="reverse-flower">❦</span><span class="reverse-monogram">R <em>&</em> H</span><span class="reverse-note">每一頁，都是愛。</span><span class="reverse-flower small">❦</span></div></div><div class="sheet-edge"></div></div>
+<div class="book-gutter" aria-hidden="true"></div></div><div class="ribbon" aria-hidden="true"></div></div></main>
+<footer class="toolbar"><div class="playback-info"><span class="live-label">幸福典藏</span><span id="pageStatus">等待第一份祝福</span><span class="total">共 <b id="wishCount">0</b> 則</span></div><nav class="controls" aria-label="祝福冊播放控制">
+<button type="button" id="prev" aria-label="上一頁">‹ <span>上一頁</span></button><button type="button" id="pause">暫停播放</button><button type="button" id="next" aria-label="下一頁"><span>下一頁</span> ›</button><span class="control-divider"></span><button type="button" id="replay">重新播放</button><button type="button" id="fullscreen">全螢幕</button><button type="button" id="export">匯出祝福</button><button type="button" id="manage">管理</button></nav></footer>
+<div class="toast" id="toast" role="status" hidden></div>
+<dialog id="adminDialog" class="admin-dialog"><form method="dialog" class="dialog-heading"><h2>祝福冊管理</h2><button aria-label="關閉管理視窗">×</button></form><form id="adminLogin" class="admin-login"><label for="adminToken">管理金鑰</label><input type="password" id="adminToken" autocomplete="off" placeholder="輸入管理員金鑰"><button type="submit">解鎖管理</button><p>金鑰只保留在這個分頁的記憶體；關閉或重整後需重新輸入。</p></form><div id="adminPanel" hidden><div class="admin-actions"><button type="button" id="adminRefresh">重新載入</button><button type="button" id="adminCSV">匯出全部 CSV</button><button type="button" id="adminBackup">完整備份 JSON（含頭像）</button><button type="button" id="adminLogout">鎖定</button></div><p class="admin-help">隱藏後不再公開展示；可重新公開。刪除為保留紀錄的軟刪除。</p><div id="adminList"></div></div><p id="adminStatus" role="status"></p></dialog>
+</body></html>

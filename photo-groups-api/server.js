@@ -1,115 +1,178 @@
 'use strict';
-const http=require('http');
-const crypto=require('crypto');
-
-const ORIGIN='https://tantan-lily-photo-groups-2026.onrender.com';
-const PORT=Number(process.env.PORT||10000);
-const MAX_ENTRIES=600;
-const entries=[];
-const subscribers=new Set();
-const limits=new Map();
-let serial=0;
-
-function cors(req,res){
-  const origin=req.headers.origin;
-  if(origin && origin!==ORIGIN){
-    res.writeHead(403,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});
-    res.end(JSON.stringify({error:'來源不允許'}));
-    return false;
+const http=require('node:http');
+const crypto=require('node:crypto');
+const sharp=require('sharp');
+const {createStore}=require('./storage');
+const segmenter=new Intl.Segmenter('zh-TW',{granularity:'grapheme'});
+const countText=value=>[...segmenter.segment(value)].length;
+const hash=value=>crypto.createHash('sha256').update(value).digest('hex');
+const clean=value=>String(value??'').normalize('NFC').replace(/[\u0000-\u001F\u007F-\u009F]/g,' ').replace(/\s{2,}/g,' ').trim();
+class ApiError extends Error {constructor(status,message){super(message);this.status=status;}}
+function json(res,status,payload){if(res.writableEnded)return;res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(payload));}
+function readJson(req){return new Promise((resolve,reject)=>{const chunks=[];let size=0,tooBig=false;req.on('data',chunk=>{size+=chunk.length;if(size>240000){tooBig=true;return;}chunks.push(chunk);});req.on('end',()=>{if(tooBig)return reject(new ApiError(413,'照片或內容太大，請重新選擇照片'));try{const data=JSON.parse(Buffer.concat(chunks).toString('utf8'));if(!data||typeof data!=='object'||Array.isArray(data))throw new Error();resolve(data);}catch{reject(new ApiError(400,'JSON 格式不正確'));}});req.on('error',reject);});}
+function requireJson(req){if(!String(req.headers['content-type']||'').toLowerCase().startsWith('application/json'))throw new ApiError(415,'必須使用 JSON');}
+function integer(value,min,max,fallback){const n=Number(value??fallback);if(!Number.isInteger(n)||n<min||n>max)throw new ApiError(400,'請確認組別、樣式及頁碼');return n;}
+async function rows(store,sql,params=[]){return (await store.query(sql,params))[0]?.results||[];}
+async function one(store,sql,params=[]){return (await rows(store,sql,params))[0];}
+async function normalizeWish(input,{importing=false}={}){
+  const author=clean(input.guest_name??input.author),message=clean(input.blessing_text??input.message);
+  const style=integer(input.style_id??input.style,1,10,1),group=integer(input.group_number??input.group,1,15);
+  if(countText(author)<1||countText(author)>20||[...author].length>100)throw new ApiError(400,'署名請填 1～20 字');
+  const graphemes=countText(message);
+  if(graphemes<1||graphemes>30||[...message].length>300)throw new ApiError(400,'祝福最多 30 字（Emoji 算一字）');
+  if(/(?:https?:\/\/|www\.|[A-Za-z0-9_-]{15,}\.(?:com|net|xyz|tw))/i.test(message))throw new ApiError(400,'祝福內容請不要放網址');
+  const avatar=String(input.avatar||'');let image=null;
+  if(avatar){
+    if(!importing&&input.consent!==true)throw new ApiError(400,'請確認照片及公開展示授權');
+    if(!/^data:image\/jpeg;base64,[A-Za-z0-9+/]+=*$/.test(avatar))throw new ApiError(400,'頭像需要壓縮後的 JPEG 照片');
+    const buffer=Buffer.from(avatar.split(',')[1],'base64');
+    if(!buffer.length||buffer.length>153600)throw new ApiError(413,'照片須小於 150 KB');
+    try{
+      const meta=await sharp(buffer,{limitInputPixels:16777216,failOn:'error'}).metadata();
+      if(meta.format!=='jpeg'||!meta.width||!meta.height||meta.width>4096||meta.height>4096)throw new Error();
+      // Authenticated backups already contain the canonical stripped thumbnail.
+      // Preserve its bytes so restoring the same backup keeps the same avatar ID.
+      let output=importing&&meta.width===480&&meta.height===480&&!meta.orientation&&!meta.exif?buffer:await sharp(buffer,{limitInputPixels:16777216}).rotate().resize(480,480,{fit:'cover',position:'centre'}).jpeg({quality:82,mozjpeg:true}).toBuffer();
+      if(output.length>153600)output=await sharp(output).jpeg({quality:60,mozjpeg:true}).toBuffer();
+      if(output.length>153600)throw new Error();
+      image={id:hash(output),base64:output.toString('base64'),bytes:output.length};
+    }catch{throw new ApiError(400,'無法讀取這張照片，請重新選擇 JPEG 照片');}
   }
-  res.setHeader('Access-Control-Allow-Origin',ORIGIN);
-  res.setHeader('Access-Control-Allow-Methods','GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers','Content-Type');
-  res.setHeader('Vary','Origin');
-  res.setHeader('Cache-Control','no-store');
-  res.setHeader('X-Content-Type-Options','nosniff');
-  res.setHeader('X-Frame-Options','DENY');
-  return true;
+  const key=String(input.idempotencyKey??input.submission_key??'');
+  if(key&&!/^[A-Za-z0-9_-]{12,100}$/.test(key))throw new ApiError(400,'送出識別碼不正確');
+  return {author,message,graphemes,style,group,image,key:key||`legacy_${crypto.randomUUID()}`,requestHash:hash(JSON.stringify({author,message,style,group,avatar:image?.id||null}))};
 }
-function json(res,status,payload){
- res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});
- res.end(JSON.stringify(payload));
+async function createApp(env=process.env){
+  const store=await createStore(env);
+  if(env.D1_AUTO_MIGRATE==='true'&&store.mode==='d1')await store.migrate();
+  // Refuse to listen if credentials or schema are unusable, even when Render's
+  // service still has its default TCP readiness check.
+  await store.query('SELECT id FROM wishes LIMIT 0');
+  const origins=new Set((env.ALLOWED_ORIGINS||'https://tantan-lily-photo-groups-2026.onrender.com').split(',').map(s=>s.trim()).filter(Boolean));
+  const subscribers=new Set();let stopped=false,mutationTail=Promise.resolve(),polling=false;
+  const serialize=fn=>{const task=mutationTail.then(fn);mutationTail=task.catch(()=>{});return task;};
+  const publicBase=(env.PUBLIC_API_URL||'').replace(/\/$/,'');
+  function present(w){return {id:w.id,author:w.guest_name,message:w.blessing_text,style:w.style_id,group:w.group_number,at:w.created_at,guest_name:w.guest_name,blessing_text:w.blessing_text,group_number:w.group_number,style_id:w.style_id,created_at:new Date(w.created_at).toISOString(),avatar_path:w.avatar_id?`${publicBase}/api/avatars/${w.id}`:null,moderation_status:w.moderation_status};}
+  function authorize(req){
+    const expected=String(env.ADMIN_TOKEN||''),supplied=String(req.headers.authorization||'').replace(/^Bearer /,'');
+    if(expected.length<24)throw new ApiError(503,'管理員授權尚未設定');
+    const suppliedBytes=Buffer.from(supplied),expectedBytes=Buffer.from(expected);
+    if(suppliedBytes.length!==expectedBytes.length||!crypto.timingSafeEqual(suppliedBytes,expectedBytes))throw new ApiError(401,'需要管理員授權');
+  }
+  function cors(req,res){
+    const origin=req.headers.origin;
+    res.setHeader('Vary','Origin');res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Frame-Options','DENY');res.setHeader('Referrer-Policy','no-referrer');
+    if(origin&&!origins.has(origin))throw new ApiError(403,'來源不允許');
+    if(origin)res.setHeader('Access-Control-Allow-Origin',origin);
+    res.setHeader('Access-Control-Allow-Methods','GET, POST, PATCH, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, Idempotency-Key, Last-Event-ID');
+    res.setHeader('Access-Control-Expose-Headers','Retry-After, Content-Disposition');
+  }
+  async function meta(){return await one(store,'SELECT (SELECT COALESCE(MAX(id),0) FROM wishes) AS latest,(SELECT COALESCE(MAX(seq),0) FROM wish_events) AS cursor');}
+  async function list(url,admin=false){
+    const after=integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER,0),limit=integer(url.searchParams.get('limit'),1,200,200);
+    // Capture a cursor before the snapshot. A concurrent insert may replay twice,
+    // which ID deduplication handles; it must never fall into a cursor gap.
+    const info=await meta();
+    const result=await rows(store,`SELECT * FROM wishes WHERE id>? ${admin?'':"AND moderation_status='approved'"} ORDER BY id ASC LIMIT ?`,[after,limit+1]);
+    return {wishes:result.slice(0,limit).map(present),...info,hasMore:result.length>limit,persistent:true,storage:store.mode};
+  }
+  async function insert(input,req,{importing=false}={}){
+    const wish=await normalizeWish(input,{importing});
+    if(req?.headers['idempotency-key'])wish.key=String(req.headers['idempotency-key']);
+    if(!/^[A-Za-z0-9_-]{12,100}$/.test(wish.key))throw new ApiError(400,'送出識別碼不正確');
+    return serialize(async()=>{
+      const existing=await one(store,'SELECT * FROM wishes WHERE submission_key=?',[wish.key]);
+      if(existing){if(existing.request_hash!==wish.requestHash)throw new ApiError(409,'這次送出識別碼已用於其他內容，請重新送出');return {ok:true,id:existing.id,wish:present(existing),duplicate:true,persistent:true};}
+      const ip=String(req?.headers['x-forwarded-for']||req?.socket.remoteAddress||'import').split(',')[0].trim(),clientHash=hash(ip+'|'+wish.author.toLocaleLowerCase('zh-TW'));
+      let now=Date.now();
+      if(importing){const date=input.created_at??input.at;if(date){const parsed=typeof date==='number'?date:Date.parse(date);if(Number.isFinite(parsed)&&parsed>0&&parsed<=Date.now()+300000)now=parsed;}}
+      if(!importing){
+        const recent=await rows(store,'SELECT created_at FROM wishes WHERE client_hash=? AND created_at>? ORDER BY created_at DESC LIMIT 12',[clientHash,now-3600000]);
+        if(recent.length>=12||(recent[0]&&now-recent[0].created_at<Number(env.RATE_COOLDOWN_MS??15000)))throw new ApiError(429,'祝福已收到，請稍後再送另一則');
+      }
+      const status=importing?(['approved','pending','hidden','deleted'].includes(input.moderation_status)?input.moderation_status:'approved'):(env.MODERATION_REQUIRED==='true'?'pending':'approved'),statements=[];
+      if(wish.image)statements.push({sql:'INSERT OR IGNORE INTO avatars(id,image_base64,mime_type,byte_size,width,height,created_at) VALUES(?,?,?,?,480,480,?)',params:[wish.image.id,wish.image.base64,'image/jpeg',wish.image.bytes,now]});
+      statements.push({sql:'INSERT OR IGNORE INTO wishes(guest_name,group_number,blessing_text,blessing_grapheme_count,avatar_id,style_id,moderation_status,created_at,updated_at,submission_key,request_hash,client_hash) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',params:[wish.author,wish.group,wish.message,wish.graphemes,wish.image?.id||null,wish.style,status,now,now,wish.key,wish.requestHash,clientHash]});
+      await store.batch(statements);
+      const saved=await one(store,'SELECT * FROM wishes WHERE submission_key=?',[wish.key]);
+      if(!saved||saved.request_hash!==wish.requestHash)throw new ApiError(409,'送出資料衝突，請重新確認');
+      pollSubscribers().catch(()=>{});return {ok:true,id:saved.id,wish:present(saved),duplicate:false,persistent:true};
+    });
+  }
+  function sendEvent(sub,type,data,seq){
+    if(sub.res.destroyed||sub.res.writableEnded)return;
+    if(sub.res.writableLength>1024*1024){sub.res.end();subscribers.delete(sub);return;}
+    sub.res.write(`id: ${seq}\nevent: ${type}\ndata: ${JSON.stringify(data)}\n\n`);sub.cursor=seq;
+  }
+  async function replay(sub){
+    const events=await rows(store,'SELECT e.seq,e.event_type,w.* FROM wish_events e JOIN wishes w ON w.id=e.wish_id WHERE e.seq>? ORDER BY e.seq ASC LIMIT 200',[sub.cursor]);
+    for(const e of events){if(e.event_type==='wish'&&e.moderation_status==='approved')sendEvent(sub,'wish',present(e),e.seq);else sendEvent(sub,'reset',{reason:'moderation',id:e.id,status:e.moderation_status,cursor:e.seq},e.seq);}
+    return events.length;
+  }
+  async function pollSubscribers(){
+    if(polling||stopped||!subscribers.size)return;polling=true;
+    try{for(const sub of subscribers){try{await replay(sub);}catch{if(!sub.res.writableEnded)sub.res.write(': database temporarily unavailable; reconnect will replay\n\n');}}}finally{polling=false;}
+  }
+  const server=http.createServer(async(req,res)=>{
+    try{
+      cors(req,res);if(req.method==='OPTIONS'){res.writeHead(204);res.end();return;}
+      const url=new URL(req.url,'http://localhost');
+      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,storage:store.mode,...await meta()});return;}
+      if(req.method==='GET'&&url.pathname==='/api/wishes'){json(res,200,await list(url));return;}
+      if(req.method==='POST'&&url.pathname==='/api/wishes'){requireJson(req);const result=await insert(await readJson(req),req);json(res,result.duplicate?200:201,result);return;}
+      const avatarMatch=url.pathname.match(/^\/api\/avatars\/(\d+)$/);
+      if(req.method==='GET'&&avatarMatch){
+        const image=await one(store,"SELECT a.image_base64,a.mime_type FROM avatars a JOIN wishes w ON w.avatar_id=a.id WHERE w.id=? AND w.moderation_status='approved'",[Number(avatarMatch[1])]);
+        if(!image)throw new ApiError(404,'找不到照片');res.writeHead(200,{'Content-Type':image.mime_type,'Cache-Control':'no-store'});res.end(Buffer.from(image.image_base64,'base64'));return;
+      }
+      if(req.method==='GET'&&url.pathname==='/api/stream'){
+        let cursor=integer(req.headers['last-event-id']??url.searchParams.get('cursor'),0,Number.MAX_SAFE_INTEGER,0);
+        if(!url.searchParams.has('cursor')&&!req.headers['last-event-id']&&url.searchParams.has('after'))cursor=(await one(store,'SELECT COALESCE(MAX(seq),0) AS cursor FROM wish_events WHERE wish_id<=?',[integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER,0)])).cursor;
+        const info=await meta();if(cursor>info.cursor)cursor=0;
+        res.writeHead(200,{'Content-Type':'text/event-stream; charset=utf-8','Connection':'keep-alive','Cache-Control':'no-cache, no-transform','X-Accel-Buffering':'no'});
+        res.write(`retry: 4000\nevent: ready\ndata: ${JSON.stringify({...info,persistent:true})}\n\n`);
+        const sub={res,cursor};subscribers.add(sub);req.on('close',()=>subscribers.delete(sub));await replay(sub);return;
+      }
+      if(url.pathname.startsWith('/api/admin/')){
+        authorize(req);
+        const adminAvatar=url.pathname.match(/^\/api\/admin\/avatars\/(\d+)$/);
+        if(req.method==='GET'&&adminAvatar){const image=await one(store,'SELECT a.image_base64,a.mime_type FROM avatars a JOIN wishes w ON w.avatar_id=a.id WHERE w.id=?',[Number(adminAvatar[1])]);if(!image)throw new ApiError(404,'找不到照片');res.writeHead(200,{'Content-Type':image.mime_type});res.end(Buffer.from(image.image_base64,'base64'));return;}
+        if(req.method==='GET'&&url.pathname==='/api/admin/wishes'){json(res,200,await list(url,true));return;}
+        const match=url.pathname.match(/^\/api\/admin\/wishes\/(\d+)$/);
+        if(req.method==='PATCH'&&match){
+          requireJson(req);const input=await readJson(req),status=input.moderation_status;
+          if(!['approved','hidden','pending','deleted'].includes(status))throw new ApiError(400,'審核狀態不正確');
+          const result=await serialize(async()=>{const old=await one(store,'SELECT * FROM wishes WHERE id=?',[Number(match[1])]);if(!old)throw new ApiError(404,'找不到祝福');if(old.moderation_status===status)return old;const now=Date.now();await store.query('UPDATE wishes SET moderation_status=?,updated_at=? WHERE id=?',[status,now,old.id]);return {...old,moderation_status:status};});
+          json(res,200,{ok:true,wish:present(result)});pollSubscribers().catch(()=>{});return;
+        }
+        if(req.method==='GET'&&['/api/admin/export.csv','/api/admin/export.json'].includes(url.pathname)){
+          const all=[];let after=0;
+          while(true){const page=await rows(store,'SELECT w.*,a.image_base64 FROM wishes w LEFT JOIN avatars a ON a.id=w.avatar_id WHERE w.id>? ORDER BY w.id LIMIT 200',[after]);all.push(...page);if(page.length<200)break;after=page.at(-1).id;}
+          if(url.pathname.endsWith('.json')){res.setHeader('Content-Disposition','attachment; filename="wedding-wishes.json"');json(res,200,{version:2,exported_at:new Date().toISOString(),wishes:all.map(w=>({...present(w),submission_key:w.submission_key,avatar:w.image_base64?'data:image/jpeg;base64,'+w.image_base64:''}))});return;}
+          const fields=['id','guest_name','group_number','blessing_text','avatar_path','created_at','style_id','moderation_status'],escape=value=>'"'+String(value??'').replace(/^[=+\-@\t\r]/,"'$&").replace(/"/g,'""')+'"';
+          const csv='\uFEFF'+[fields.join(','),...all.map(w=>{const p=present(w);return fields.map(k=>escape(p[k])).join(',');})].join('\r\n');
+          res.writeHead(200,{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="wedding-wishes.csv"'});res.end(csv);return;
+        }
+        if(req.method==='POST'&&url.pathname==='/api/admin/import'){
+          requireJson(req);const input=await readJson(req);if(!Array.isArray(input.wishes)||input.wishes.length>200)throw new ApiError(400,'每批匯入最多 200 則');
+          const imported=[];for(const wish of input.wishes){const canonical={...wish,idempotencyKey:wish.submission_key||`import_${hash(JSON.stringify(wish)).slice(0,48)}`};imported.push(await insert(canonical,req,{importing:true}));}
+          json(res,200,{ok:true,imported:imported.length,ids:imported.map(w=>w.id)});return;
+        }
+      }
+      throw new ApiError(404,'找不到此頁');
+    }catch(error){
+      if(res.headersSent){if(!res.writableEnded)res.end();return;}
+      const status=error.status||503;if(status===429)res.setHeader('Retry-After','15');
+      if(!error.status)console.error('Wedding API persistent operation failed:',error.message);
+      json(res,status,{error:error.status?error.message:'資料庫暫時無法連線，祝福尚未送出，請稍後重試',persistent:store.persistent});
+    }
+  });
+  server.keepAliveTimeout=63000;
+  const interval=setInterval(()=>pollSubscribers().catch(()=>{}),Number(env.SSE_POLL_MS||3000));interval.unref();
+  const heartbeat=setInterval(()=>{for(const sub of subscribers)if(!sub.res.destroyed)sub.res.write(': ping\n\n');},18000);heartbeat.unref();
+  async function close(){stopped=true;clearInterval(interval);clearInterval(heartbeat);for(const sub of subscribers)sub.res.end();await mutationTail;await new Promise(resolve=>server.close(resolve));await store.close();}
+  return {server,store,close,insert,normalizeWish};
 }
-function clean(s,max){
- return String(s||'').normalize('NFKC').replace(/[\u0000-\u001F\u007F-\u009F]/g,' ').replace(/\s{2,}/g,' ').trim().slice(0,max);
-}
-function ipHash(req){
- const raw=String(req.headers['x-forwarded-for']||req.socket.remoteAddress||'unknown').split(',')[0].trim();
- return crypto.createHash('sha256').update(raw).digest('hex').slice(0,16);
-}
-function checkRate(k){
- const now=Date.now();
- if(limits.size>5000)for(const [id,ts] of limits){if(now-ts.last>3600e3)limits.delete(id)}
- const l=limits.get(k)||{last:0,times:[]};
- l.times=l.times.filter(t=>now-t<3600e3);
- if(now-l.last<15000) return 15;
- if(l.times.length>=12) return 3600-Math.floor((now-l.times[0])/1000);
- l.last=now;l.times.push(now);limits.set(k,l);
- return 0;
-}
-function broadcast(item){
- const msg='id: '+item.id+'\nevent: wish\ndata: '+JSON.stringify(item)+'\n\n';
- for(const response of subscribers){
-   try{response.write(msg)}catch{ subscribers.delete(response) }
- }
-}
-function readJson(req){
- return new Promise((resolve,reject)=>{
-   const chunks=[];let len=0;let stopped=false;
-   req.on('data',chunk=>{len+=chunk.length;if(len>10000){stopped=true;reject(new Error('太長'));req.destroy()}else chunks.push(chunk)});
-   req.on('end',()=>{if(stopped)return;try{resolve(JSON.parse(Buffer.concat(chunks).toString('utf8')))}catch{reject(new Error('JSON 格式錯誤'))}});
-   req.on('error',reject);
- });
-}
-const server=http.createServer(async(req,res)=>{
- if(!cors(req,res))return;
- if(req.method==='OPTIONS'){res.writeHead(204);res.end();return}
- const url=new URL(req.url,'http://localhost');
- if(url.pathname==='/health'&&req.method==='GET'){json(res,200,{ok:true,count:entries.length,version:1});return}
- if(url.pathname==='/api/wishes'&&req.method==='GET'){
-   const after=Math.max(0,Number(url.searchParams.get('after')||0)||0);
-   const last=entries.filter(w=>w.id>after).slice(-200);
-   json(res,200,{wishes:last,latest:serial,persistent:false});
-   return;
- }
- if(url.pathname==='/api/stream'&&req.method==='GET'){
-   res.writeHead(200,{'Content-Type':'text/event-stream; charset=utf-8','Connection':'keep-alive','Cache-Control':'no-cache, no-transform'});
-   res.write('retry: 4000\n\n');
-   const after=Math.max(0,Number(url.searchParams.get('after')||0)||0);
-   for(const item of entries.filter(w=>w.id>after).slice(-120)){
-      res.write('id: '+item.id+'\nevent: wish\ndata: '+JSON.stringify(item)+'\n\n');
-   }
-   subscribers.add(res);
-   req.on('close',()=>subscribers.delete(res));
-   return;
- }
- if(url.pathname==='/api/wishes'&&req.method==='POST'){
-   if(!String(req.headers['content-type']||'').toLowerCase().startsWith('application/json')){json(res,415,{error:'必須使用 JSON'});return}
-   let item;
-   try{item=await readJson(req)}catch{if(!res.writableEnded)json(res,400,{error:'訊息格式不正確'});return}
-   if(!item || typeof item!=='object'){json(res,400,{error:'內容不正確'});return}
-   const author=clean(item.author,20),message=clean(item.message,130);
-   const style=Number(item.style),group=Number(item.group);
-   if(author.length<1||message.length<2||message.length>30||!Number.isInteger(style)||style<1||style>10||!Number.isInteger(group)||group<1||group>15){
-     json(res,400,{error:'請確認文字、組別及祝福框樣式'});return;
-   }
-   if(/(?:https?:\/\/|www\.|[A-Za-z0-9_-]{15,}\.(?:com|net|xyz|tw))/i.test(message)){
-      json(res,400,{error:'祝福內容請不要放網址'});return;
-   }
-   // Limit each visible author per IP, so many guests using the venue Wi-Fi do not block each other.
-   const wait=checkRate(ipHash(req)+'|'+author.toLocaleLowerCase('zh-TW'));
-   if(wait){json(res,429,{error:'祝福已收到，請稍後再送另一則',retryAfter:wait});return}
-   const wish={id:++serial,author,message,style,group,at:Date.now()};
-   entries.push(wish);
-   if(entries.length>MAX_ENTRIES)entries.shift();
-   broadcast(wish);
-   json(res,201,{ok:true,id:wish.id,wish});
-   return;
- }
- json(res,404,{error:'找不到此頁'});
-});
-server.keepAliveTimeout=63000;
-setInterval(()=>{
- for(const client of subscribers)try{client.write(': ping\n\n')}catch{subscribers.delete(client)}
-},18000).unref();
-server.listen(PORT,'0.0.0.0',()=>console.log('Wedding wishes service listening',PORT));
+if(require.main===module){createApp().then(app=>{const port=Number(process.env.PORT||10000);app.server.listen(port,'0.0.0.0',()=>console.log('Wedding wishes v2 listening',port,'storage:',app.store.mode));let closing=false;const stop=()=>{if(closing)return;closing=true;app.close().then(()=>process.exit(0));setTimeout(()=>process.exit(1),25000).unref();};process.on('SIGTERM',stop);process.on('SIGINT',stop);}).catch(error=>{console.error('Wedding API startup refused:',error.message);process.exitCode=1;});}
+module.exports={createApp,normalizeWish,countText};

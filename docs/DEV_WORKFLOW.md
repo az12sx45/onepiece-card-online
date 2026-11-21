@@ -9801,3 +9801,20 @@ Main/Core六logical edits、五diffblocks精確逆回原bytes，原三回合期�
 Publisher從真confirmed A19/I24 state/PCK/source-index起跑，在匹配QJS QA與實際載入module path/hash門檻下完成原Updater本機/正常公開stage-trial-confirm-cold與factory/mount/合成舊帳號save哨兵；Windows actual stock1.2.34隔離更新器及全6590manifest diff分別列證。bounded fixture與fullgame界線詳Gate，不宣稱實裝完整1.6GB、私人正式帳號/存檔、實體手機或自然完整戰役。官方QJS QA後端版本匹配，不宣稱精確手機library逐byte相同。所有V8錯backend C0005、失敗試驗a264/c293、QA adapter首輪時間欄錯誤與歷史FAIL保留。
 
 公開Gate D:\Codex_QA\board-ngplus-lineage-release-20261120/PUBLIC_UPDATE_VERIFIED.json；SHA256 6108448627fdae83ce070ae1059ea0000a94765dda010b2b5ad16a0effc090e6。Runtime provider已Live，公告後仍核最終公告Live/公開metadata再封唯一RELEASED。公告revision122保99則deeporder，最舊Board原記錄封存。原DEV完整prefix只追加本段。LATTICE API缺席，不宣稱持久任務/SQL/Graph，清理零刪且保護原版、回復、compiler/SDK/QA。
+
+
+## 2026-11-22：獨立婚禮祝福冊、自拍與 D1
+
+婚禮功能只在 photo-groups-2026 分支與既有兩個婚禮 Render 服務變更；遊戲 main、server/src/public、遊戲 PostgreSQL 均不變。手機查詢 PAYLOAD 與五張 PIC 原始內容逐字保留，206 組姓名變體雜湊、15 個組別值不變；原始 80 筆／169 人名單不在此分支，不能由雜湊變體重新統計或宣稱私人名單逐人驗收。
+
+photo-groups/index.html 接上 mobile-wishes.js/css：相機與相簿分開、EXIF 方向、480×480 JPEG 等比例裁切壓縮至 150 KB 以內、照片預覽／更換、公開同意、NFC + Intl.Segmenter 的 30 grapheme 限制、固定送出識別碼與重新整理重試。舊 v1 記憶體 API 不會被新頁誤判為永久保存成功。
+
+tv.html + book.js/css 為固定新人合照／正式網址 QR 與單人祝福的紙本雙頁。右頁以 preserve-3d、rotateY、正反紙面及動態投影於 1.1 秒內翻頁，停留 10 秒；新紀錄排隊、ID 去重、事件游標重連，支援暫停、繼續、前後頁、重播、全螢幕。自然翻頁時紙葉短暫經過左頁上方，左頁本身不移動。長署名與複合 Emoji 以實際字型幾何縮放至紙張安全範圍。既有 AI PNG 圖框不在 Git；現有十種 CSS 樣式保留，新增本機 SVG 花卉裝飾不冒充原 AI 圖框。
+
+photo-groups-api 改為 D1 REST 主儲存，獨立 avatars/wishes/wish_events 三表、索引與原子事件觸發器。文字與小型 JPEG 頭像同存 D1，不開通 R2；Node sharp 重驗方向／大小並移除 EXIF，資料庫約束檢查組別／30 字計數與狀態。管理 Bearer token 保護隱藏、復原、軟刪除、CSV 與含頭像 JSON 備份／匯回。正式環境禁止 SQLite 測試後備。
+
+已實跑 API 單元／持久化／SSE／頭像／授權測試（8 PASS、1 實際 REST D1 憑證測試 SKIP）；WebKit iPhone 模擬 7/7、Chromium 1920×1080 真實本機 SQLite API + SSE 整合 10/10、手機送出到電視端到端、QR 原檔及螢幕截圖解碼均 PASS。翻頁 0/25/50/75/100% 分別截圖，長複合 Emoji 首輪溢出已修正重驗；沒有實體 iPhone 相機或實體電視驗收。
+
+使用者重新授權 Cloudflare 後，真正建立專用 D1 renjun-hengru-wedding-2026（e11044f8-2a73-47c0-9cd9-fa7d7927eeb3），遠端遷移與讀回 3 表／4 索引／2 觸發器，外鍵無異常，起始零紀錄。Render 婚禮 API Build 改為 npm ci --prefix photo-groups-api、Health Check /health，私密環境設定受限 D1 token 及獨立管理金鑰。正式部署／Live POST／重啟驗收應另以當次部署及公開讀回為準；不能用本段取代 Live 證據。操作、資料庫、備份與啟用流程見 photo-groups-api/SETUP.md。
+
+LATTICE API 未出現在本階段工具清單；官方 serve 接入未在期限內完成 initialize，未成功取得 runtime status／task API，不宣稱任務或圖譜持久寫入。

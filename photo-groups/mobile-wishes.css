@@ -1,0 +1,21 @@
+.selfieArea{margin:20px 0;padding:18px 14px;border:1px solid #eaded5;background:#fffcf7;border-radius:18px;text-align:center}
+.wishStorageStatus{padding:10px 12px;margin:0 0 14px;text-align:center;color:#687653;background:#f4f6ec;border-radius:10px;font-size:13px;line-height:1.7}
+.wishStorageStatus.unavailable{background:#fff2e8;color:#995a61}
+.selfiePhoto{width:160px;height:160px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 14px;border:5px solid #fff;outline:1px solid #d2b985;box-shadow:0 6px 22px #7452461c;background:#f4e9e5}
+.selfieActions{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.selfieActions button{min-height:44px;padding:10px 13px;border:1px solid #c99b9d;border-radius:12px;color:#865662;background:#fff;font:700 14px/1.4 inherit}
+.selfieActions button.primaryPhoto{background:#a95e70;color:#fff;border-color:#a95e70}
+.selfieActions button:disabled{opacity:.55;cursor:wait}
+.selfieActions button[hidden]{display:none}
+.selfieHelp{font-size:12px;line-height:1.8;color:#877782;margin:12px 0 0}
+.selfieStatus{font-size:14px;line-height:1.6;color:#975566;margin:10px 0 0;min-height:1.6em}
+.wishConsent{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:14px;line-height:1.8;color:#735e67;padding:14px 12px;margin:17px 0 0;background:#fff8f2;border:1px solid #ecdfd3;border-radius:12px;cursor:pointer}
+.wishConsent input{flex:none;width:20px;height:20px;margin:3px 0 0;accent-color:#ad6474}
+.wishCount.overLimit{color:#b2354d;font-weight:800}
+.previewAvatar{width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 0 0 1px #cbb78e;z-index:1}
+.wishStyles{margin-top:20px}
+.wishStyles summary{font-weight:800;color:#725e66;padding:12px 0;cursor:pointer;font-size:15px;line-height:1.6}
+.wishStyles summary:focus-visible,.selfieActions button:focus-visible{outline:3px solid #b8667b;outline-offset:3px}
+.wishPreview .wishFrame{min-height:230px}
+.visuallyHiddenInput{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+@media(max-width:400px){.selfieArea{padding:15px 10px}.selfieActions{gap:7px}.selfieActions button{padding:10px}}

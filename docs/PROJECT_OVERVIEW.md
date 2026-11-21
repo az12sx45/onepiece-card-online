@@ -3321,3 +3321,8 @@ Preserve final critical recovery/text behavior and existing game-only host71 flo
 研究系統開放後，打倒敵人島所產生的臨時醫療服務／酒館服務，同樣使用研究所／競技場畫面與入口；商店維持商店。既有舊存檔直接依有效島嶼類型解析，原三回合重生規則不變。Windows 與手機共用此規則修正。
 
 Android／iOS 抽取畫面重排選擇彈巢、裝置、目標和文字；雷射接合即時槍口，發射前完成九十度旋轉，消除重複裝置與殘留特效。第一階段縮圈與原判定共用原始時鐘。平台測試、發布狀態以本輪 COMBINED_READY 及 publisher 正式收據為準，非要求重裝 App。
+
+
+## 2026-11-22：仁鈞＆姮儒婚禮獨立網站
+
+photo-groups-2026 分支的 photo-groups 與 photo-groups-api 提供拍照組別查詢、壓縮自拍、30 字祝福與 3D 翻頁幸福祝福冊。原手機與 tv.html 網址保留，婚禮 API 使用專用 Cloudflare D1，與遊戲 main 及遊戲資料庫分開。原 15 組查詢映射逐字保留。管理金鑰放 Render 私密環境，不放網頁或 Git。功能、實測範圍及部署驗證界線見 DEV_WORKFLOW.md、photo-groups-api/SETUP.md；此項不變更遊戲規則。

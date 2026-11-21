@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#fcfaf8">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>仁鈞＆姮儒｜拍照分組</title>
+<title>仁鈞＆姮儒｜拍照分組與幸福祝福冊</title>
 <link rel="stylesheet" href="./wishes.css">
+<link rel="stylesheet" href="./mobile-wishes.css">
 <style>
 :root{color-scheme:light;--ink:#302f37;--rose:#b85f70;--shadow:0 16px 55px rgba(87,65,71,.12)}
 *{box-sizing:border-box}
@@ -96,18 +97,31 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
       </div>
     </div>
     <section class="wishSection" aria-label="寫下祝福">
-      <h2 class="wishHeadline">把祝福送到幸福的天空 ♡</h2>
-      <p class="wishIntro">寫一句想對仁鈞與姮儒說的話，<br>挑一款喜歡的祝福框，就會飄上電視！</p>
+      <h2 class="wishHeadline">留下我們的幸福回憶 ♡</h2>
+      <p class="wishIntro">拍一張自拍，寫一句想對新人說的話，<br>讓你的祝福翻進現場的幸福祝福冊。</p>
+      <div class="selfieArea">
+        <img id="avatarPreview" class="selfiePhoto" src="./assets/default-avatar.svg" alt="婚禮預設頭像" width="160" height="160">
+        <div class="selfieActions">
+          <button id="takeSelfie" class="primaryPhoto" type="button">拍一張自拍</button>
+          <button id="choosePhoto" type="button">從相簿選擇</button>
+          <button id="removePhoto" type="button" hidden>使用預設頭像</button>
+        </div>
+        <input id="cameraInput" class="visuallyHiddenInput" type="file" accept="image/*" capture="user" tabindex="-1" aria-label="開啟自拍相機">
+        <input id="galleryInput" class="visuallyHiddenInput" type="file" accept="image/*" tabindex="-1" aria-label="從相簿選擇照片">
+        <p id="selfieStatus" class="selfieStatus" role="status" aria-live="polite"></p>
+        <p class="selfieHelp">自拍為選填，也可以使用婚禮預設頭像。<br>無法開啟相機時，請按「從相簿選擇」。<br>照片會以正方形裁切並壓縮，請先確認預覽。</p>
+      </div>
       <label class="wishLabel" for="wishAuthor">你的署名（會出現在電視上）</label>
-      <input id="wishAuthor" class="wishInput" type="text" maxlength="20" placeholder="例如：第5組的朋友" autocomplete="off">
+      <input id="wishAuthor" class="wishInput" type="text" placeholder="例如：第5組的朋友" autocomplete="off">
       <label class="wishLabel" for="wishMessage">你的祝福</label>
-      <textarea id="wishMessage" class="wishInput" rows="3" maxlength="30" placeholder="祝仁鈞與姮儒永遠幸福，手牽手走過每個春夏秋冬 ♡"></textarea>
+      <textarea id="wishMessage" class="wishInput" rows="3" placeholder="祝仁鈞與姮儒永遠幸福，手牽手走過每個春夏秋冬 ♡"></textarea>
       <div class="wishCount" id="wishLength">0 / 30 字</div>
-      <div class="wishLabel" id="wishStyleTitle">選一款你喜歡的祝福框（10 種）</div>
-      <div class="wishChoices" id="wishChoices" role="group" aria-labelledby="wishStyleTitle"></div>
+      <details class="wishStyles"><summary id="wishStyleTitle">挑選祝福書頁的風格（10 種）</summary>
+      <div class="wishChoices" id="wishChoices" role="group" aria-labelledby="wishStyleTitle"></div></details>
       <div class="wishPreviewLabel">✦ 電視上的祝福預覽 ✦</div>
       <div class="wishPreview" id="wishPreview" aria-live="polite"></div>
-      <button class="wishSend" type="button" id="wishSend">送出祝福，飛向電視 ♡</button>
+      <label class="wishConsent" for="wishConsent"><input id="wishConsent" type="checkbox"><span>我已確認照片與文字，並同意將我的頭像、署名及祝福公開展示於現場電視與新人祝福冊。若照片有其他人，我已取得他們的同意。</span></label>
+      <button class="wishSend" type="button" id="wishSend">送出祝福 ♡</button>
       <div class="wishStatus" id="wishStatus" role="status" aria-live="polite"></div>
       <p class="wishNote">請避免輸入電話或其他個人資料；送出後會公開顯示在現場電視上。</p>
     </section>
@@ -115,6 +129,7 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
     <button class="reset" id="resetBtn" type="button">重新查詢</button>
   </section>
 </main>
+<script src="./mobile-wishes.js"></script>
 <script>
 'use strict';
 const PAYLOAD={"sha":{"e30ad949f11a406c15b64541c44023eb":[1],"4b36f2df8e04e3121d85381b8acecfb0":[1],"9ff76dafd476bd1b05c2211c76cd708a":[1],"aac037e9170ba758895325be8771d788":[1],"50b7a2d71fedd51bd37c76d39e35324a":[1],"35a082596e27049832c12c34a388a103":[1],"272059290b582be77e57fdc38cb76fb2":[1],"1a90836ae2f42e2ca6fb546fa41e1c9c":[1],"2744d909935e0dde36384a04482d19e8":[1],"88c7564c980bbf4973835609b9962769":[1],"07333af6ae75cdfd08713d18bacebd80":[1],"e8bf47d6a5f6fcf3398613fb53f8335d":[1],"0e369c216b40af009c754115f7a8f4d5":[1],"d121508fe8c5787e7a8a055c8face504":[2],"5d7dfff394ce4c5b5fe2cc1217fee192":[2],"3ad4eab1aeabf0dcbae70291ef33fd3f":[2],"d95b840c1ccb015577a0f6c8e2f7e9d1":[2],"44a8c431413ef00678e083fb1200eb3d":[2],"9314733565c43ff7ac955bb9cb0cf1f2":[2],"b021a2b9b18825359b55f4cf6f883c66":[2],"29e789e72307d8341545389b17ab68ec":[2],"c279733ceb84800bbd3cbb3fd29a7e30":[2],"f5000188168ee41d9ffcc23ce89f10f5":[2],"80c1b6cf5cec96ca52304f29507e17ba":[2],"81b9603c9f00dd62afff65d30e51c1b4":[2],"b6baad0e0d6e8f0ef1799fb0434a29f9":[2],"8b4ac1bda092fd7ec87561201d6aff52":[2],"3a8d0fd364435df91b48caa98b5b37cc":[2],"3d66f735944fb90fcdd5b7890ea97c51":[3],"a555c87e59e29d538bd48950b5a07414":[3],"730e911481d08522179f0c0655552f1b":[3],"8336f79fb6c2d562cf7c06794097135f":[3,12],"83545fdb39ca4cdac412a7bd031d67a2":[3],"daeb46f278910976cb2e5fe5c4118f8c":[3],"4560f6f14e20b4ea45bc1ed91be1cd9e":[3],"41d0f004c0d2ea9603e9129083ee59cc":[3],"d361d05b92d21703115fbd59ef26f189":[3],"6ef72731c50b9c3604146b99fd964c24":[3],"4397236afda293884818636ed4fa0e77":[3],"6cd3ec0adf359b0497183a74a8ca24c2":[3],"acd7ca54798181c6a04a2437edc5cf47":[3],"bb9691ff47792a532a326e7419c4cdbb":[3],"a4f59232e9a524f500f3a200a2d30870":[4],"0da4f13711629f78b8a23c7f3cd206e0":[4],"e196e55b50a2684a3b30427971a80835":[4],"06c8c96c9fdaab4e18ea0fb48b079e11":[4],"84706eb0db6dc0d2c65d9300225427ff":[4],"98d297d5609a7a2a14ac960ad769fde8":[4],"9b24923a524525f3a3a06c0713449f2c":[4],"fce510255d969181c666e6686d121119":[4],"63e7387bff3a1c1e97b3efd3dac35318":[4],"f5e8ce81e54a6e7e07d9f156192c4587":[4],"08f6619f241ae6364bc2606f511aadf8":[4],"cc487418d5cbac69696f11d2c11776f8":[4],"dd6791c66f4d89e8f525d55320cd881a":[5],"c995232ecb300f1ed06fc5612e850c3c":[5],"13f0c84bc91a2ee2f0437e204619d43a":[5],"85def26f7e53eb81adec7560867ad86c":[5],"3d710cfc999c109248e8d9749ff2ec2d":[5],"29de0b8ce865c6feb3b49c0c452f0d76":[5],"26358f6dde796b35fc434cd74162138c":[5],"ed3a19ab4ba56ee13cf42c9a42e4bba8":[5],"44089ff306c8bf3ed9bb55c2db4c8ee6":[5],"672cd82de77e96b735784bc54dbd1b68":[5],"dcafc8e4aeb52d5f0c56b8d80a0c41ad":[5],"da7b0a741d222b29f040ac4d8c04e083":[5],"3bf5271e55b196bdac1af750706b6848":[5],"196ad096a49794b591253327e639742c":[5],"709b82ef402c724fa20e831e9d7b88fa":[5],"156bee1a6089b13de749a50c66326573":[6],"b1e562f6c87b883ed2fb24554584adc6":[6],"bbae7c3a7b5930f6f7eeeaaf75ec9b60":[6],"fb338dfd6436e027bbaadfdfbc976df8":[6],"9b55f4b68759abfb62427a4c7cda6a6f":[6],"6077917cac44ef578b01c416ade1f0ee":[6],"84704685d776ae4c0dacd38ba9b43499":[6],"0e4be1dad4f43e69ba6cfd4d570027af":[6],"2ae9e46e6f0dd6f668d8bf99316d60d0":[6],"5ce0a1504da07b58c82004dd72d6c321":[6],"0f564da0af308d23e37873c2225fcabe":[6],"ba25a0521443b803d5d4134b3e081851":[6],"fac2aafa8769d42a8281536354dd9990":[6],"e1009b1ed65ce487527643380f9b4070":[6],"ea1b8d38ff233cab9e6afa3f7d767806":[6],"4bcb5c086e31a5e6e88e1ef9ce9290d2":[7],"6f20c460ca55592c39de3e99b7813d90":[7],"4bcbffb293be1ee820a2798f45867759":[7],"c273dabe41692e69d72120586f60bbba":[7],"104830e7113f21d5bb36384d60909c87":[7],"2d68dbfffd20c14fbb0d422f21e6796b":[7],"81b94572b801ae14d5cd4ac23db180dd":[7],"35e10681a1dbc59e38bd720379bf593c":[7],"d46fa17b116b53211d5f0e5312e0855c":[7],"cf73fc5b0c233c6141f120e4dc287a71":[7],"b668d85367c08181347b6f36e030b900":[7],"a83e2ebed2dfdd1b308612571169b0bd":[7],"e222b2958a8023b48c28cc526ceb3fd2":[8],"a4b8c8f0d0681e88851da3fe8388f85c":[8],"44873c88dd7561f9af90daaf3bbf4642":[8],"f0bdbff68e5585395767762fe43e31ac":[8],"88cec22e9169d89af1c9a9b9fee1833d":[8],"598318fe5832b9e745d5b9700859214d":[8],"53da9937606cf707242dce3504afd8e7":[8],"535ba4d0478ca7bc42f2a607672a2828":[8],"0adfdb0596bf95022cc0b4865a31f5e3":[8],"6f7ad5111f70347cc8f10f084b47b4d3":[8],"a71510c35314f081fd0ef4039e32d536":[8],"2728b3e795b3364b0e408bd86432affe":[8],"6894ad8edbbb9771516b61457c25ff52":[8],"941ebf03f5e02fd4b653ed30541def7d":[8],"9f6417c79ad21fd8069a33869898de47":[9],"c0ad2791357e6b561ed04f6cd4e9ac77":[9],"ec563a769f132370473296bd4a4a9e5b":[9],"23ac932ca6811470eab22b26bc92ca90":[9],"24ffe0d079d72ad10f7c1d3426440fda":[9],"a5f2b4c3274f92ac47793fc74547e489":[9],"0d6f7a435cf89b2c2d1d9921c999b467":[9],"4b43be381e69829e07113255638cd84d":[9],"aaf922913d3edaedd946d5fcf8a11335":[9],"8c07a970643dce8d24feeab324093d34":[9],"07fb911d714028c3837dcddc0b9c5878":[9],"f2a968c8202da187abe108c3d5d06eff":[9],"a688feabaecbeaeb2537f9c1c36a2097":[9],"020b6369dfffd1756b022a4923820378":[9],"812d73fb40f0a7ee94887a9a980897ba":[10],"a0e4e4df56672adc6163ff526ef2233f":[10],"19cd6ff62b8065606f6937eb8a4cf64c":[10],"a7ea51f9d115609fc65f517ee816d89f":[10],"e364473efc58e8cc8745fe055cc50dbe":[10],"1e8c20c75b5d5c908b84bca58bd19f79":[10],"039b48d499ac2092bc9aca582093bc0d":[10],"5a5d0169497d4ca60dc313a67fa8dbb8":[10],"ee58935b4afd77c72f2493499a140251":[10],"206543c16df9d5dd398898c65c9daf0b":[10],"4e6553e4d01ed8c146b48e8896c4a7ae":[10],"65b618339dd42f4bbb606313e604cd9a":[10],"1586fcc71df77b52cac2d28db0ccb6bd":[11],"a3f745eb1151863778ca3ac431976afc":[11],"62b684873b14e3fe1f75acf1ab773a37":[11],"372d664f2ce5488efe811a46056bf9b8":[11],"a3b09f8312e2189d3de5d6e6db8629ab":[11],"3e16a755f798a976def185372cebf50c":[11],"703ee8e461c15be321f6695e5197104e":[11],"91ab195cb77bce0686fb4c8b977561dd":[11],"7871e78efc444e06c6f1e578632ec60f":[11],"2a44f26653ca4d8a87b12917989ac5de":[11],"91e0aa0f967064f673020ae1718bed80":[11],"706afa17fa0d91e879dcff4953ddb1d7":[11],"f3cb8af95a437c6030353885985b5c4e":[11],"546a4a236b78d86b56e45be3a665c96b":[12],"7039aaaab87a2fb893165eb93aa39295":[12],"4ae7f974606a9610748174652e9b11eb":[12],"f534d5fd435edad24483fdd1164649a7":[12],"dca915e28966a8c2eebbefc06595fa7d":[12],"1bdecb5c72c58099d5f658304ea9df5b":[12],"8dee8ef67054bc99d9a466679f660d18":[12],"f5325229c8a9a36440db6860a2436898":[12],"3629da8a0fdee1e21a635e3309261c62":[12],"1d624ceec7d54efe7ca9ae8fd281dc71":[12],"c2b8ac54d2d3d785cee1617779a3d514":[12],"9bc508df1eb38a5d1ab6b6a0db6e66de":[12],"d04f16374faaac04fd7c51070030627f":[12],"4c450b71b857505383ee6250121701a8":[13],"d825415e61ea0e54fdbdb2acceaa2810":[13],"26d4a6eb38eb857a29a670a6e6c16a4a":[13],"0d36e90a308e1b142e669cf2447c70c3":[13],"df7b15708908c3aa25dc3c2b9ae38d1a":[13],"44c088b6e9bcc28b35ae7c911f47d8f0":[13],"76c0c97c69c8130382a05fd8f5bb6a12":[13],"e9a93ac612d1606de38fcfdeddf1165f":[13],"98c67f50503dbbdb5826c25830ec2cd6":[13],"40e659b5c04b5959c288ffc112e9e1b0":[13],"ec68b076ec526554ed4cb529fe1ea881":[13],"48eb74ca49681ba87394645a3aa2f462":[13],"a6cd2fe35e3eef45509af1d8c1c1094d":[13],"09607ae0fb4acb3fe8ee214c0630a6b8":[13],"8c44dd477f79ba25741dec7c5104cd2b":[14],"9681b689e577a0376a22d6667cfb0cdd":[14],"a5d376cddc9e369decca205a9484855a":[14],"4f83cf3e2d1220bbdb4273b391c47169":[14],"9f3286ef0a85e2502b7f732433764301":[14],"0764037b9992ada2a574548bb010efd2":[14],"533ada183151a87a18ef8ce38003aabc":[14],"4821c9d51e617e1a48626cd9e44e9e10":[14],"3910d32d01dd3834ef7016f458e5bbb4":[14],"6e31bc52cfdd601c8337808d0734234f":[14],"7bacb5b2d9a310acc6d76d247d0bf4e2":[14],"2cd2258e42076190d820ce7380ae6622":[14],"424f54976b4f6ba65abba432346f2649":[14],"d43fc206f91713199aba268d7adda12d":[14],"56ffea9092bb3870ba25ddca81b57d99":[14],"75ee88b639672598304ceb2b8f8cf75e":[15],"747bb7cfdcc3bc010d487abb05e209af":[15],"c49c9bed8ea669c12df1096cf0999df8":[15],"5bc51cdea800d7a5c192b1c8a8ba97e7":[15],"f2e5396d76bbf196fba25548c6580d6c":[15],"bb2a2999261b236ade23a4c98814bfdc":[15],"05727bd48819b943ae43b3d8937f3e71":[15],"395b5d17292afc9ff1273ad8017d4667":[15],"a2426271701cc0b1ef3e298507c2c0c6":[15],"99e9f4512c738245050d35ddd50ea188":[15],"b795b2a471d3138d2624caf27a494bd3":[15],"4493cef84b43b4bf1f045c5f490bfc8b":[15],"6ce7646db393085399e7198f8ad118e4":[15],"097f0f6f02fc192e71b75a6f4fccf4e2":[15],"5bae9003d9312f0c049ece73697e4b49":[15]},"fnv":{"d63cfda1":[1],"3e323465":[1],"f1897e9b":[1],"ceb550f3":[1],"e6c02383":[1],"537b8580":[1],"b6b4c2dc":[1],"7947a828":[1],"0d52b996":[1],"01ba6f9e":[1],"15b00cc4":[1],"334d7bcc":[1],"cb1f44d6":[1],"5423b66f":[2],"9c8f70b4":[2],"9dc83cfe":[2],"6259e7d1":[2],"a67d4a98":[2],"82c95f19":[2],"762b56bb":[2],"7279a967":[2],"73b91e1e":[2],"57eec619":[2],"39a212c6":[2],"d3930a3a":[2],"d886ac40":[2],"40ad8601":[2],"208169a2":[2],"9a51f9ec":[3],"d65c18aa":[3],"0cd25c9b":[3],"53408d4b":[3,12],"ca88682c":[3],"ad73e63d":[3],"d70272eb":[3],"0e882775":[3],"ade038e5":[3],"e022e7f8":[3],"587a8d94":[3],"6f22258b":[3],"b0a2d9ab":[3],"99462824":[3],"90f5a980":[4],"536301ec":[4],"a4adc7e1":[4],"adc9c37f":[4],"cf7f498b":[4],"70015c4a":[4],"6e3029f1":[4],"b2b96470":[4],"0f7bf02e":[4],"2e3b62c2":[4],"24ad2d16":[4],"58a3bbdb":[4],"0e9a48dc":[5],"bdacb251":[5],"8a058282":[5],"9105c357":[5],"8b4de159":[5],"532ba757":[5],"58e415e0":[5],"e605a0a2":[5],"84f5ce01":[5],"6849df10":[5],"38561565":[5],"52f5a895":[5],"7cff165f":[5],"e115e168":[5],"25797c3c":[5],"d536be60":[6],"1dcd4f64":[6],"c6cf41ce":[6],"89c76fb3":[6],"f0a7af87":[6],"9d2c2126":[6],"76972c0b":[6],"d6ed204f":[6],"bc7df48d":[6],"7f4bb24a":[6],"a54a10c3":[6],"e6668375":[6],"0704cdcf":[6],"e1f2e36c":[6],"75945d55":[6],"e9b60bb8":[7],"e009616a":[7],"ccecc4ee":[7],"29ab98a1":[7],"35cd6f75":[7],"f2784d63":[7],"e5c90c0a":[7],"008f3f4d":[7],"e34ce64b":[7],"dac90c4d":[7],"16c3d07c":[7],"4ecaf373":[7],"8c681f15":[8],"3355d3bb":[8],"cdd68096":[8],"26f6fd16":[8],"acff0161":[8],"18241bcf":[8],"3bc60e98":[8],"ce2bd8b6":[8],"d9356297":[8],"21ad4b49":[8],"a129751e":[8],"3e1c90a9":[8],"5dd30d63":[8],"ac6d88ea":[8],"e73f0f8c":[9],"45de88cc":[9],"29eaf4b8":[9],"36b78588":[9],"ab22992b":[9],"b16694e7":[9],"ab14d7c4":[9],"d66828d0":[9],"8c0dbbaa":[9],"55f49fc6":[9],"a0c84295":[9],"2a5f1c85":[9],"5adb5bde":[9],"d26e6953":[9],"cd4b23ef":[10],"6abbddf4":[10],"eaab8791":[10],"b67d3413":[10],"2e6b7d1b":[10],"75b2d254":[10],"45f0b5ab":[10],"301ce090":[10],"37fd3da0":[10],"e6061ecc":[10],"91685a54":[10],"2fd2d509":[10],"df5418da":[11],"f6501582":[11],"2dddb924":[11],"e30895a2":[11],"d8ea6ebd":[11],"8797f765":[11],"0b347113":[11],"d2b72e28":[11],"8fbe8e87":[11],"c775310b":[11],"67b26118":[11],"1efa4bef":[11],"30567537":[11],"bd5b56c1":[12],"507deb46":[12],"b5ab118b":[12],"02116166":[12],"5d5506e5":[12],"12464ef2":[12],"830dcec2":[12],"d6e7d4fc":[12],"04b8256b":[12],"522fc350":[12],"0f2bf347":[12],"37d430a6":[12],"f7dddcfe":[12],"c7d9ce97":[13],"b9f3f336":[13],"6b80d038":[13],"bb46366d":[13],"009a9495":[13],"59bdf954":[13],"3cc7db85":[13],"ba6bdaca":[13],"b26ab562":[13],"bf2522b4":[13],"802c9363":[13],"210b1333":[13],"3cc114ae":[13],"26142b5d":[13],"558106e3":[14],"75fe4166":[14],"187144ff":[14],"1e3f8889":[14],"6835a435":[14],"b9583384":[14],"113e64a7":[14],"0241c863":[14],"d804dea1":[14],"1fe6c597":[14],"2b1b5af4":[14],"7245fd1d":[14],"33df76cf":[14],"4e3b5040":[14],"add6f250":[14],"30a862a6":[15],"cd01e51c":[15],"ece369ab":[15],"308e58f5":[15],"71a72fb3":[15],"e7d39d14":[15],"89cfec03":[15],"0e413f50":[15],"9747a00f":[15],"000d1319":[15],"afbdf3f9":[15],"fec2106d":[15],"d01ca0e6":[15],"22647290":[15],"d7376e77":[15]}};
@@ -128,71 +143,7 @@ const groupNum=document.getElementById('groupNum');
 const greeting=document.getElementById('greeting');
 const memo=document.getElementById('memo');
 const photoStage=document.getElementById('photoStage');
-const WISH_API='https://renjun-hengru-wishes-live-2026.onrender.com';
-const STYLE_DATA=[
-  ['玫瑰情書','💗'],['星空誓言','✨'],['香檳金典','🥂'],['海洋泡泡','🫧'],['薰衣草夢','🪻'],
-  ['草莓奶霜','🍓'],['森林花園','🌿'],['彩虹糖果','🌈'],['復古底片','📸'],['璀璨煙火','🎆']
-];
-const authorInput=document.getElementById('wishAuthor');
-const wishInput=document.getElementById('wishMessage');
-const choices=document.getElementById('wishChoices');
-const preview=document.getElementById('wishPreview');
-const statusWish=document.getElementById('wishStatus');
-const sendWishBtn=document.getElementById('wishSend');
-let currentGroup=0,selectedStyle=1,isSending=false;
-function choiceUI(){
- choices.innerHTML='';
- STYLE_DATA.forEach(([label,emoji],index)=>{
-   const n=index+1,button=document.createElement('button');
-   button.type='button';
-   button.className='wishChoice'+(n===selectedStyle?' selected':'');
-   button.dataset.style=String(n);
-   button.setAttribute('aria-pressed',String(n===selectedStyle));
-   const frame=document.createElement('span');
-   frame.className='wishFrame style-'+n;
-   const i=document.createElement('span');i.className='wishIcon';i.textContent=emoji;
-   const title=document.createElement('span');title.className='wishStyleName';title.textContent=label;
-   frame.append(i,title);button.append(frame);
-   button.setAttribute('aria-label',label);
-   button.onclick=()=>{selectedStyle=n;for(const b of choices.children){const active=b===button;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active))}updatePreview()};
-   choices.append(button);
- });
- updatePreview();
-}
-function updatePreview(){
- const frame=document.createElement('div');
- frame.className='wishFrame style-'+selectedStyle;
- const icon=document.createElement('div');icon.className='wishIcon';icon.textContent=STYLE_DATA[selectedStyle-1][1];
- const body=document.createElement('div');body.className='wishBody';body.textContent=wishInput.value.trim()||'幸福每一天，甜蜜直到永遠 ♡';
- const sign=document.createElement('div');sign.className='wishSignature';sign.textContent='第 '+(currentGroup||'?')+' 組 · '+(authorInput.value.trim()||'來賓');
- frame.append(icon,body,sign);
- preview.replaceChildren(frame);
- document.getElementById('wishLength').textContent=String(wishInput.value.length)+' / 30 字';
-}
-authorInput.addEventListener('input',updatePreview);
-wishInput.addEventListener('input',updatePreview);
-choiceUI();
-sendWishBtn.addEventListener('click',async()=>{
- if(isSending)return;
- if(!currentGroup){statusWish.textContent='請先查詢你的組別。';return}
- const author=authorInput.value.trim()||'賓客';
- const message=wishInput.value.trim();
- if(message.length<2){statusWish.textContent='寫至少兩個字的祝福，讓大家一起分享幸福 ♡';wishInput.focus();return}
- if(message.length>30){statusWish.textContent='祝福文字最多30個字。';return}
- if(author.length>20){statusWish.textContent='署名請控制在20字以內。';return}
- isSending=true;sendWishBtn.disabled=true;sendWishBtn.textContent='正在傳送祝福…';statusWish.textContent='';
- try{
-   const response=await fetch(WISH_API+'/api/wishes',{
-     method:'POST',headers:{'Content-Type':'application/json'},
-     body:JSON.stringify({author,message,style:selectedStyle,group:currentGroup})
-   });
-   const data=await response.json().catch(()=>({}));
-   if(!response.ok)throw new Error(data.error||'連線失敗，請稍後重試');
-   statusWish.textContent='♡ 送出成功！你的祝福已送到電視彈幕牆。';
-   wishInput.value='';updatePreview();
- }catch(err){statusWish.textContent='送出失敗：'+(err?.message||'請稍後再試') }
- finally{isSending=false;sendWishBtn.disabled=false;sendWishBtn.textContent='再送一份祝福 ♡'}
-});
+const composer=createWeddingComposer();
 
 function norm(s){return (s||'').normalize('NFKC').toLowerCase().trim().replace(/\s+/g,'').replace(/[，,／/;；|]/g,'、')}
 function fnvHex(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++)h=Math.imul(h ^ s.charCodeAt(i),0x01000193);return (h>>>0).toString(16).padStart(8,'0')}
@@ -210,10 +161,7 @@ function showResult(n,group){
   resultImage.src=src;
   photoStage.style.setProperty('--ph','url("'+src+'")');
   groupNum.textContent='第 '+group+' 組';
-  currentGroup=group;
-  authorInput.value=n.slice(0,20);
-  statusWish.textContent='';
-  updatePreview();
+  composer.setGroup(n,group);
   greeting.textContent='找到你囉，'+n+'！';
   memo.textContent='你被分在第 '+group+' 組，請與同行親友一起前往集合拍照。';
   result.classList.add('show');
@@ -240,9 +188,7 @@ async function search(){
 form.addEventListener('submit',function(e){e.preventDefault();search()});
 document.getElementById('resetBtn').addEventListener('click',function(){
   requestCounter++;
-  currentGroup=0;
-  statusWish.textContent='';
-  wishInput.value='';
+  composer.reset();
   result.classList.remove('show');
   document.body.classList.remove('is-found');
   clearStatus();
