@@ -90,7 +90,7 @@ const server=http.createServer(async(req,res)=>{
    if(!item || typeof item!=='object'){json(res,400,{error:'內容不正確'});return}
    const author=clean(item.author,20),message=clean(item.message,130);
    const style=Number(item.style),group=Number(item.group);
-   if(author.length<1||message.length<2||message.length>120||!Number.isInteger(style)||style<1||style>10||!Number.isInteger(group)||group<1||group>15){
+   if(author.length<1||message.length<2||message.length>30||!Number.isInteger(style)||style<1||style>10||!Number.isInteger(group)||group<1||group>15){
      json(res,400,{error:'請確認文字、組別及祝福框樣式'});return;
    }
    if(/(?:https?:\/\/|www\.|[A-Za-z0-9_-]{15,}\.(?:com|net|xyz|tw))/i.test(message)){
