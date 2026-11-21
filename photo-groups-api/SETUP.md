@@ -6,11 +6,13 @@
 
 ## 目前正式狀態（2026-11-22 台北時間）
 
-婚禮靜態站與 API 的應用程式版本 `ccc9a30a1375bf987935e2412a6247f8568fbb1c` 已在原網址 Live。API `/health` 實際回傳 `version:2`、`persistent:true`、`storage:"d1"`。已設定受限 D1 長期權杖與獨立 ADMIN_TOKEN，兩個婚禮服務均維持免費，沒有開通 R2 或新增付費方案。
+婚禮靜態站版本 `7442db78a160d5c556cb5647fa3949633ee8079b` 與 API 版本 `ee5ccbd00525172034c706c6da79422304cf5ee8` 已在原網址 Live；兩版的 API 程式與 migration 完全一致。API `/health` 實際回傳 `version:2`、`persistent:true`、`storage:"d1"`、`playback:true`。已設定受限 D1 長期權杖與獨立 ADMIN_TOKEN，兩個婚禮服務均維持免費，沒有開通 R2 或新增付費方案。
 
 已在正式網址以 5 筆明確標記的系統祝福驗證 SSE 排隊、單人翻頁與五個進度截圖；另以 WebKit 手機模擬完成自拍圖片→API→D1→SSE→電視。管理介面授權與隱藏、CSV／含頭像 JSON 匯出通過；共 6 筆系統測試紀錄已隱藏，沒有刪除資料。2026-11-22 02:20:02 執行 Render Restart service，02:20:56 重新讀回全部 6 筆與 480×480 JPEG 頭像，維持隱藏。正式公開頁目前沒有系統測試留言。
 
-管理：開啟 tv.html，右下「管理」輸入 Render API → Environment → ADMIN_TOKEN 的值。可公開／隱藏／軟刪除留言、匯出 CSV 與完整 JSON。播放鈕包括暫停／繼續、前後頁、重播與全螢幕；預設停留 10 秒、翻頁 1.1 秒。會場開始前先開啟電視頁，讓免費 API 完成閒置喚醒並持續接收。
+第二次正式驗收於台北 03:11 完成：正式靜態檔逐一比對 Git 相同、1920×1080 整本書與 QR 解碼、真正控制台送出暫停／下一頁／上一頁／重播／繼續均通過；換頁同步輪替原照，依字數自動播放，保存翻頁 0/25/50/75/100% 畫面。另用一位現有公開署名與原雜湊映射核對，省略姓氏的正式手機查詢成功；這不是逐人名單驗收。過程沒有新增或修改祝福，公開既有 id 7/8/9 皆保留，測試結束恢復自動播放。
+
+管理：開啟 [control.html](https://tantan-lily-photo-groups-2026.onrender.com/control.html)，輸入 Render 婚禮 API → Environment → ADMIN_TOKEN 的既有值。可暫停／繼續、前後頁、重播、公開／隱藏／軟刪除留言、匯出 CSV 與完整 JSON。金鑰僅保留在當前分頁記憶體；重新整理須再登入。電視 [tv.html](https://tantan-lily-photo-groups-2026.onrender.com/tv.html) 沒有可見控制鈕，雙擊書本或 F11 全螢幕。每頁停留 6 秒＋祝福 grapheme 字數×0.3 秒、最多 15 秒，翻頁 1.1 秒；每次完成翻頁輪替原五張新人照片。會場開始前先開啟電視頁，讓免費 API 完成閒置喚醒並持續接收。
 
 仍待實體 iPhone 相機／相簿與現場電視確認；Playwright WebKit 模擬不等於真機驗收。原先 10 款 AI PNG 不在此分支或提供的本機素材目錄，需使用者重新提供才能接入；目前沿用十種 CSS 樣式及新增 SVG 花卉。原 15 組查詢映射與五張新人照片逐字保留；因原始明文邀請名單不在 repo，沒有重新統計或宣稱逐人核對 80 筆／169 人。
 
