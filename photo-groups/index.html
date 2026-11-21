@@ -25,6 +25,7 @@ form{display:flex;gap:10px}
 .field:focus{border-color:var(--rose);box-shadow:0 0 0 4px #f8e6e8}
 .btn{flex:none;min-height:56px;padding:0 22px;border:none;border-radius:15px;background:var(--rose);color:#fff;font-size:17px;font-weight:800}
 .btn:active{transform:translateY(1px)}
+.lookupHelp{margin:14px 0 0;color:#9a8188;font-size:13px;line-height:1.7;text-align:center}
 .status{display:none;margin:17px 0 0;padding:13px 15px;background:#fff6f3;border:1px solid #f0dcd6;border-radius:13px;color:#995a61;font-size:15px;line-height:1.7}
 .status.show{display:block}
 .result{display:none}
@@ -79,9 +80,10 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
   <section class="shell" aria-label="拍照分組查詢">
     <form id="lookupForm">
       <label for="name" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">請輸入姓名</label>
-      <input id="name" class="field" type="text" placeholder="請輸入你的名字" autocomplete="name" enterkeyhint="search" maxlength="50">
+      <input id="name" class="field" type="text" placeholder="完整姓名或名字（可省略姓氏）" autocomplete="name" enterkeyhint="search" maxlength="50">
       <button class="btn" type="submit">查詢組別</button>
     </form>
+    <p class="lookupHelp">可以只輸入名字，不用姓氏；遇到同名時請輸入完整姓名。</p>
     <div id="status" class="status" role="status" aria-live="polite"></div>
     <noscript>請使用 Safari 或 Chrome 開啟正式網站以查詢組別。</noscript>
   </section>
@@ -129,6 +131,7 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
     <button class="reset" id="resetBtn" type="button">重新查詢</button>
   </section>
 </main>
+<script src="./name-lookup.js"></script>
 <script src="./mobile-wishes.js"></script>
 <script>
 'use strict';
@@ -145,14 +148,7 @@ const memo=document.getElementById('memo');
 const photoStage=document.getElementById('photoStage');
 const composer=createWeddingComposer();
 
-function norm(s){return (s||'').normalize('NFKC').toLowerCase().trim().replace(/\s+/g,'').replace(/[，,／/;；|]/g,'、')}
-function fnvHex(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++)h=Math.imul(h ^ s.charCodeAt(i),0x01000193);return (h>>>0).toString(16).padStart(8,'0')}
-async function digest(s){
-  if(window.crypto&&window.crypto.subtle&&window.TextEncoder){
-    try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('').slice(0,32)}catch(e){}
-  }
-  return null;
-}
+function norm(s){return WeddingNameLookup.normalize(s)}
 function setStatus(s){status.textContent=s;status.classList.add('show');result.classList.remove('show');document.body.classList.remove('is-found')}
 function clearStatus(){status.textContent='';status.classList.remove('show')}
 function showResult(n,group){
@@ -169,25 +165,31 @@ function showResult(n,group){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 let requestCounter=0;
+const lookupButton=form.querySelector('button');
+function searching(active){form.setAttribute('aria-busy',String(active));lookupButton.textContent=active?'查詢中…':'查詢組別';}
+u.addEventListener('input',()=>{requestCounter++;searching(false)});
 async function search(){
   const ticket=++requestCounter;
   const n=norm(u.value);
-  clearStatus(); result.classList.remove('show');
-  if(!n){setStatus('請先輸入你的名字。');return}
-  if(n.length<2){setStatus('請至少輸入兩個字，或輸入完整姓名。');return}
-  const key='wedding-photo-groups-2026-11-a|'+n;
-  let matches=[];
-  const d=await digest(key);
-  if(d) matches=PAYLOAD.sha[d]||[];
-  else matches=PAYLOAD.fnv[fnvHex(key)]||[];
-  if(ticket!==requestCounter)return;
-  if(matches.length===1){showResult(u.value.trim(),matches[0]);return}
-  if(matches.length>1){setStatus('這個稱呼對應到不只一筆名單，請輸入更完整的姓名；如果仍出現這個提示，請洽現場工作人員。');return}
-  setStatus('沒有找到這個名字。可以試試邀請名單上的姓名；如果家人只有列在「一家」或「家人」裡，請用該筆名單的主要姓名查詢，或請工作人員幫忙。');
+  clearStatus();result.classList.remove('show');
+  if(!n){setStatus('請輸入完整姓名，或只輸入名字（不用姓氏）。');return}
+  searching(true);
+  try{
+    const match=await WeddingNameLookup.find(n,PAYLOAD,{isCurrent:()=>ticket===requestCounter});
+    if(ticket!==requestCounter||match.mode==='cancelled')return;
+    if((match.mode==='exact'||match.mode==='given')&&match.groups.length===1){showResult(u.value.trim(),match.groups[0]);return}
+    if(match.mode==='ambiguous'){setStatus('這個名字對應到多位賓客，請加上姓氏，輸入完整姓名；如果仍有同名情形，請洽現場工作人員。');return}
+    if(match.mode==='unavailable'){setStatus('這個瀏覽器暫時無法搜尋省略姓氏的名字，請使用 Safari 或 Chrome 開啟正式網址，或改輸入完整姓名。');return}
+    setStatus('沒有找到這個名字。可以試試完整姓名；如果家人只列在「一家」或「家人」裡，請用名單上的主要姓名查詢，或請現場工作人員幫忙。');
+  }catch{
+    if(ticket===requestCounter)setStatus('查詢暫時無法完成，請稍後再試，或請現場工作人員幫忙。');
+  }finally{
+    if(ticket===requestCounter)searching(false);
+  }
 }
 form.addEventListener('submit',function(e){e.preventDefault();search()});
 document.getElementById('resetBtn').addEventListener('click',function(){
-  requestCounter++;
+  requestCounter++;searching(false);
   composer.reset();
   result.classList.remove('show');
   document.body.classList.remove('is-found');

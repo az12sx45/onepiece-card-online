@@ -7,15 +7,15 @@ async function main(){
   const store=new D1Store(process.env),command=process.argv[2];
   if(command==='migrate'){
     await store.migrate();
-    const result=await store.query("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('wishes','avatars','wish_events') ORDER BY name");
+    const result=await store.query("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('wishes','avatars','wish_events','playback_state','playback_commands') ORDER BY name");
     const tables=result[0]?.results?.map(r=>r.name)||[];
-    if(tables.length!==3)throw new Error('Migration read-back incomplete');
+    if(tables.length!==5)throw new Error('Migration read-back incomplete');
     console.log(JSON.stringify({ok:true,storage:'d1',tables}));return;
   }
   if(command==='backup'){
     const target=process.argv[3];if(!target)throw new Error('Usage: npm run backup:d1 -- <private-output.json>');
     const data={version:2,exported_at:new Date().toISOString(),tables:{}};
-    for(const table of ['avatars','wishes','wish_events']){
+    for(const table of ['avatars','wishes','wish_events','playback_state','playback_commands']){
       data.tables[table]=[];let offset=0;
       while(true){const result=await store.query(`SELECT * FROM ${table} ORDER BY ${table==='wish_events'?'seq':'id'} LIMIT 200 OFFSET ?`,[offset]),page=result[0]?.results||[];data.tables[table].push(...page);if(page.length<200)break;offset+=200;}
     }

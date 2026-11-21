@@ -3326,3 +3326,6 @@ Android／iOS 抽取畫面重排選擇彈巢、裝置、目標和文字；雷射
 ## 2026-11-22：仁鈞＆姮儒婚禮獨立網站
 
 photo-groups-2026 分支的 photo-groups 與 photo-groups-api 提供拍照組別查詢、壓縮自拍、30 字祝福與 3D 翻頁幸福祝福冊。原手機與 tv.html 網址保留，婚禮 API 使用專用 Cloudflare D1，與遊戲 main 及遊戲資料庫分開。原 15 組查詢映射逐字保留。管理金鑰放 Render 私密環境，不放網頁或 Git。功能、實測範圍及部署驗證界線見 DEV_WORKFLOW.md、photo-groups-api/SETUP.md；此項不變更遊戲規則。
+
+
+2026-11-22 婚禮追加：電視為整本書的純展示頁；control.html 獨立管理／遙控播放。新人五張原照隨翻頁輪替，祝福依字數停留6～15秒。手機支援省略姓氏查詢並提示同名歧義，原15組不變。

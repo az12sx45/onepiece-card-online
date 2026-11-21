@@ -2604,3 +2604,6 @@ Android／iOS 各三個既有 PUBLIC 目標；十四個 HOST、Core、Portrait�
 - photo-groups-api/server.js、storage.js、migrations/0001_wishes.sql：相容 API、D1／明確本機 SQLite、頭像、持久 SSE、授權審核與匯出。
 - photo-groups-api/test/api.test.js：持久化、EXIF、字數、授權、SSE、資料庫約束與實際 D1 明確開關。
 - photo-groups-api/scripts/d1-setup.js、SETUP.md、.env.example：遠端遷移、完整備份與安全環境設定。不保存實際權杖。
+
+
+2026-11-22 婚禮追加：photo-groups/control.html、control.js、control.css 為授權控制台；name-lookup.js 為省姓姓名比對；assets/couple-1.jpg～couple-5.jpg 為原PIC逐張抽出。book.js/css 與 tv.html 管理純展示、完整書本邊界、照片輪替及閱讀時間；photo-groups-api/migrations/0002_playback_control.sql、server.js、storage.js 加上耐久播放狀態與指令。

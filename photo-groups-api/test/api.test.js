@@ -89,6 +89,26 @@ test('production cannot silently use local or missing D1 storage',async()=>{
   await assert.rejects(()=>createStore({STORAGE_MODE:'sqlite-local',SQLITE_PATH:'unused.sqlite',RENDER:'true'}),/Render requires D1/);
   await assert.rejects(()=>createStore({}),/Missing CLOUDFLARE_ACCOUNT_ID/);
 });
+test('remote playback is authorized, idempotent, paginated and durable without stale commands on a new TV',async t=>{
+  const f=await fixture(t);
+  const initial=await f.request('/api/playback');assert.equal(initial.res.status,200);assert.equal(initial.body.paused,false);assert.equal(initial.body.latest,0);assert.deepEqual(initial.body.commands,[]);
+  const command=(action,key='test_control_'+action)=>({action,requestId:key});
+  assert.equal((await f.request('/api/admin/playback')).res.status,401);
+  assert.equal((await f.request('/api/admin/playback','POST',command('pause'))).res.status,401);
+  assert.equal((await f.request('/api/admin/playback','POST',command('delete-all'),true)).res.status,400);
+  assert.equal((await f.request('/api/admin/playback','POST',{action:'next',requestId:'short'},true)).res.status,400);
+  const pause=await f.request('/api/admin/playback','POST',command('pause'),true);assert.equal(pause.res.status,201);assert.equal(pause.body.state.paused,true);
+  const duplicate=await f.request('/api/admin/playback','POST',command('pause'),true);assert.equal(duplicate.res.status,200);assert.equal(duplicate.body.duplicate,true);assert.equal(duplicate.body.command.id,pause.body.command.id);
+  assert.equal((await f.request('/api/admin/playback','POST',command('resume','test_control_pause'),true)).res.status,409);
+  for(const action of ['next','prev','replay','resume'])assert.equal((await f.request('/api/admin/playback','POST',command(action),true)).res.status,201);
+  const page=await f.request('/api/playback?after=0&limit=2');assert.equal(page.body.latest,5);assert.equal(page.body.hasMore,true);assert.deepEqual(page.body.commands.map(c=>c.action),['pause','next']);assert.equal(page.body.nextCursor,2);
+  const rest=await f.request('/api/playback?after='+page.body.nextCursor);assert.deepEqual(rest.body.commands.map(c=>c.action),['prev','replay','resume']);assert.equal(rest.body.nextCursor,5);assert.equal(rest.body.hasMore,false);
+  const freshTV=await f.request('/api/playback');assert.equal(freshTV.body.paused,false);assert.equal(freshTV.body.latest,5);assert.deepEqual(freshTV.body.commands,[],'Fresh TV skips old next/prev/replay presses');
+  await f.app.store.query('INSERT INTO playback_commands(action,request_key,created_at) VALUES(?,?,?)',['next','test_control_expired',Date.now()-120000]);
+  const expired=await f.request('/api/playback?after=5');assert.deepEqual(expired.body.commands,[]);assert.equal(expired.body.nextCursor,6,'Expired transient commands still advance the cursor');
+  await f.request('/api/admin/playback','POST',command('pause','test_control_pause_restart'),true);await f.restart();
+  const restored=await f.request('/api/playback');assert.equal(restored.body.paused,true);assert.equal(restored.body.latest,7);assert.deepEqual(restored.body.commands,[]);assert.equal((await f.request('/api/wishes')).body.wishes.length,0,'Playback commands never modify guest records');
+});
 test('D1 adapter sends parameterized REST batch and never interpolates guest input',async()=>{
   const store=new D1Store({CLOUDFLARE_ACCOUNT_ID:'account',CLOUDFLARE_DATABASE_ID:'database',CLOUDFLARE_API_TOKEN:'test-secret'}),original=global.fetch,seen=[];
   global.fetch=async(url,options)=>{seen.push({url,body:JSON.parse(options.body)});return {ok:true,json:async()=>({success:true,result:[{success:true,results:[]}]})};};

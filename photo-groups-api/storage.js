@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const initSqlJs = require('sql.js');
-const SCHEMA = fs.readFileSync(path.join(__dirname,'migrations/0001_wishes.sql'),'utf8');
+const SCHEMA = fs.readdirSync(path.join(__dirname,'migrations')).filter(name=>/^\d+_.*\.sql$/.test(name)).sort().map(name=>fs.readFileSync(path.join(__dirname,'migrations',name),'utf8')).join('\n');
 
 class D1Store {
   constructor(env) {

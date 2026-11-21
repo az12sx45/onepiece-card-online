@@ -1,18 +1,23 @@
-/* One fixed photograph page; one physical leaf turns around the binding. */
+/* Clean television spread. Playback and moderation live on control.html. */
 (() => {
   'use strict';
   const API = 'https://renjun-hengru-wishes-live-2026.onrender.com';
   const DEFAULT_AVATAR = './assets/default-avatar.svg';
-  const DWELL = 10000, TURN = 1100;
+  const TURN = 1100;
+  const segmenter=new Intl.Segmenter('zh-TW',{granularity:'grapheme'});
+  const dwellFor=message=>Math.round(Math.min(15000,Math.max(6000,6000+[...segmenter.segment(String(message||'').normalize('NFC'))].length*300)));
+  const PHOTO_FILES=Array.from({length:5},(_,i)=>'./assets/couple-'+(i+1)+'.jpg');
+  const photoImages=new Map();
   const $ = id => document.getElementById(id);
   const right = $('rightPage'), sheet = $('turningSheet'), front = $('sheetFront'), shadow = $('pageTurnShadow');
   const wishes = new Map(), known = new Set();
   let pending = [], current = null, paused = false, busy = false, timer, activeAnimation, animations = [];
   let cursor = 0, stream, syncing = null, resync = false, initial = true, duringSync = [], connected = false;
-  let adminToken = '', wantExport = false;
-  const adminImages=new Set();
+  let photoIndex=4,controlCursor=0,controlVersion=-1,controlReady=false,controlFlight=false;
+  const controlQueue=[];
   let resumeId = null;
   try { resumeId = localStorage.getItem('renjun_hengru_book_current_v2'); } catch {}
+  try {const value=localStorage.getItem('renjun_hengru_book_photo_v3');if(value!==null&&Number.isInteger(Number(value))&&Number(value)>=0&&Number(value)<5)photoIndex=Number(value);}catch{}
 
   function element(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function ordered() { return [...wishes.values()].sort((a,b) => a.at - b.at || Number(a.id) - Number(b.id)); }
@@ -44,9 +49,7 @@
   }
   function updateStatus() {
     $('wishCount').textContent=String(wishes.size);
-    $('pageStatus').textContent=current?'第 '+(ordered().findIndex(w=>w.id===current.id)+1)+' 頁'+(paused?' · 已暫停':' · 每頁 10 秒'):'等待第一份祝福';
-    $('prev').disabled=busy||wishes.size<2; $('next').disabled=busy||wishes.size<2; $('replay').disabled=busy||!wishes.size;
-    $('pause').textContent=paused?'繼續播放':'暫停播放';
+    $('pageStatus').textContent=current?'第 '+(ordered().findIndex(w=>w.id===current.id)+1)+' 頁'+(paused?' · 已暫停':' · 停留 '+(dwellFor(current.message)/1000).toFixed(1)+' 秒'):'等待第一份祝福';
   }
   function fitPrintedText(root) {
     for (const p of root.querySelectorAll('.guest-page')) {
@@ -62,19 +65,31 @@
     if(current) { pending=pending.filter(id=>id!==current.id); try{localStorage.setItem('renjun_hengru_book_current_v2',current.id);}catch{} }
     updateStatus();
   }
-  function schedule() { clearTimeout(timer); if(!paused&&!busy&&wishes.size) timer=setTimeout(()=>navigate(1),DWELL); }
+  function schedule() { clearTimeout(timer); if(!paused&&!busy&&wishes.size) timer=setTimeout(()=>navigate(1),dwellFor(current?.message)); }
+  async function preparePhoto(index){
+    let img=photoImages.get(index);
+    if(!img){img=new Image();img.src=PHOTO_FILES[index];img.id='couplePhoto';img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';photoImages.set(index,img);}
+    await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
+    return img.naturalWidth?img:null;
+  }
+  function applyPhoto(index,img){
+    if(!img)return;
+    photoIndex=index;$('couplePhotoMount').replaceChildren(img);$('leftPage').dataset.photoIndex=String(index);
+    try{localStorage.setItem('renjun_hengru_book_photo_v3',String(index));}catch{}
+  }
   async function preload(preparedPage) {
     const img=preparedPage.querySelector('.guest-avatar');
     await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
     if(!img.naturalWidth){img.src=DEFAULT_AVATAR;await img.decode().catch(()=>{});}
   }
-  async function turnTo(next, direction=1) {
-    if(busy || !next || current?.id===next.id) { schedule(); return; }
+  async function turnTo(next, direction=1, forcedPhoto) {
+    if(busy || !next) { schedule(); return; }
     busy=true; clearTimeout(timer); updateStatus();
     const nextPage=page(next);
-    await preload(nextPage);
+    const targetPhoto=forcedPhoto??((photoIndex+(direction<0?-1:1)+5)%5);
+    const [,preparedPhoto]=await Promise.all([preload(nextPage),preparePhoto(targetPhoto)]);
     // A moderated item can disappear while its image is loading.
-    if(!wishes.has(next.id)) { busy=false; updateStatus(); schedule(); return; }
+    if(!wishes.has(next.id)) { busy=false; updateStatus(); schedule();flushControls();return; }
     // Move the decoded DOM image with its paper instead of creating a second
     // no-store avatar request during the turn or at the resting-page commit.
     const currentPage=right.firstElementChild;
@@ -95,13 +110,13 @@
     const curve=front.animate([{borderRadius:'0 7px 9px 0'},{borderRadius:'0 70px 80px 0',offset:.4},{borderRadius:'0 7px 9px 0'}],{duration:TURN,fill:'both'});
     animations=[activeAnimation,shade,curve];
     // Pause freezes the physical leaf as well as the dwell timer.
-    if(paused && direction===0) animations.forEach(a=>a.pause());
     try { await activeAnimation.finished; } catch {}
     const kept=wishes.get(next.id);
     render(kept||ordered()[0]||null,kept?nextPage:undefined);
+    applyPhoto(targetPhoto,preparedPhoto);
     // Commit the resting page before removing the leaf: no blank frame.
     sheet.hidden=true; animations.forEach(a=>a.cancel()); animations=[]; activeAnimation=null; busy=false;
-    updateStatus(); schedule();
+    updateStatus(); schedule();flushControls();
   }
   function navigate(direction) {
     if(busy) return;
@@ -123,10 +138,10 @@
     if(!initial && !current && !busy){render(n);schedule();}
     updateStatus();
   }
-  async function snapshot(path='/api/wishes',auth=false) {
+  async function snapshot() {
     let all=[],after=0,latestCursor=0;
     for(let i=0;i<100;i++) {
-      const response=await fetch(API+path+'?after='+after+'&limit=200',{cache:'no-store',headers:auth?{Authorization:'Bearer '+adminToken}:{}});
+      const response=await fetch(API+'/api/wishes?after='+after+'&limit=200',{cache:'no-store'});
       const data=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(data.error||'無法讀取祝福');
       all.push(...(data.wishes||[]));if(i===0)latestCursor=Number(data.cursor)||0;
@@ -150,7 +165,7 @@
         if(initial){initial=false;render(wishes.get(resumeId)||ordered()[0]||null);schedule();}
         else if(current&&!wishes.has(current.id)&&!busy){render(ordered()[0]||null);schedule();}
         else if(current&&!busy){current=wishes.get(current.id)||null;}
-        updateStatus();
+        updateStatus();flushControls();
         if(!connected){$('linkStatus').textContent=data.persistent?'已同步 · 重新連接即時訊息中':'舊版服務 · 永久儲存待啟用';}
       } catch(e) { if(!connected)$('linkStatus').textContent='連線中斷 · 自動重試'; }
       finally { syncing=null; if(resync){resync=false;setTimeout(sync,200);} }
@@ -165,48 +180,45 @@
     stream.addEventListener('reset',e=>{try{const d=JSON.parse(e.data);if(d.id){wishes.delete(String(d.id));pending=pending.filter(id=>id!==String(d.id));if(syncing)duringSync.push({type:'remove',id:d.id});if(current?.id===String(d.id)&&!busy)render(ordered()[0]||null);}cursor=Math.max(cursor,Number(e.lastEventId)||0);}catch{} void sync();});
     stream.addEventListener('error',()=>{connected=false;$('indicator').classList.remove('live');$('linkStatus').textContent='重新連線中 · 祝福繼續播放';});
   }
-  function resize(){const v=document.querySelector('.book-viewport');$('bookScale').style.setProperty('--book-scale',Math.min((v.clientWidth-95)/1642,(v.clientHeight-40)/870));fitPrintedText(right);if(!sheet.hidden)fitPrintedText(front);}
+  function resize(){const v=document.querySelector('.book-viewport');$('bookScale').style.setProperty('--book-scale',Math.max(.05,Math.min((v.clientWidth-100)/1740,(v.clientHeight-70)/1040)));fitPrintedText(right);if(!sheet.hidden)fitPrintedText(front);}
   function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,4500);}
-  $('pause').onclick=()=>{paused=!paused;clearTimeout(timer);if(busy)animations.forEach(a=>paused?a.pause():a.play());updateStatus();schedule();};
-  $('next').onclick=()=>navigate(1);$('prev').onclick=()=>navigate(-1);
-  $('replay').onclick=()=>{if(busy)return;pending=ordered().map(w=>w.id);const first=wishes.get(pending.shift());if(first?.id===current?.id){schedule();toast('從第一頁重新播放');}else void turnTo(first);};
-  $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('請使用瀏覽器的全螢幕功能（F11）');}};
-
-  function openAdmin(exportRequested=false){wantExport=exportRequested;$('adminDialog').showModal();if(adminToken)void loadAdmin();else $('adminToken').focus();}
-  $('manage').onclick=()=>openAdmin();$('export').onclick=()=>openAdmin(true);
-  $('adminLogin').onsubmit=async e=>{e.preventDefault();adminToken=$('adminToken').value.trim();$('adminToken').value='';await loadAdmin();};
-  $('adminLogout').onclick=()=>{adminToken='';$('adminPanel').hidden=true;$('adminLogin').hidden=false;$('adminList').replaceChildren();$('adminStatus').textContent='已鎖定';};
-  async function adminFetch(path,options={}){const r=await fetch(API+path,{...options,cache:'no-store',headers:{'Authorization':'Bearer '+adminToken,...options.headers}});if(!r.ok){const d=await r.json().catch(()=>({}));throw new Error(d.error||'管理操作失敗');}return r;}
-  async function download(path,name){try{const r=await adminFetch(path);const url=URL.createObjectURL(await r.blob());const a=element('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);}catch(e){$('adminStatus').textContent=e.message;}}
-  $('adminCSV').onclick=()=>download('/api/admin/export.csv','仁鈞姮儒_祝福紀錄.csv');
-  $('adminBackup').onclick=()=>download('/api/admin/export.json','仁鈞姮儒_祝福完整備份.json');
-  $('adminRefresh').onclick=()=>loadAdmin();
-  async function loadAdmin(){
-    $('adminStatus').textContent='正在載入…';
-    try {
-      const {all}=await snapshot('/api/admin/wishes',true);$('adminPanel').hidden=false;$('adminLogin').hidden=true;$('adminList').replaceChildren();
-      for(const url of adminImages)URL.revokeObjectURL(url);adminImages.clear();
-      for(const w of all.slice().reverse()){
-        const row=element('article','admin-entry'),pic=avatar(w),body=element('div');
-        if(w.avatar_path){adminFetch('/api/admin/avatars/'+w.id).then(r=>r.blob()).then(blob=>{if(!row.isConnected)return;const url=URL.createObjectURL(blob);adminImages.add(url);pic.src=url;}).catch(()=>{});}
-        body.append(element('strong','',w.author??w.guest_name),element('p','',w.message??w.blessing_text),element('small','','第 '+(w.group??w.group_number)+' 組 · '+new Date(w.at||w.created_at).toLocaleString('zh-TW')+' · '+w.moderation_status));
-        const buttons=element('div','entry-buttons');
-        for(const [label,status] of [['公開','approved'],['隱藏','hidden'],['刪除','deleted']]){
-          const b=element('button','',label);b.type='button';b.disabled=w.moderation_status===status;
-          b.onclick=async()=>{try{await adminFetch('/api/admin/wishes/'+w.id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({moderation_status:status})});await loadAdmin();await sync();}catch(e){$('adminStatus').textContent=e.message;}};
-          buttons.append(b);
-        }
-        body.append(buttons);row.append(pic,body);$('adminList').append(row);
-      }
-      $('adminStatus').textContent='共 '+all.length+' 則紀錄（包含隱藏與刪除）';
-      if(wantExport){wantExport=false;await download('/api/admin/export.csv','仁鈞姮儒_祝福紀錄.csv');}
-    }catch(e){adminToken='';$('adminPanel').hidden=true;$('adminLogin').hidden=false;$('adminStatus').textContent=e.message;}
+  function setPaused(value){
+    value=Boolean(value);if(paused===value)return;
+    paused=value;clearTimeout(timer);if(busy)animations.forEach(a=>paused?a.pause():a.play());updateStatus();schedule();
   }
+  function replay(){
+    if(busy)return;
+    pending=ordered().map(w=>w.id);const first=wishes.get(pending.shift());
+    if(first)void turnTo(first,1,4);
+  }
+  function flushControls(){
+    if(initial||busy||!controlQueue.length)return;
+    const action=controlQueue.shift();
+    if(action==='next')navigate(1);else if(action==='prev')navigate(-1);else if(action==='replay')replay();
+    if(!busy&&controlQueue.length)setTimeout(flushControls,0);
+  }
+  async function pollPlayback(){
+    if(controlFlight)return;controlFlight=true;
+    try{
+      for(let page=0;page<10;page++){
+        const r=await fetch(API+'/api/playback'+(controlReady?'?after='+controlCursor+'&limit=100':''),{cache:'no-store',signal:AbortSignal.timeout(8000)});
+        if(!r.ok)throw new Error('Control unavailable');const d=await r.json();
+        if(typeof d.paused!=='boolean'||!Number.isSafeInteger(d.latest))throw new Error('Invalid playback state');
+        if(!controlReady){controlCursor=d.nextCursor??d.latest;controlVersion=d.latest;controlReady=true;setPaused(d.paused);break;}
+        if(d.latest!==controlVersion){controlVersion=d.latest;setPaused(d.paused);}
+        for(const c of d.commands||[]){if(Number(c.id)>controlCursor&&['next','prev','replay'].includes(c.action))controlQueue.push(c.action);}
+        controlCursor=Number(d.nextCursor??d.latest);if(!d.hasMore)break;
+      }
+      flushControls();
+    }catch{}finally{controlFlight=false;}
+  }
+  async function fullscreen(){try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('請使用電視瀏覽器的全螢幕功能（F11）');}}
   window.addEventListener('resize',resize);document.addEventListener('fullscreenchange',resize);
-  document.addEventListener('keydown',e=>{if($('adminDialog').open||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight')navigate(1);if(e.key==='ArrowLeft')navigate(-1);if(e.code==='Space'){e.preventDefault();$('pause').click();}});
+  document.addEventListener('dblclick',e=>{if(!e.target.closest('a'))void fullscreen();});
+  document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight')navigate(1);if(e.key==='ArrowLeft')navigate(-1);if(e.code==='Space'){e.preventDefault();setPaused(!paused);}});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)void sync();});
   window.addEventListener('beforeunload',()=>stream?.close());
   // Read-only diagnostics permit frame-by-frame verification without a fake production input.
-  window.bookPlayback=Object.freeze({get state(){return {currentId:current?.id,pending:[...pending],ids:ordered().map(w=>w.id),busy,paused,cursor};},get animation(){return activeAnimation;},get animations(){return [...animations];},sync});
-  resize();render(null);sync().then(connect);setInterval(()=>{if(!connected)void sync();},10000);setInterval(()=>{if(connected)void sync();},60000);
+  window.bookPlayback=Object.freeze({get state(){return {currentId:current?.id,pending:[...pending],ids:ordered().map(w=>w.id),busy,paused,cursor,photoIndex,dwellMs:dwellFor(current?.message),controlCursor,controlReady,queuedControls:controlQueue.length};},get animation(){return activeAnimation;},get animations(){return [...animations];},sync});
+  resize();render(null);const firstPhotoIndex=photoIndex;preparePhoto(firstPhotoIndex).then(img=>{if(photoIndex===firstPhotoIndex&&!busy)applyPhoto(firstPhotoIndex,img);});for(let i=0;i<5;i++)void preparePhoto(i);pollPlayback().then(()=>sync().then(connect));setInterval(pollPlayback,2000);setInterval(()=>{if(!connected)void sync();},10000);setInterval(()=>{if(connected)void sync();},60000);
 })();

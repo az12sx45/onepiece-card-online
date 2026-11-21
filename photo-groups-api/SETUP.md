@@ -98,3 +98,12 @@ SQLite 檔案在每次交易成功時原子寫入；此模式在 `RENDER` 或 `N
 D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不能代替婚禮紀念冊的長期副本。婚禮前、活動結束後下載 CSV + 完整 JSON 到新人保管的位置。也可用 `npm run backup:d1 -- C:\private-backups\wedding.json` 備份三張資料表；此檔包含頭像與個資，勿加入 Git。該 CLI 原始表備份用於人工災難復原，網站 `/api/admin/import` 使用的格式是 `/api/admin/export.json`。
 
 [D1 Time Travel 官方說明](https://developers.cloudflare.com/d1/reference/time-travel/)。還原 Time Travel 會覆寫資料庫，不屬於日常匯出操作，執行前須另行確認。
+
+
+## 第二次畫面與控制調整（2026-11-22）
+
+新控制頁為 `/control.html`，電視 `/tv.html` 移除可見播放／管理鈕，完整展示書本；原五張新人合照每次翻頁完成輪替，閱讀停留為6秒＋每個Unicode grapheme 0.3秒，最多15秒，紙葉翻動仍1.1秒。電視本機雙擊或F11全螢幕；跨裝置指令無法替另一個瀏覽器提供全螢幕使用者手勢。控制台沿用原ADMIN_TOKEN，沒有新增帳號或金鑰。
+
+部署前必須先套用 `migrations/0002_playback_control.sql`。本次真正D1已成功套用並讀回；既有祝福與頭像筆數不變。`GET /api/playback` 初次回傳paused、latest、nextCursor且不重播歷史命令；之後使用 `?after=<nextCursor>&limit=100`，有hasMore時繼續讀。每個TV約2秒輪詢，使用nextCursor而不是自行猜序號；暫停狀態耐久保存、60秒以前的前後頁命令不補播。`POST /api/admin/playback` 必須Bearer原管理金鑰，JSON為action（pause/resume/next/prev/replay）及穩定requestId；相同key重試不重複新增指令。
+
+`name-lookup.js` 支援輸入名字查詢既有姓名雜湊，不附帶明文邀請名單；相同名字多身分時請補姓氏。原PAYLOAD與五張PIC完全保留。非漢字或未列入官方公開資料的特殊多字姓若無既有映射，仍應輸入完整姓名。

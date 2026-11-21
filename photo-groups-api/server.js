@@ -48,6 +48,7 @@ async function createApp(env=process.env){
   // Refuse to listen if credentials or schema are unusable, even when Render's
   // service still has its default TCP readiness check.
   await store.query('SELECT id FROM wishes LIMIT 0');
+  await store.query('SELECT id FROM playback_state WHERE id=1');
   const origins=new Set((env.ALLOWED_ORIGINS||'https://tantan-lily-photo-groups-2026.onrender.com').split(',').map(s=>s.trim()).filter(Boolean));
   const subscribers=new Set();let stopped=false,mutationTail=Promise.resolve(),polling=false;
   const serialize=fn=>{const task=mutationTail.then(fn);mutationTail=task.catch(()=>{});return task;};
@@ -69,6 +70,30 @@ async function createApp(env=process.env){
     res.setHeader('Access-Control-Expose-Headers','Retry-After, Content-Disposition');
   }
   async function meta(){return await one(store,'SELECT (SELECT COALESCE(MAX(id),0) FROM wishes) AS latest,(SELECT COALESCE(MAX(seq),0) FROM wish_events) AS cursor');}
+  async function playbackSnapshot(after,limit=100){
+    const state=await one(store,'SELECT paused,latest_id,updated_at FROM playback_state WHERE id=1');
+    if(!state)throw new Error('Playback state migration is missing.');
+    const info={paused:state.paused===1,latest:state.latest_id,updated_at:state.updated_at,persistent:true};
+    // A newly opened display starts at this watermark, rather than replaying
+    // every historical page-turn button. Pause/resume remains durable state.
+    if(after===undefined)return {...info,commands:[],hasMore:false,nextCursor:state.latest_id};
+    const result=await rows(store,'SELECT id,action,created_at FROM playback_commands WHERE id>? AND id<=? AND created_at>=? ORDER BY id ASC LIMIT ?',[after,state.latest_id,Date.now()-60000,limit+1]);
+    const commands=result.slice(0,limit),hasMore=result.length>limit;
+    return {...info,commands,hasMore,nextCursor:hasMore?commands.at(-1).id:state.latest_id};
+  }
+  async function playbackCommand(input){
+    const action=String(input.action||''),key=String(input.requestId||'');
+    if(!['pause','resume','next','prev','replay'].includes(action))throw new ApiError(400,'播放指令不正確');
+    if(!/^[A-Za-z0-9_-]{12,100}$/.test(key))throw new ApiError(400,'播放指令識別碼不正確');
+    return serialize(async()=>{
+      const existing=await one(store,'SELECT id,action,created_at FROM playback_commands WHERE request_key=?',[key]);
+      if(existing){if(existing.action!==action)throw new ApiError(409,'這個識別碼已用於其他播放指令');return {ok:true,duplicate:true,command:existing,state:await playbackSnapshot()};}
+      await store.query('INSERT OR IGNORE INTO playback_commands(action,request_key,created_at) VALUES(?,?,?)',[action,key,Date.now()]);
+      const saved=await one(store,'SELECT id,action,created_at FROM playback_commands WHERE request_key=?',[key]);
+      if(!saved||saved.action!==action)throw new ApiError(409,'播放指令識別碼衝突');
+      return {ok:true,duplicate:false,command:saved,state:await playbackSnapshot()};
+    });
+  }
   async function list(url,admin=false){
     const after=integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER,0),limit=integer(url.searchParams.get('limit'),1,200,200);
     // Capture a cursor before the snapshot. A concurrent insert may replay twice,
@@ -118,7 +143,11 @@ async function createApp(env=process.env){
     try{
       cors(req,res);if(req.method==='OPTIONS'){res.writeHead(204);res.end();return;}
       const url=new URL(req.url,'http://localhost');
-      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,storage:store.mode,...await meta()});return;}
+      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,playback:true,storage:store.mode,...await meta()});return;}
+      if(req.method==='GET'&&url.pathname==='/api/playback'){
+        const after=url.searchParams.has('after')?integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER):undefined;
+        json(res,200,await playbackSnapshot(after,integer(url.searchParams.get('limit'),1,100,100)));return;
+      }
       if(req.method==='GET'&&url.pathname==='/api/wishes'){json(res,200,await list(url));return;}
       if(req.method==='POST'&&url.pathname==='/api/wishes'){requireJson(req);const result=await insert(await readJson(req),req);json(res,result.duplicate?200:201,result);return;}
       const avatarMatch=url.pathname.match(/^\/api\/avatars\/(\d+)$/);
@@ -136,6 +165,8 @@ async function createApp(env=process.env){
       }
       if(url.pathname.startsWith('/api/admin/')){
         authorize(req);
+        if(req.method==='GET'&&url.pathname==='/api/admin/playback'){json(res,200,await playbackSnapshot());return;}
+        if(req.method==='POST'&&url.pathname==='/api/admin/playback'){requireJson(req);const result=await playbackCommand(await readJson(req));json(res,result.duplicate?200:201,result);return;}
         const adminAvatar=url.pathname.match(/^\/api\/admin\/avatars\/(\d+)$/);
         if(req.method==='GET'&&adminAvatar){const image=await one(store,'SELECT a.image_base64,a.mime_type FROM avatars a JOIN wishes w ON w.avatar_id=a.id WHERE w.id=?',[Number(adminAvatar[1])]);if(!image)throw new ApiError(404,'找不到照片');res.writeHead(200,{'Content-Type':image.mime_type});res.end(Buffer.from(image.image_base64,'base64'));return;}
         if(req.method==='GET'&&url.pathname==='/api/admin/wishes'){json(res,200,await list(url,true));return;}

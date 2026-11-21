@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5ece4"><meta name="robots" content="noindex,nofollow,noarchive"><title>仁鈞＆姮儒｜祝福書控制台</title><link rel="stylesheet" href="./control.css"><script src="./control.js" defer></script></head>
+<body>
+<main class="control-shell">
+  <header class="control-heading"><div><p class="eyebrow">RENJUN & HENGRU</p><h1>祝福書控制台</h1><p class="intro">電視只留下整本書，播放與留言管理都在這裡。</p></div><a class="tv-link" id="openTV" href="./tv.html" target="_blank" rel="noopener">開啟電視頁 ↗</a></header>
+  <section class="panel login-panel" id="loginPanel"><div class="lock-mark" aria-hidden="true">♡</div><h2>管理員登入</h2><p>使用既有的管理金鑰，從手機或另一個瀏覽器分頁控制電視。</p><form id="controlLogin"><label for="controlToken">管理金鑰</label><input id="controlToken" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" required placeholder="輸入 ADMIN_TOKEN"><button type="submit" id="unlock">解鎖控制台</button></form><p class="privacy-note">金鑰只保留在目前分頁的記憶體，不會寫入瀏覽器儲存。重整或關閉後需重新登入。</p></section>
+  <div id="controlPanel" hidden>
+    <section class="panel playback-panel" aria-label="電視播放控制"><div class="section-title"><div><p class="eyebrow">PLAYBACK</p><h2>播放控制</h2></div><button class="quiet" id="controlLogout" type="button">鎖定控制台</button></div><div class="playback-summary"><span class="connection-dot" id="connectionDot"></span><span id="playbackState">正在讀取播放設定…</span><span class="count" id="approvedCount">0 則公開祝福</span></div><div class="playback-buttons"><button type="button" data-action="prev">‹ 上一頁</button><button type="button" data-action="pause">暫停播放</button><button type="button" data-action="resume">繼續播放</button><button type="button" data-action="next">下一頁 ›</button><button type="button" data-action="replay" class="secondary">從第一頁重新播放</button></div><p class="hint">每頁依祝福字數停留約 6～15 秒；每次翻頁會換一張新人合照。電視頁保持開啟即可接收指令，正在翻頁時會先完成當次動畫。</p><p class="hint">新開啟的電視會沿用暫停／播放設定，不會重播以前按過的下一頁指令。全螢幕請在電視本機按 F11，或雙擊電視畫面；瀏覽器無法由另一台手機直接代按全螢幕。</p></section>
+    <section class="panel records-panel" aria-label="祝福管理與備份"><div class="section-title"><div><p class="eyebrow">MEMORIES</p><h2>祝福管理與備份</h2></div><button class="quiet" type="button" id="adminRefresh">重新載入</button></div><div class="export-buttons"><button type="button" id="adminCSV">匯出全部 CSV</button><button type="button" id="adminBackup">完整備份 JSON（含照片）</button></div><p class="hint">隱藏後會從電視移除，日後可重新公開。「刪除」保留為軟刪除紀錄；完整照片請以 JSON 備份。</p><div class="record-filters"><label><span>狀態</span><select id="statusFilter"><option value="all">全部紀錄</option><option value="approved">公開中</option><option value="pending">待審核</option><option value="hidden">已隱藏</option><option value="deleted">已刪除</option></select></label><label class="search-field"><span>搜尋署名或祝福</span><input id="wishSearch" type="search" placeholder="輸入關鍵字"></label></div><p id="recordSummary" class="record-summary"></p><div id="adminList"></div></section>
+  </div>
+  <p class="control-status" id="controlStatus" role="status" aria-live="polite">尚未解鎖</p>
+  <footer>仁鈞 ♡ 姮儒 · 珍藏每一份心意</footer>
+</main>
+</body></html>
