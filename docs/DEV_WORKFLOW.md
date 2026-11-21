@@ -9820,3 +9820,5 @@ photo-groups-api 改為 D1 REST 主儲存，獨立 avatars/wishes/wish_events �
 LATTICE API 未出現在本階段工具清單；官方 serve 接入未在期限內完成 initialize，未成功取得 runtime status／task API，不宣稱任務或圖譜持久寫入。
 
 婚禮翻頁補充：翻頁前解碼即將顯示的實際頭像 DOM，翻頁完成時移動同一張紙面而不重建 no-store 圖片；每分鐘同步若內容未改則保留當前頁，避免背景重取造成頭像跳動。驗證仍使用相同 Playwright 整合流程。
+
+婚禮部署補充：正式建置 audit 發現 sharp 0.34.5 上游解碼器弱點，更新鎖定 0.35.5／Node >=20.9.0；針對婚禮 API npm audit 為 0、8 項 API 測試重新通過。Render API 根目錄調整為 photo-groups-api，使用 npm ci 與 node server.js，只打包婚禮服務。

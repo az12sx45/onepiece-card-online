@@ -2,6 +2,8 @@
 
 此服務僅供 `photo-groups-2026` 婚禮分支使用，與遊戲 main、遊戲 PostgreSQL 完全分開。v2 沒有記憶體資料庫後備模式：Render 必須連上 D1，資料庫失敗回傳 503，不能顯示「已送出」。
 
+2026-11-22 部署時實際發現 sharp 0.34.5 的上游解碼器安全公告，已依 [sharp 官方公告](https://github.com/lovell/sharp/security/advisories/GHSA-wq5f-xc86-pv6w) 更新並鎖定 0.35.5（Node 至少 20.9.0），重新產生 lock；針對此 API 的 `npm audit` 已回報 0 個弱點。sql.js 1.13.0 不在這次弱點清單，保留原版本。解碼與持久化測試須使用更新後的套件重跑，Render 亦須部署含此 lock 的版本。
+
 ## 儲存與免費額度
 
 正式架構為原 Render Node API → Cloudflare D1 REST API。祝福文字、審核狀態、唯一送出識別碼與 SSE 事件序號永久寫入 D1；480×480、最多 150 KB 的 JPEG 頭像以 base64 放在獨立 `avatars` 表，避免開通 R2 訂閱。169 張頭像即使每張達上限，加上 base64 約 34 MB。所有公開清單只取文字及頭像路徑，不將圖片塞進每次 SSE。
@@ -23,7 +25,7 @@
 2. 取得該帳戶的 Account ID、該 D1 的 Database ID。在 API Tokens 建立自訂 token，權限為 Account → D1 → Edit（API 名稱 D1 Write），範圍只選婚禮所在帳戶。Token 只交給 Render 私密環境變數，不貼入 GitHub、網頁或聊天。
 3. 在既有婚禮 Render API 服務設定 `.env.example` 所列變數：`STORAGE_MODE=d1`、`CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_DATABASE_ID`、`CLOUDFLARE_API_TOKEN`、`PUBLIC_API_URL`、`ALLOWED_ORIGINS`、隨機且至少 24 字元的 `ADMIN_TOKEN`。管理 token 不可與 Cloudflare token 相同。
 4. 在可信終端以相同私密環境執行 `npm ci`、`npm run migrate:d1`。遷移只會建立尚不存在的表與索引，會讀回三張表核驗。或只在首次受控部署設定 `D1_AUTO_MIGRATE=true`，確認成功後關閉。
-5. API 的 Render Build Command 使用 `npm ci --prefix photo-groups-api`；Start Command 使用 `node photo-groups-api/server.js`（若 Root Directory 已為 `photo-groups-api`，分別用 `npm ci` 與 `npm start`）。Node 20 以上。
+5. 婚禮 API 的 Render Root Directory 設為 `photo-groups-api`，Build Command 使用 `npm ci`，Start Command 使用 `node server.js`，Node 至少 20.9.0。這讓婚禮服務只建置及部署 API 子目錄，避免打包遊戲內容。只有維護舊的儲存庫根目錄設定時，才使用 `npm ci --prefix photo-groups-api` 與 `node photo-groups-api/server.js` 這組替代命令，兩種設定不可混用。
 6. 部署後讀 `/health`，必須為 HTTP 200、`version:2`、`persistent:true`、`storage:"d1"`。再完成一筆有授權的測試祝福，重啟服務後讀回同一 id，才能宣稱正式 D1 持久化驗收通過。
 7. `RUN_D1_INTEGRATION=1 npm test` 會啟用真正 D1 schema 讀回測試。未設定時明確 SKIP，不能將本機 SQLite 或 REST 格式測試稱作雲端 D1 驗收。
 
