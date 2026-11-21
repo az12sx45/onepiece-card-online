@@ -96,7 +96,8 @@ const server=http.createServer(async(req,res)=>{
    if(/(?:https?:\/\/|www\.|[A-Za-z0-9_-]{15,}\.(?:com|net|xyz|tw))/i.test(message)){
       json(res,400,{error:'祝福內容請不要放網址'});return;
    }
-   const wait=checkRate(ipHash(req));
+   // Limit each visible author per IP, so many guests using the venue Wi-Fi do not block each other.
+   const wait=checkRate(ipHash(req)+'|'+author.toLocaleLowerCase('zh-TW'));
    if(wait){json(res,429,{error:'祝福已收到，請稍後再送另一則',retryAfter:wait});return}
    const wish={id:++serial,author,message,style,group,at:Date.now()};
    entries.push(wish);
