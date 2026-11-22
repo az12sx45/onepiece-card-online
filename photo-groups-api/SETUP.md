@@ -6,7 +6,7 @@
 
 ## 目前正式狀態（2026-11-22 台北時間）
 
-婚禮靜態站版本 `542ab393f9de740d5682fd14d8a8b7473e617c47` 與 API 版本 `ee5ccbd00525172034c706c6da79422304cf5ee8` 已在原網址 Live；兩版的 API 程式與 migration 完全一致。最新靜態部署 `dep-dc1488rl550s73dc3flg` 於台北09:24:53完成。API `/health` 實際回傳 `version:2`、`persistent:true`、`storage:"d1"`、`playback:true`。已設定受限 D1 長期權杖與獨立 ADMIN_TOKEN，兩個婚禮服務均維持免費，沒有開通 R2 或新增付費方案。
+婚禮靜態站版本 `f49c05e626bf24ca5f72a6016a25d3b80f46697f` 與 API 版本 `5755b731afee9fac450eeff6cc8512573e833a0d` 已在原網址 Live；兩版的 API 可執行程式與 migration 完全一致。靜態部署 `dep-dc158nrl550s73df6hqg` 於台北10:34:07完成，API `dep-dc150f2jnfac73fnfl00` 於10:26:36完成。API `/health` 已實際讀回 `version:2`、`persistent:true`、`storage:"d1"`、`avatar_gender:true`。已設定受限 D1 長期權杖與獨立 ADMIN_TOKEN，兩個婚禮服務均維持Free，沒有開通 R2 或升級付費方案。現在提供自然比例相框、自選圓形裁切及男／女空輪廓，實際驗收結果按下方各次紀錄區分。
 
 已在正式網址以 5 筆明確標記的系統祝福驗證 SSE 排隊、單人翻頁與五個進度截圖；另以 WebKit 手機模擬完成自拍圖片→API→D1→SSE→電視。管理介面授權與隱藏、CSV／含頭像 JSON 匯出通過；共 6 筆系統測試紀錄已隱藏，沒有刪除資料。2026-11-22 02:20:02 執行 Render Restart service，02:20:56 重新讀回全部 6 筆與 480×480 JPEG 頭像，維持隱藏。正式公開頁目前沒有系統測試留言。
 
@@ -38,7 +38,7 @@
 1. 使用者登入 [Cloudflare Dashboard](https://dash.cloudflare.com/)，確認使用 Workers Free；在 Storage & databases → D1 開啟上述既有婚禮資料庫，不要重複建立。不要使用遊戲的任何資料庫。
 2. 取得該帳戶的 Account ID、該 D1 的 Database ID。在 API Tokens 建立自訂 token，權限為 Account → D1 → Edit（API 名稱 D1 Write），範圍只選婚禮所在帳戶。Token 只交給 Render 私密環境變數，不貼入 GitHub、網頁或聊天。
 3. 在既有婚禮 Render API 服務設定 `.env.example` 所列變數：`STORAGE_MODE=d1`、`CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_DATABASE_ID`、`CLOUDFLARE_API_TOKEN`、`PUBLIC_API_URL`、`ALLOWED_ORIGINS`、隨機且至少 24 字元的 `ADMIN_TOKEN`。管理 token 不可與 Cloudflare token 相同。
-4. 在可信終端以相同私密環境執行 `npm ci`、`npm run migrate:d1`。遷移只會建立尚不存在的表與索引，會讀回三張表核驗。或只在首次受控部署設定 `D1_AUTO_MIGRATE=true`，確認成功後關閉。
+4. 在可信終端以相同私密環境執行 `npm ci`、`npm run migrate:d1`。遷移依序套用尚未存在的表／索引，並探測後新增相容的 `avatar_gender` 欄位；讀回五張業務表與欄位核驗，可重跑。或只在首次受控部署設定 `D1_AUTO_MIGRATE=true`，確認成功後關閉。
 5. 婚禮 API 的 Render Root Directory 設為 `photo-groups-api`，Build Command 使用 `npm ci`，Start Command 使用 `node server.js`，Node 至少 20.9.0。這讓婚禮服務只建置及部署 API 子目錄，避免打包遊戲內容。只有維護舊的儲存庫根目錄設定時，才使用 `npm ci --prefix photo-groups-api` 與 `node photo-groups-api/server.js` 這組替代命令，兩種設定不可混用。
 6. 部署後讀 `/health`，必須為 HTTP 200、`version:2`、`persistent:true`、`storage:"d1"`。再完成一筆有授權的測試祝福，重啟服務後讀回同一 id，才能宣稱正式 D1 持久化驗收通過。
 7. `RUN_D1_INTEGRATION=1 npm test` 會啟用真正 D1 schema 讀回測試。未設定時明確 SKIP，不能將本機 SQLite 或 REST 格式測試稱作雲端 D1 驗收。
@@ -141,3 +141,5 @@ D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不�
 新版API `5755b731afee9fac450eeff6cc8512573e833a0d`／`dep-dc150f2jnfac73fnfl00` 於台北10:26:36 Live；10:27:39純GET確認health的avatar_gender:true／storage:d1／persistent:true，以及公開id7/8/9（舊紀錄均unspecified）。本輪沒有新增正式測試留言。
 
 翻頁照片解碼加入8秒期限與一致fallback：新圖失敗時，紙葉背面及落頁都保留實際已載的同一張照片，晚圖不會突然覆蓋；完全沒有可用圖時先不翻，保留待播放順序。定向4/4通過（3秒延遲、HTTP失敗重試、10.5秒晚到、無圖恢復），未重跑無關測試；首次測試器誤等load而被hold圖片阻塞的失敗記錄保留。
+
+第四輪正式靜態 `f49c05e626bf24ca5f72a6016a25d3b80f46697f`／`dep-dc158nrl550s73df6hqg` 於台北10:34:07 Live。10:35:33完成正式唯讀7/7：16靜態檔／SVG與Git相同、五原照、三種16:9雙向30階段與完整背頁、真公開署名對原PAYLOAD查組別、WebKit三預設與拖曳縮放／確認／移除均通過。19張正式截圖保留；公開7/8/9及共用播放狀態前後一致，61次GET、0 POST、0瀏覽器錯誤。正式這輪沒有新增測試留言；完整手機送出→API/SQLite/SSE→TV寫入、重送與重啟驗證使用前述獨立本機環境，不能冒稱本輪已做正式POST或實體iPhone驗收。
