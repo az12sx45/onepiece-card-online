@@ -10,7 +10,9 @@ async function main(){
     const result=await store.query("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('wishes','avatars','wish_events','playback_state','playback_commands') ORDER BY name");
     const tables=result[0]?.results?.map(r=>r.name)||[];
     if(tables.length!==5)throw new Error('Migration read-back incomplete');
-    console.log(JSON.stringify({ok:true,storage:'d1',tables}));return;
+    const column=(await store.query('PRAGMA table_info(wishes)'))[0]?.results?.find(c=>c.name==='avatar_gender');
+    if(!column)throw new Error('Avatar gender column read-back incomplete');
+    console.log(JSON.stringify({ok:true,storage:'d1',tables,avatar_gender:{type:column.type,notnull:column.notnull,default:column.dflt_value}}));return;
   }
   if(command==='backup'){
     const target=process.argv[3];if(!target)throw new Error('Usage: npm run backup:d1 -- <private-output.json>');

@@ -2,7 +2,27 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const initSqlJs = require('sql.js');
-const SCHEMA = fs.readdirSync(path.join(__dirname,'migrations')).filter(name=>/^\d+_.*\.sql$/.test(name)).sort().map(name=>fs.readFileSync(path.join(__dirname,'migrations',name),'utf8')).join('\n');
+const MIGRATIONS = fs.readdirSync(path.join(__dirname,'migrations')).filter(name=>/^\d+_.*\.sql$/.test(name)).sort().map(name=>({name,sql:fs.readFileSync(path.join(__dirname,'migrations',name),'utf8')}));
+async function avatarGenderSchemaReady(store){
+  const columns=(await store.query('PRAGMA table_info(wishes)'))[0]?.results||[];
+  const column=columns.find(c=>c.name==='avatar_gender');
+  if(!column)return false;
+  const table=(await store.query("SELECT sql FROM sqlite_master WHERE type='table' AND name='wishes'"))[0]?.results?.[0]?.sql||'';
+  if(String(column.type).toUpperCase()!=='TEXT'||column.notnull!==1||column.dflt_value!=="'unspecified'"||! /CHECK\s*\(\s*avatar_gender\s+IN\s*\(\s*'male'\s*,\s*'female'\s*,\s*'unspecified'\s*\)\s*\)/i.test(table))throw new Error('Existing avatar_gender schema is incompatible; no guest records were changed.');
+  return true;
+}
+async function migrateStore(store){
+  for(const migration of MIGRATIONS){
+    // The original two migrations use IF NOT EXISTS. SQLite has no matching
+    // ADD COLUMN syntax, so probe the actual schema before applying 0003.
+    if(migration.name==='0003_avatar_gender.sql'){
+      if(await avatarGenderSchemaReady(store))continue;
+      try{await store.executeSchema(migration.sql);}
+      catch(error){if(!await avatarGenderSchemaReady(store))throw error;}
+      if(!await avatarGenderSchemaReady(store))throw new Error('Avatar gender migration read-back incomplete.');
+    }else await store.executeSchema(migration.sql);
+  }
+}
 
 class D1Store {
   constructor(env) {
@@ -26,7 +46,8 @@ class D1Store {
     if(!response.ok || !data.success || data.result?.some(r=>!r.success)) throw new Error('Persistent database transaction failed.');
     return data.result || [];
   }
-  async migrate(){return this.query(SCHEMA);}
+  async executeSchema(sql){return this.query(sql);}
+  async migrate(){return migrateStore(this);}
   async close(){}
 }
 
@@ -52,7 +73,8 @@ class LocalStore {
     try{const results=statements.map(s=>this.run(s.sql,s.params||[]));this.db.run('COMMIT');this.save();return results;}
     catch(e){this.db.run('ROLLBACK');throw e;}
   }
-  async migrate(){this.db.run(SCHEMA);this.save();}
+  async executeSchema(sql){this.db.run(sql);this.save();}
+  async migrate(){return migrateStore(this);}
   async close(){this.save();this.db.close();}
 }
 async function createStore(env=process.env){
@@ -67,4 +89,4 @@ async function createStore(env=process.env){
   db.run('PRAGMA foreign_keys=ON');
   const store=new LocalStore(db,file);await store.migrate();return store;
 }
-module.exports={createStore,D1Store,SCHEMA};
+module.exports={createStore,D1Store,MIGRATIONS};

@@ -1,6 +1,7 @@
 (() => {
   'use strict';
   const API='https://renjun-hengru-wishes-live-2026.onrender.com',DEFAULT='./assets/default-avatar.svg';
+  const defaultAvatar=gender=>gender==='male'?'./assets/default-avatar-male.svg':gender==='female'?'./assets/default-avatar-female.svg':DEFAULT;
   const $=id=>document.getElementById(id),labels={approved:'公開中',pending:'待審核',hidden:'已隱藏',deleted:'已刪除'},actionLabels={pause:'暫停',resume:'繼續播放',next:'下一頁',prev:'上一頁',replay:'重新播放'};
   let token='',records=[],posting=false,pendingCommand=null,statePoll=null,polling=false,loadGeneration=0;
   const images=new Set();let observer;
@@ -48,7 +49,7 @@
     $('adminList').replaceChildren();$('recordSummary').textContent='顯示 '+shown.length+' / '+records.length+' 則紀錄（包含隱藏與軟刪除）';$('approvedCount').textContent=records.filter(w=>w.moderation_status==='approved').length+' 則公開祝福';
     if(!shown.length){$('adminList').append(text('p','empty-records','這個篩選條件目前沒有祝福紀錄。'));return;}
     for(const w of shown.slice().reverse()){
-      const row=text('article','admin-entry');row.dataset.wishId=String(w.id);const img=document.createElement('img');img.src=DEFAULT;img.alt=String(w.author)+' 的頭像';img.width=62;img.height=62;
+      const row=text('article','admin-entry');row.dataset.wishId=String(w.id);const img=document.createElement('img');img.src=defaultAvatar(w.avatar_gender);img.alt=String(w.author)+' 的頭像';img.width=62;img.height=62;
       const body=text('div'),name=text('div','entry-name',w.author);name.append(text('span','status-badge '+w.moderation_status,labels[w.moderation_status]||w.moderation_status));
       body.append(name,text('p','entry-meta','第 '+w.group+' 組 · '+new Date(w.at||w.created_at).toLocaleString('zh-TW')),text('p','entry-message',w.message));
       const buttons=text('div','entry-buttons');

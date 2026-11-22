@@ -3,6 +3,8 @@
   'use strict';
   const API = 'https://renjun-hengru-wishes-live-2026.onrender.com';
   const DEFAULT_AVATAR = './assets/default-avatar.svg';
+  const DEFAULT_AVATARS={male:'./assets/default-avatar-male.svg',female:'./assets/default-avatar-female.svg',unspecified:DEFAULT_AVATAR};
+  const defaultAvatar=w=>DEFAULT_AVATARS[w?.avatar_gender]||DEFAULT_AVATAR;
   const TURN = 1100;
   const segmenter=new Intl.Segmenter('zh-TW',{granularity:'grapheme'});
   const dwellFor=message=>Math.round(Math.min(15000,Math.max(6000,6000+[...segmenter.segment(String(message||'').normalize('NFC'))].length*300)));
@@ -27,14 +29,15 @@
     const at = Number(w.at) || Date.parse(w.created_at) || 0;
     return { ...w, id:String(w.id), author:String(w.author ?? w.guest_name ?? '賓客'), message:String(w.message ?? w.blessing_text), group:Number(w.group ?? w.group_number)||1, style:Number(w.style ?? w.style_id)||1, at };
   }
-  function safeAvatar(path) {
-    if (typeof path !== 'string' || !path) return DEFAULT_AVATAR;
-    try { const u = new URL(path, API); return u.origin === new URL(API).origin && /^\/api\/avatars\/[\w-]+$/.test(u.pathname) ? u.href : DEFAULT_AVATAR; } catch { return DEFAULT_AVATAR; }
+  function safeAvatar(path,fallback) {
+    if (typeof path !== 'string' || !path) return fallback;
+    try { const u = new URL(path, API); return u.origin === new URL(API).origin && /^\/api\/avatars\/[\w-]+$/.test(u.pathname) ? u.href : fallback; } catch { return fallback; }
   }
   function avatar(w) {
     const img = element('img','guest-avatar'); img.alt = w ? w.author + ' 的頭像' : '婚禮花卉愛心預設頭像';
-    img.src = w ? safeAvatar(w.avatar_path || w.avatar_id && '/api/avatars/'+w.avatar_id) : DEFAULT_AVATAR;
-    img.onerror = () => { img.onerror = null; img.src = DEFAULT_AVATAR; };
+    const fallback=defaultAvatar(w);img.dataset.defaultAvatar=fallback;
+    img.src = w ? safeAvatar(w.avatar_path || w.avatar_id && '/api/avatars/'+w.avatar_id,fallback) : fallback;
+    img.onerror = () => { img.onerror = null; img.src = fallback; };
     return img;
   }
   function page(w) {
@@ -72,8 +75,15 @@
     await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
     return img.naturalWidth?img:null;
   }
+  function layoutPhoto(printed,img,index){
+    const ratio=img.naturalWidth/img.naturalHeight;
+    const portrait=ratio<.95;
+    printed.dataset.photoIndex=String(index);printed.dataset.photoOrientation=portrait?'portrait':'landscape';
+    printed.style.setProperty('--photo-ratio',String(ratio));
+    printed.style.setProperty('--photo-width',(portrait?340:Math.min(620,360*ratio))+'px');
+  }
   function mountPhoto(index,img){
-    if(img){$('couplePhotoMount').replaceChildren(img);$('leftPage').dataset.photoIndex=String(index);}
+    if(img){layoutPhoto($('leftPage'),img,index);$('couplePhotoMount').replaceChildren(img);}
   }
   function applyPhoto(index,img){
     if(!img)return;
@@ -92,12 +102,13 @@
     img.src=PHOTO_FILES[index];img.dataset.photoIndex=String(index);
     img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';
     await img.decode().catch(()=>{});
+    if(img.naturalWidth)layoutPhoto(printed,img,index);
     return printed;
   }
   async function preload(preparedPage) {
     const img=preparedPage.querySelector('.guest-avatar');
     await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
-    if(!img.naturalWidth){img.src=DEFAULT_AVATAR;await img.decode().catch(()=>{});}
+    if(!img.naturalWidth){img.onerror=null;img.src=img.dataset.defaultAvatar||DEFAULT_AVATAR;await img.decode().catch(()=>{});}
   }
   async function turnTo(next, direction=1, forcedPhoto) {
     if(busy || !next) { schedule(); return; }

@@ -9851,3 +9851,11 @@ QA曾誤用cwd產生兩個暫存檔；測試工具已改絕對基準。自動核
 第三次正式靜態542ab39／dep-dc1488rl550s73dc3flg於台北09:24:53 Live。正式初驗API GET逾時；獨立瀏覽器503 Render Application loading，直接D1唯讀仍9祝福／3頭像／21事件、外鍵正常、0寫入，現有id1～6deleted與7～9approved保持。原婚禮API同版重啟後於09:41:06 health/wishes均200、三則公開id讀回；其間曾發出相同API可執行程式的備援建置dep-dc14ebou01pc738o4fog，原服務先恢復，因此09:41:55在build/upload階段取消，API仍ee5ccbd／dep-dc0uhld9fdbs739650ug Live，無未完成部署，未升級方案或改D1。錯誤及載入觀測報告完整保留。
 
 台北09:45:03正式唯讀Playwright 11/11 PASS：三個產品檔對Git、四個16:9視窗與雙向五階段、完整新人背頁、五照片輪替與QR均通過；14張正式PNG含雙向0/25/50/75/100%與四張完整書本。公開id前後7/8/9、24次瀏覽器請求均GET、0寫入。正式HTTP相片由CDN Polish重壓縮（cf-polished ok/orig_size可讀），並非byte exact；原Git/PIC SHA全同，HTTP同方向sRGB解碼尺寸一致、PSNR40.57～45.08dB／MAE0.82～1.35，依原始檔保留加CDN內容品質檢查通過。首次API逾時與第二輪HTTP圖片hash FAIL未覆寫或改標；修正驗收條件不等於產品圖檔變更。main仍cf296d、遊戲部署仍dep-dc00b40u01pc73b83jt0；真機與現場掃描界線保留，資料與憑證不進Git。
+
+## 2026-11-22：自然比例相框、預設輪廓與自選圓形頭像
+
+本輪澄清保留原相框／膠帶／陰影，依原照自然比例安排：橫式上圖下文、直式照片與姓名QR並排，框內無額外留白、無拉伸或裁掉合照；5圖原bytes與姓名PAYLOAD/PIC不變。大書本、原網址、雙面完整新人紙張與字數播放規則保留。
+
+手機鼓勵今天的漂亮帥氣照片及祝福／短經文，仍30graphemes；圓形取景可拖曳／縮放／重設／取消／確認，修EXIF後先縮來源最長邊1600於記憶體，確認才出480JPEG、重勾公開同意，TV圓框與手機同範圍。兩款SVG男／女無五官頭肩空輪廓、標示尚未上傳；avatar_gender選填三值，自拍優先、不依名字推測，未選用中性。API/SSE/CSV/JSON還原及控制台接上欄位；unspecified沿用v2 request hash與pending UUID相容，health宣告能力防靜態先接舊API。
+
+0003以欄位probe後ADD COLUMN DEFAULT unspecified+CHECK enum，不重建／重寫表；migrate入口可重跑，舊欄型態不相容時拒絕。真正D1前後9wishes/3avatars/21events/1playback_state/5commands之既有欄值摘要全同，外鍵正常；舊列預設unspecified，不復原6筆既有soft-delete。API本機13PASS／1明示直接D1 token測試SKIP；UI整合15PASS/0FAIL，30雙向frames與真local SQLite/SSE/重啟、圓形裁切pixels、EXIF、預設回復、同UUID失去回應重試只有一筆、30/31字、CSV/backup、能力與編碼鎖定都有實跑。首次QA啟動錯誤保留；WebKit模擬不冒稱真機。正式API先、靜態後，Live紀錄另列。

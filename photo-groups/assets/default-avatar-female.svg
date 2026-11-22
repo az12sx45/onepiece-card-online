@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480" role="img" aria-labelledby="title desc">
+<title id="title">女士輪廓預設頭像</title><desc id="desc">尚未上傳照片的空白頭肩線條輪廓，沒有五官。</desc>
+<defs><radialGradient id="paper"><stop stop-color="#fffdf5"/><stop offset="1" stop-color="#f1e0d7"/></radialGradient></defs>
+<circle cx="240" cy="240" r="240" fill="url(#paper)"/><circle cx="240" cy="240" r="211" fill="none" stroke="#cbb88e" stroke-width="2"/><circle cx="240" cy="240" r="198" fill="none" stroke="#e0cdbb"/>
+<g fill="none" stroke="#97a68a" stroke-width="2.6" stroke-linecap="round"><path d="M104 306q-28-77 22-144M376 306q28-77-22-144"/><path d="M101 275q-27-12-16-34q24 10 16 34m0-55q-17-21 4-38q17 18-4 38M379 275q27-12 16-34q-24 10-16 34m0-55q17-21-4-38q-17 18 4 38" fill="#a6b199" fill-opacity=".25"/></g>
+<g fill="none" stroke="#b77e8b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M176 272q-12-41-6-94q5-71 70-71t70 71q6 53-6 94M196 174q29-3 45-28q14 24 43 28v25q0 43-44 57q-44-14-44-57Z"/><path d="M216 252v27l-47 20q-28 11-31 43M264 252v27l47 20q28 11 31 43M216 279q24 30 48 0"/></g>
+<path d="M159 354h162" stroke="#d3bc95" stroke-width="1.5"/><text x="240" y="385" text-anchor="middle" fill="#9b7d68" font-family="Microsoft JhengHei,PingFang TC,sans-serif" font-size="20" letter-spacing="2">尚未上傳照片</text>
+</svg>

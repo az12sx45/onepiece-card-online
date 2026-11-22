@@ -17,13 +17,23 @@
 .display-only .book-scale{height:860px;perspective:none}
 .display-only .book{height:860px;perspective:10000px}
 .display-only .ribbon{bottom:-36px;height:42px}
-.couple-photo{width:520px;height:390px;margin:16px auto 0;padding:0;border:0;background:none;box-shadow:none;transform:none}
-.couple-photo:before,.couple-photo:after{display:none}
-.couple-photo img{object-fit:cover;object-position:50% 50%;background:none}
-.couple-photo img[data-photo-index="0"]{object-position:55% 50%}
-.couple-photo img[data-photo-index="1"]{object-position:50% 30%}
-.couple-photo img[data-photo-index="2"]{object-position:50% 70%}
-.left-page h1{margin-top:20px}
+.left-page{padding-inline:48px}
+.couple-layout{display:grid;grid-template-rows:405px auto;justify-items:center;align-items:center;margin-top:10px}
+.couple-copy{width:100%;min-width:0}
+.couple-photo{width:calc(var(--photo-width,480px) + 22px);height:auto;margin:0;padding:10px;border:1px solid #e3d9c7;background:#fffefb;box-shadow:3px 8px 18px #846e5120;transform:rotate(-2deg)}
+.couple-photo:before,.couple-photo:after{display:block}
+.couple-photo img{display:block;width:100%;height:auto;aspect-ratio:var(--photo-ratio,1.3333333333);object-fit:contain;object-position:center;background:none}
+.left-page h1{margin-top:14px}
 .couple-note{margin-bottom:18px}
+.left-page[data-photo-orientation="portrait"] .couple-layout{grid-template-columns:360px minmax(0,1fr);grid-template-rows:1fr;column-gap:24px;min-height:700px;margin-top:20px}
+.left-page[data-photo-orientation="portrait"] .couple-copy{align-self:center}
+.left-page[data-photo-orientation="portrait"] h1{font-size:42px;letter-spacing:.09em;white-space:nowrap;margin:0 0 12px}
+.left-page[data-photo-orientation="portrait"] h1 span{font-size:32px;margin:0 6px}
+.left-page[data-photo-orientation="portrait"] .couple-note{font-size:16px;line-height:1.8;letter-spacing:.06em;max-width:290px;margin:0 auto 22px}
+.left-page[data-photo-orientation="portrait"] .join-us{flex-direction:column;gap:18px}
+.left-page[data-photo-orientation="portrait"] .join-copy{text-align:center}
+.left-page[data-photo-orientation="portrait"] .join-copy h2{font-size:30px;margin:8px 0}
+.left-page[data-photo-orientation="portrait"] .join-copy p{font-size:19px;line-height:1.7}
+.left-page[data-photo-orientation="portrait"] .tiny-heart{margin-top:8px}
 .sheet-back>.turning-couple-page{inset:0;width:100%;height:100%}
 .display-only .toast{bottom:24px}

@@ -8,6 +8,11 @@
 .selfieActions button:disabled{opacity:.55;cursor:wait}
 .selfieActions button[hidden]{display:none}
 .selfieHelp{font-size:12px;line-height:1.8;color:#877782;margin:12px 0 0}
+.avatarChoice{max-width:320px;margin:17px auto 0;text-align:left;padding-top:14px;border-top:1px solid #eaded5}
+.avatarChoice label{display:block;font-size:14px;line-height:1.6;color:#735e67;font-weight:700;margin-bottom:7px}
+.avatarChoice select{display:block;width:100%;min-height:46px;border:1px solid #d8c5b7;border-radius:11px;background:#fff;color:#735e67;padding:10px 12px;font-family:inherit;font-size:16px;line-height:1.5;accent-color:#a95e70}
+.avatarChoice select:focus-visible{outline:3px solid #d9a2b0;outline-offset:2px}
+.avatarChoice p{font-size:12px;color:#8a7c7e;line-height:1.7;margin:7px 0 0}
 .selfieStatus{font-size:14px;line-height:1.6;color:#975566;margin:10px 0 0;min-height:1.6em}
 .wishConsent{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:14px;line-height:1.8;color:#735e67;padding:14px 12px;margin:17px 0 0;background:#fff8f2;border:1px solid #ecdfd3;border-radius:12px;cursor:pointer}
 .wishConsent input{flex:none;width:20px;height:20px;margin:3px 0 0;accent-color:#ad6474}
@@ -18,4 +23,25 @@
 .wishStyles summary:focus-visible,.selfieActions button:focus-visible{outline:3px solid #b8667b;outline-offset:3px}
 .wishPreview .wishFrame{min-height:230px}
 .visuallyHiddenInput{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
+.cropDialog{box-sizing:border-box;width:min(430px,calc(100vw - 24px));max-height:calc(100dvh - 28px);padding:20px;border:1px solid #d2b88f;border-radius:22px;background:#fffaf4;color:#66505b;box-shadow:0 22px 80px #2e17274d;overflow-y:auto;font-family:inherit}
+.cropDialog::backdrop{background:#34272e9e;backdrop-filter:blur(3px)}
+.cropHeading{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}
+.cropHeading h2{margin:2px 0 0;font-size:21px;line-height:1.5;font-weight:800;color:#965d6c}
+.cropHeading button{flex:none;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:#f3e4df;color:#885d67;font:26px/1 inherit;cursor:pointer}
+.cropHint{font-size:13px;line-height:1.8;margin:10px 0 15px;color:#87757b}
+.cropStage{position:relative;width:min(340px,100%);aspect-ratio:1;margin:0 auto;overflow:hidden;border-radius:12px;background:#e9ddd5;user-select:none;-webkit-user-select:none}
+.cropStage canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab;outline-offset:-3px}
+.cropStage canvas:active{cursor:grabbing}
+.cropStage canvas:focus-visible{outline:3px solid #d8af73}
+.cropMask{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle closest-side,transparent 98.5%,#fff6df 99%,#fff6df 100%,#35282dbd 100.5%)}
+.cropZoomLabel{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:#8a6c74;margin:17px 1px 4px}
+.cropZoomLabel span:nth-child(2){font-weight:700;font-variant-numeric:tabular-nums}
+.cropZoom{width:100%;margin:0;min-height:40px;accent-color:#ab6e7a;touch-action:pan-x}
+.cropStatus{min-height:1.6em;margin:4px 0 9px;color:#a24d5f;font-size:13px;line-height:1.6}
+.cropActions{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:8px}
+.cropActions button{min-height:46px;border:1px solid #d9b6b4;border-radius:12px;background:#fffdf8;color:#8a5a67;font-family:inherit;font-size:15px;font-weight:700;padding:9px 7px;cursor:pointer}
+.cropActions button.cropConfirm{border-color:#a96576;background:#a96576;color:#fff}
+.cropActions button:disabled{opacity:.55;cursor:wait}
+.cropActions button:focus-visible,.cropHeading button:focus-visible{outline:3px solid #d8af73;outline-offset:2px}
+@media(max-height:720px){.cropDialog{padding:15px}.cropStage{width:min(270px,100%)}.cropHint{margin:7px 0 10px}.cropZoomLabel{margin-top:10px}.cropStatus{margin:0 0 5px}}
 @media(max-width:400px){.selfieArea{padding:15px 10px}.selfieActions{gap:7px}.selfieActions button{padding:10px}}

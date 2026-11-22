@@ -17,6 +17,8 @@ async function one(store,sql,params=[]){return (await rows(store,sql,params))[0]
 async function normalizeWish(input,{importing=false}={}){
   const author=clean(input.guest_name??input.author),message=clean(input.blessing_text??input.message);
   const style=integer(input.style_id??input.style,1,10,1),group=integer(input.group_number??input.group,1,15);
+  const avatarGender=input.avatar_gender===undefined?'unspecified':input.avatar_gender;
+  if(!['male','female','unspecified'].includes(avatarGender))throw new ApiError(400,'請重新選擇預設頭像');
   if(countText(author)<1||countText(author)>20||[...author].length>100)throw new ApiError(400,'署名請填 1～20 字');
   const graphemes=countText(message);
   if(graphemes<1||graphemes>30||[...message].length>300)throw new ApiError(400,'祝福最多 30 字（Emoji 算一字）');
@@ -40,20 +42,24 @@ async function normalizeWish(input,{importing=false}={}){
   }
   const key=String(input.idempotencyKey??input.submission_key??'');
   if(key&&!/^[A-Za-z0-9_-]{12,100}$/.test(key))throw new ApiError(400,'送出識別碼不正確');
-  return {author,message,graphemes,style,group,image,key:key||`legacy_${crypto.randomUUID()}`,requestHash:hash(JSON.stringify({author,message,style,group,avatar:image?.id||null}))};
+  const content={author,message,style,group,avatar:image?.id||null};
+  // The default has the same meaning as the field absent in v2 submissions.
+  // Keep that canonical hash unchanged so old pending UUID retries stay valid.
+  if(avatarGender!=='unspecified')content.avatar_gender=avatarGender;
+  return {author,message,graphemes,style,group,image,avatarGender,key:key||`legacy_${crypto.randomUUID()}`,requestHash:hash(JSON.stringify(content))};
 }
 async function createApp(env=process.env){
   const store=await createStore(env);
   if(env.D1_AUTO_MIGRATE==='true'&&store.mode==='d1')await store.migrate();
   // Refuse to listen if credentials or schema are unusable, even when Render's
   // service still has its default TCP readiness check.
-  await store.query('SELECT id FROM wishes LIMIT 0');
+  await store.query('SELECT id,avatar_gender FROM wishes LIMIT 0');
   await store.query('SELECT id FROM playback_state WHERE id=1');
   const origins=new Set((env.ALLOWED_ORIGINS||'https://tantan-lily-photo-groups-2026.onrender.com').split(',').map(s=>s.trim()).filter(Boolean));
   const subscribers=new Set();let stopped=false,mutationTail=Promise.resolve(),polling=false;
   const serialize=fn=>{const task=mutationTail.then(fn);mutationTail=task.catch(()=>{});return task;};
   const publicBase=(env.PUBLIC_API_URL||'').replace(/\/$/,'');
-  function present(w){return {id:w.id,author:w.guest_name,message:w.blessing_text,style:w.style_id,group:w.group_number,at:w.created_at,guest_name:w.guest_name,blessing_text:w.blessing_text,group_number:w.group_number,style_id:w.style_id,created_at:new Date(w.created_at).toISOString(),avatar_path:w.avatar_id?`${publicBase}/api/avatars/${w.id}`:null,moderation_status:w.moderation_status};}
+  function present(w){return {id:w.id,author:w.guest_name,message:w.blessing_text,style:w.style_id,group:w.group_number,at:w.created_at,guest_name:w.guest_name,blessing_text:w.blessing_text,group_number:w.group_number,style_id:w.style_id,created_at:new Date(w.created_at).toISOString(),avatar_path:w.avatar_id?`${publicBase}/api/avatars/${w.id}`:null,avatar_gender:w.avatar_gender??'unspecified',moderation_status:w.moderation_status};}
   function authorize(req){
     const expected=String(env.ADMIN_TOKEN||''),supplied=String(req.headers.authorization||'').replace(/^Bearer /,'');
     if(expected.length<24)throw new ApiError(503,'管理員授權尚未設定');
@@ -118,7 +124,7 @@ async function createApp(env=process.env){
       }
       const status=importing?(['approved','pending','hidden','deleted'].includes(input.moderation_status)?input.moderation_status:'approved'):(env.MODERATION_REQUIRED==='true'?'pending':'approved'),statements=[];
       if(wish.image)statements.push({sql:'INSERT OR IGNORE INTO avatars(id,image_base64,mime_type,byte_size,width,height,created_at) VALUES(?,?,?,?,480,480,?)',params:[wish.image.id,wish.image.base64,'image/jpeg',wish.image.bytes,now]});
-      statements.push({sql:'INSERT OR IGNORE INTO wishes(guest_name,group_number,blessing_text,blessing_grapheme_count,avatar_id,style_id,moderation_status,created_at,updated_at,submission_key,request_hash,client_hash) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',params:[wish.author,wish.group,wish.message,wish.graphemes,wish.image?.id||null,wish.style,status,now,now,wish.key,wish.requestHash,clientHash]});
+      statements.push({sql:'INSERT OR IGNORE INTO wishes(guest_name,group_number,blessing_text,blessing_grapheme_count,avatar_id,avatar_gender,style_id,moderation_status,created_at,updated_at,submission_key,request_hash,client_hash) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',params:[wish.author,wish.group,wish.message,wish.graphemes,wish.image?.id||null,wish.avatarGender,wish.style,status,now,now,wish.key,wish.requestHash,clientHash]});
       await store.batch(statements);
       const saved=await one(store,'SELECT * FROM wishes WHERE submission_key=?',[wish.key]);
       if(!saved||saved.request_hash!==wish.requestHash)throw new ApiError(409,'送出資料衝突，請重新確認');
@@ -143,7 +149,7 @@ async function createApp(env=process.env){
     try{
       cors(req,res);if(req.method==='OPTIONS'){res.writeHead(204);res.end();return;}
       const url=new URL(req.url,'http://localhost');
-      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,playback:true,storage:store.mode,...await meta()});return;}
+      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,playback:true,avatar_gender:true,storage:store.mode,...await meta()});return;}
       if(req.method==='GET'&&url.pathname==='/api/playback'){
         const after=url.searchParams.has('after')?integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER):undefined;
         json(res,200,await playbackSnapshot(after,integer(url.searchParams.get('limit'),1,100,100)));return;
@@ -181,7 +187,7 @@ async function createApp(env=process.env){
           const all=[];let after=0;
           while(true){const page=await rows(store,'SELECT w.*,a.image_base64 FROM wishes w LEFT JOIN avatars a ON a.id=w.avatar_id WHERE w.id>? ORDER BY w.id LIMIT 200',[after]);all.push(...page);if(page.length<200)break;after=page.at(-1).id;}
           if(url.pathname.endsWith('.json')){res.setHeader('Content-Disposition','attachment; filename="wedding-wishes.json"');json(res,200,{version:2,exported_at:new Date().toISOString(),wishes:all.map(w=>({...present(w),submission_key:w.submission_key,avatar:w.image_base64?'data:image/jpeg;base64,'+w.image_base64:''}))});return;}
-          const fields=['id','guest_name','group_number','blessing_text','avatar_path','created_at','style_id','moderation_status'],escape=value=>'"'+String(value??'').replace(/^[=+\-@\t\r]/,"'$&").replace(/"/g,'""')+'"';
+          const fields=['id','guest_name','group_number','blessing_text','avatar_path','avatar_gender','created_at','style_id','moderation_status'],escape=value=>'"'+String(value??'').replace(/^[=+\-@\t\r]/,"'$&").replace(/"/g,'""')+'"';
           const csv='\uFEFF'+[fields.join(','),...all.map(w=>{const p=present(w);return fields.map(k=>escape(p[k])).join(',');})].join('\r\n');
           res.writeHead(200,{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':'attachment; filename="wedding-wishes.csv"'});res.end(csv);return;
         }
