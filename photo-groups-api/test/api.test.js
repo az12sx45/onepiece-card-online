@@ -7,6 +7,10 @@ const sharp=require('sharp');
 const {createApp,countText,normalizeWish}=require('../server');
 const {createStore,D1Store}=require('../storage');
 const ADMIN='test-only-admin-token-0123456789';
+async function fetch(url,options={}){
+  try{return await globalThis.fetch(url,{...options,headers:{Connection:'close',...options.headers}});}
+  catch(error){console.error('Local HTTP fixture fetch failed:',JSON.stringify({url,code:error.cause?.code,cause:error.cause?.message,localPort:error.cause?.socket?.localPort,remotePort:error.cause?.socket?.remotePort}));throw error;}
+}
 async function fixture(t,overrides={}){
   const dir=fs.mkdtempSync(path.resolve(__dirname,'../../../backend-test-'));
   const env={STORAGE_MODE:'sqlite-local',SQLITE_PATH:path.join(dir,'wishes.sqlite'),ADMIN_TOKEN:ADMIN,ALLOWED_ORIGINS:'http://localhost:8080',SSE_POLL_MS:'20',...overrides};
@@ -14,7 +18,7 @@ async function fixture(t,overrides={}){
   t.after(async()=>{if(app)await app.close();});
   return {get app(){return app;},get base(){return base;},env,async restart(){await app.close();app=await createApp(env);await new Promise(r=>app.server.listen(0,'127.0.0.1',r));base=`http://127.0.0.1:${app.server.address().port}`;},async request(route,method='GET',body,admin=false){const res=await fetch(base+route,{method,headers:{...(body?{'Content-Type':'application/json'}:{}),...(admin?{Authorization:'Bearer '+ADMIN}:{})},...(body?{body:JSON.stringify(body)}:{})});return {res,body:await res.json()};}};
 }
-const sample=(suffix='a',extra={})=>({author:'測試賓客'+suffix,message:'仁鈞姮儒新婚快樂 💕',style:1,group:1,idempotencyKey:'test_submission_'+suffix,consent:true,...extra});
+const sample=(suffix='a',extra={})=>({author:'測試賓客'+suffix,message:'仁鈞姮儒新婚快樂 💕',style:1,group:1,avatar_gender:'male',idempotencyKey:'test_submission_'+suffix,consent:true,...extra});
 test('Unicode graphemes: Chinese, combined accents, family and skin-tone emoji share one rule',async()=>{
   assert.equal(countText('👨‍👩‍👧‍👦👍🏽e\u0301'),3);
   const thirty='👨‍👩‍👧‍👦'.repeat(30);

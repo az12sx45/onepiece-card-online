@@ -65,10 +65,10 @@ SQLite 檔案在每次交易成功時原子寫入；此模式在 `RENDER` 或 `N
 `POST /api/wishes` 接受：
 
 ```json
-{"author":"賓客署名","message":"新婚快樂 💕","style":1,"group":1,"avatar":"data:image/jpeg;base64,...","idempotencyKey":"UUID-or-stable-random-key","consent":true}
+{"author":"賓客署名","message":"新婚快樂 💕","style":1,"group":1,"avatar":"data:image/jpeg;base64,...","avatar_gender":"female","idempotencyKey":"UUID-or-stable-random-key","consent":true}
 ```
 
-`author/message/style/group` 保留原 API 相容，也接受 `guest_name/blessing_text/style_id/group_number`。照片可空白；有照片必須 `consent:true`。署名 1～20、祝福 1～30 個 Unicode grapheme。手機與 Node 都以 NFC + `Intl.Segmenter` 計數，家庭 Emoji、膚色與結合字不拆開。資料庫對可信服務計算的 `blessing_grapheme_count` 加上 1～30 的 CHECK，並限制文字最多 300 Unicode codepoint，防止超長結合字濫用；SQL 不假裝自行實作 ICU grapheme 分割。
+`author/message/style/group` 保留原 API 欄位，也接受 `guest_name/blessing_text/style_id/group_number`。新賓客送出必須明確提供 `avatar_gender:"male"` 或 `"female"`，即使有自拍也一樣；缺漏、空值或 `unspecified` 都回400，不寫入祝福、照片或事件。既有紀錄不改寫，管理員匯回舊備份仍可保留 `unspecified`。手機已移除風格選單，新送出固定 `style:1`；舊紀錄的style保留。照片可空白；有照片必須 `consent:true`。署名 1～20、祝福 1～30 個 Unicode grapheme。手機與 Node 都以 NFC + `Intl.Segmenter` 計數，家庭 Emoji、膚色與結合字不拆開。資料庫對可信服務計算的 `blessing_grapheme_count` 加上 1～30 的 CHECK，並限制文字最多 300 Unicode codepoint，防止超長結合字濫用；SQL 不假裝自行實作 ICU grapheme 分割。
 
 伺服器驗證 JPEG、大小、解碼及像素範圍，再用 sharp 根據 EXIF 旋轉、等比例 cover 裁切 480×480、壓縮並移除 EXIF。原始照片不保存。每個唯一識別碼只建立一筆完整紀錄；相同內容重試回 200 + `duplicate:true`，同一識別碼換內容回 409。舊客戶端未提供 key 仍相容，但只有新版穩定 key 才具備跨重整重試去重保證。
 
@@ -143,3 +143,13 @@ D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不�
 翻頁照片解碼加入8秒期限與一致fallback：新圖失敗時，紙葉背面及落頁都保留實際已載的同一張照片，晚圖不會突然覆蓋；完全沒有可用圖時先不翻，保留待播放順序。定向4/4通過（3秒延遲、HTTP失敗重試、10.5秒晚到、無圖恢復），未重跑無關測試；首次測試器誤等load而被hold圖片阻塞的失敗記錄保留。
 
 第四輪正式靜態 `f49c05e626bf24ca5f72a6016a25d3b80f46697f`／`dep-dc158nrl550s73df6hqg` 於台北10:34:07 Live。10:35:33完成正式唯讀7/7：16靜態檔／SVG與Git相同、五原照、三種16:9雙向30階段與完整背頁、真公開署名對原PAYLOAD查組別、WebKit三預設與拖曳縮放／確認／移除均通過。19張正式截圖保留；公開7/8/9及共用播放狀態前後一致，61次GET、0 POST、0瀏覽器錯誤。正式這輪沒有新增測試留言；完整手機送出→API/SQLite/SSE→TV寫入、重送與重啟驗證使用前述獨立本機環境，不能冒稱本輪已做正式POST或實體iPhone驗收。
+
+## 第五次填寫表單調整（2026-11-22）
+
+移除無法改變書本版面的十款風格選單，手機預覽及一般新送出固定婚禮樣式1。性別改為男／女必填，初始為「請選擇性別」，不預選；即使有自拍，未選也不能送出。沒有自拍時沿用對應的空輪廓頭像。自拍裁切、公開展示同意與30字限制保留。
+
+手機要求 `/health` 的 `avatar_gender_required:true` 才允許送出。API在確認原UUID收據之後、任何新紀錄寫入之前驗證必填；舊unspecified紀錄及原UUID相同內容重試、管理員舊備份匯回保持相容，無須遷移或改寫D1。未指定／unspecified的新賓客請求回400及 `error_code:"GENDER_REQUIRED"`。
+
+未確認的舊草稿只因新規則改變風格或性別時，沿用原UUID先送新的有效內容；若409代表原UUID已有舊內容，再用原payload確認舊收據，不另建第二筆。已確認的舊收據也以相同內容的舊風格／性別簽章核對，並明示上次已收到；不把新選擇假稱已寫回舊紀錄。性別必填先於所有收據捷徑。
+
+本機整合10／10通過；後端以 `node --test test/*.test.js` 完整17項為16 PASS、0 FAIL、1 SKIP（未提供直接D1 REST整合憑證）。另有同UUID查詢後競爭寫入的實際注入測試，回409且只保留贏家一筆。初次後端HTTP連線失敗原始TAP保留，3項定向診斷重跑通過但底層原因未再現；fixture明確使用Connection:close後完成上述整套驗證。不能把本機驗證稱為正式POST或實體iPhone驗收。

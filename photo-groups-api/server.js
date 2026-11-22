@@ -7,7 +7,7 @@ const segmenter=new Intl.Segmenter('zh-TW',{granularity:'grapheme'});
 const countText=value=>[...segmenter.segment(value)].length;
 const hash=value=>crypto.createHash('sha256').update(value).digest('hex');
 const clean=value=>String(value??'').normalize('NFC').replace(/[\u0000-\u001F\u007F-\u009F]/g,' ').replace(/\s{2,}/g,' ').trim();
-class ApiError extends Error {constructor(status,message){super(message);this.status=status;}}
+class ApiError extends Error {constructor(status,message,code){super(message);this.status=status;if(code)this.code=code;}}
 function json(res,status,payload){if(res.writableEnded)return;res.writeHead(status,{'Content-Type':'application/json; charset=utf-8'});res.end(JSON.stringify(payload));}
 function readJson(req){return new Promise((resolve,reject)=>{const chunks=[];let size=0,tooBig=false;req.on('data',chunk=>{size+=chunk.length;if(size>240000){tooBig=true;return;}chunks.push(chunk);});req.on('end',()=>{if(tooBig)return reject(new ApiError(413,'照片或內容太大，請重新選擇照片'));try{const data=JSON.parse(Buffer.concat(chunks).toString('utf8'));if(!data||typeof data!=='object'||Array.isArray(data))throw new Error();resolve(data);}catch{reject(new ApiError(400,'JSON 格式不正確'));}});req.on('error',reject);});}
 function requireJson(req){if(!String(req.headers['content-type']||'').toLowerCase().startsWith('application/json'))throw new ApiError(415,'必須使用 JSON');}
@@ -115,6 +115,9 @@ async function createApp(env=process.env){
     return serialize(async()=>{
       const existing=await one(store,'SELECT * FROM wishes WHERE submission_key=?',[wish.key]);
       if(existing){if(existing.request_hash!==wish.requestHash)throw new ApiError(409,'這次送出識別碼已用於其他內容，請重新送出');return {ok:true,id:existing.id,wish:present(existing),duplicate:true,persistent:true};}
+      // Keep exact retries of old receipts valid; only new public submissions
+      // require the explicit choice, including guests who upload a selfie.
+      if(!importing&&!['male','female'].includes(wish.avatarGender))throw new ApiError(400,'請先選擇男生或女生，再送出祝福','GENDER_REQUIRED');
       const ip=String(req?.headers['x-forwarded-for']||req?.socket.remoteAddress||'import').split(',')[0].trim(),clientHash=hash(ip+'|'+wish.author.toLocaleLowerCase('zh-TW'));
       let now=Date.now();
       if(importing){const date=input.created_at??input.at;if(date){const parsed=typeof date==='number'?date:Date.parse(date);if(Number.isFinite(parsed)&&parsed>0&&parsed<=Date.now()+300000)now=parsed;}}
@@ -149,7 +152,7 @@ async function createApp(env=process.env){
     try{
       cors(req,res);if(req.method==='OPTIONS'){res.writeHead(204);res.end();return;}
       const url=new URL(req.url,'http://localhost');
-      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,playback:true,avatar_gender:true,storage:store.mode,...await meta()});return;}
+      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,playback:true,avatar_gender:true,avatar_gender_required:true,storage:store.mode,...await meta()});return;}
       if(req.method==='GET'&&url.pathname==='/api/playback'){
         const after=url.searchParams.has('after')?integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER):undefined;
         json(res,200,await playbackSnapshot(after,integer(url.searchParams.get('limit'),1,100,100)));return;
@@ -202,7 +205,7 @@ async function createApp(env=process.env){
       if(res.headersSent){if(!res.writableEnded)res.end();return;}
       const status=error.status||503;if(status===429)res.setHeader('Retry-After','15');
       if(!error.status)console.error('Wedding API persistent operation failed:',error.message);
-      json(res,status,{error:error.status?error.message:'資料庫暫時無法連線，祝福尚未送出，請稍後重試',persistent:store.persistent});
+      json(res,status,{error:error.status?error.message:'資料庫暫時無法連線，祝福尚未送出，請稍後重試',...(error.status&&error.code?{error_code:error.code}:{}),persistent:store.persistent});
     }
   });
   server.keepAliveTimeout=63000;
