@@ -9881,3 +9881,17 @@ v9本機實測：後端25項為24 PASS／0 FAIL／1 SKIP（直接正式D1整合�
 本機獨立npm start檢查被自動核准審查以blocked by policy拒絕，沒有提供詳細原因，程序未啟動，未列通過且沒有切殼重試。上述隔離createApp整合是另行實際成功執行的HTTP API／SSE／瀏覽器驗證，不冒稱該npm指令已執行。
 
 v9補驗：相同前版book SHA4391dd…完成額外4／4（舊last→新A/B→舊first、原續點被刪略過、replay保新佇列、舊刪除filter可真刪）。最後review發現舊頁預載時收到新祝福仍可能先翻舊頁，因此只在實體葉啟動前增加history/resume→urgent的交接，replay以明確intent保原行為；最終book SHAad9cfa27…另做1項真local API/SSE定向PASS：舊2頭像hold83ms、新6入列時原1不變／無紙葉，release後實體target順序[6,2]，落頁才consume。前9＋4與後1分版本記錄，不宣稱整套在最終SHA全重跑；其他產品SHA不變。初次undefined/null的測試器斷言失敗保留，不改產品湊結果。全程0正式請求。
+
+## 2026-11-23：三星瀏覽器填寫前的 Chrome 相容入口
+
+使用者不接受讓賓客自行找資料夾；確認一般網站無法強制Samsung Internet指定原生Gallery後，已明確接受「填寫前按一次入口切到已安裝Chrome」的替代方案。這一輪不宣稱在Samsung原地一鍵開原生相簿，也不把UA模擬當Android真機驗收。
+
+index.html只在查姓名表單前加入預設hidden的相容卡及兩個版本引用；browser-compat.js/css為獨立模組，不改手機送出／自拍／裁切／30字邏輯。Android Samsung UA或UAData品牌才在一般頁顯示；browser_switch=unavailable返回頁跨UA顯示備援。Chrome入口為使用者明示點擊的固定intent，指定com.android.chrome並URL編碼同站HTTPS fallback，不自動跳轉／計時重試／安裝App／假判已切換。若有系統選單提醒選Chrome；可複製固定網址，clipboard拒絕／缺少時改用可選取readonly網址，不誤報複製成功；繼續按鈕收起卡片並聚焦原查詢欄位。
+
+入口明說先切換再查姓名／填祝福，兩個瀏覽器不共用已填內容；不讀寫guest草稿儲存、也不把姓名／祝福／組別／送出UUID／照片放進跳轉網址。原PAYLOAD/PIC與查組腳本、圖片input、API／D1、TV／控制台及電子書均維持。只部署原Render靜態服務，婚禮分支與原網址沿用，遊戲main及遊戲服務不改。
+
+Chrome官方格式參考：https://developer.chrome.com/docs/android/intents 。它證明intent語法與Chrome發起行為，不證明各Samsung版本會尊重package／fallback，實際Samsung→Chrome及其相片選擇器仍須真機驗證。當輪工具未提供LATTICE API，沒有捏造project/task/graph身分；定向原始碼／測試證據另存本工作outputs。
+
+v11驗證：本機UI前5項通過後，真點readonly網址造成原生caret蓋過全選，已保留失敗報告；僅把該明示click的select延到下一繪製幀（保留長按、不自動導航），最終JS51761e50…另完成剩餘3項定向，合計8個component分版本記錄，不冒稱全部在新SHA重跑。涵蓋Samsung Android UA／UAData、一般Chrome/iOS/桌機隱藏、fallback跨UA不自跳、intent固定URL／不攜帶資料、clipboard成功／拒絕／不存在與手動全選、Continue與晚回應、原查詢／裁切／30字smoke。Root已目視手機390px一般及fallback，QA另目視360／1280／1920；無橫向溢出。PAYLOAD/PIC／15組五照及原手機核心不變。
+
+獨立source review另有9項靜態核對（不是runtime測試），無blocking finding；確認原inline查詢bootstrap／CSS與資料literal只按CRLF→LF後精確相同，其他保護範圍diff為空。測試攔截原手機初始化既有health GET而非擴改舊流程，0正式API傳輸、0POST、0外部App啟動；Samsung真機→Chrome、未安裝與原生相片介面未驗。正式靜態Live／公開讀回收據另列，不以UA模擬冒稱真機。

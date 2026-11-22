@@ -1,0 +1,19 @@
+@charset "UTF-8";
+.browserCompat[hidden],.browserCompat [hidden]{display:none!important}
+.browserCompat{margin:0 0 23px;padding:18px 16px;border:1px solid #dfc6b2;border-radius:18px;background:radial-gradient(ellipse at 0 0,#f7e2e7,transparent 70%),#fffaf2;color:#775c63;overflow-wrap:anywhere}
+.browserCompatEyebrow{margin:0 0 7px;color:#ae8d64;font-size:11px;font-weight:700;letter-spacing:.12em}
+.browserCompat h2{margin:0 0 10px;color:#a05e70;font-family:inherit;font-size:19px;font-weight:700;line-height:1.55;letter-spacing:.025em}
+.browserCompatDescription,.browserCompatNote,.browserCompatFallback{margin:8px 0;font-size:13px;line-height:1.85}
+.browserCompatNote{color:#947576;font-size:12px}
+.browserCompatFallback{padding:10px 11px;border:1px solid #e1c2ab;border-radius:9px;background:#fff6e7;color:#956149;font-weight:600}
+.browserCompatActions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;margin-top:15px}
+.browserCompatActions a,.browserCompatActions button{display:flex;align-items:center;justify-content:center;min-height:46px;min-width:0;padding:11px 10px;border:1px solid #d6acb4;border-radius:11px;background:#fffaf7;color:#995e6d;font-family:inherit;font-size:13px;font-weight:600;line-height:1.6;text-align:center;text-decoration:none;cursor:pointer;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent}
+.browserCompatActions .browserCompatPrimary{grid-column:1/-1;background:#ad687a;border-color:#ad687a;color:#fff;font-size:15px}
+.browserCompatActions button:disabled{opacity:.6;cursor:progress}
+.browserCompatActions a:focus-visible,.browserCompatActions button:focus-visible,.browserCompatManual input:focus-visible{outline:3px solid #d3b181;outline-offset:3px}
+.browserCompatManual{margin-top:13px}
+.browserCompatManual label{display:block;margin-bottom:7px;font-size:12px;color:#8c6c72;line-height:1.6}
+.browserCompatManual input{display:block;width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid #d6c1b1;border-radius:8px;background:#fff;color:#795d66;font-family:inherit;font-size:16px;line-height:1.5;user-select:text;-webkit-user-select:text}
+.browserCompatStatus{margin:11px 0 0;font-size:12px;line-height:1.8;color:#956774}
+.browserCompatStatus:empty{margin:0}
+@media(max-width:380px){.browserCompat{padding:16px 13px}.browserCompat h2{font-size:18px}.browserCompatActions{gap:8px}.browserCompatActions button{font-size:12px}}

@@ -8,6 +8,8 @@
 <title>仁鈞＆姮儒｜拍照分組與幸福祝福冊</title>
 <link rel="stylesheet" href="./wishes.css">
 <link rel="stylesheet" href="./mobile-wishes.css?v=20261122-reliable-send-v7">
+<link rel="stylesheet" href="./browser-compat.css?v=20261123-v11">
+<script src="./browser-compat.js?v=20261123-v11" defer></script>
 <style>
 :root{color-scheme:light;--ink:#302f37;--rose:#b85f70;--shadow:0 16px 55px rgba(87,65,71,.12)}
 *{box-sizing:border-box}
@@ -74,6 +76,20 @@ noscript{display:block;color:#935763;line-height:1.7;margin-top:15px}
 <main class="frame">
   <header><div class="spark" aria-hidden="true">仁鈞 ♡ 姮儒</div><h1>拍照分組</h1></header>
   <section class="shell" aria-label="拍照分組查詢">
+    <section id="browserCompat" class="browserCompat" aria-labelledby="browserCompatTitle" hidden>
+      <p class="browserCompatEyebrow">照片選擇小提醒</p>
+      <h2 id="browserCompatTitle">用 Chrome 選照片更方便</h2>
+      <p class="browserCompatDescription">請先切換，再查詢姓名與填寫祝福。Chrome開啟後，選照片仍由手機提供。</p>
+      <p class="browserCompatNote">已填內容不會帶到另一個瀏覽器；若已開始填寫，請留在目前瀏覽器完成。</p>
+      <p id="browserCompatFallback" class="browserCompatFallback" hidden>未能自動開啟Chrome，可在Chrome貼上網址後繼續</p>
+      <div class="browserCompatActions">
+        <a id="browserCompatChrome" class="browserCompatPrimary" href="intent://tantan-lily-photo-groups-2026.onrender.com/#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=https%3A%2F%2Ftantan-lily-photo-groups-2026.onrender.com%2F%3Fbrowser_switch%3Dunavailable;end">用 Chrome 開啟</a>
+        <button id="browserCompatCopy" type="button">複製網站網址</button>
+        <button id="browserCompatContinue" type="button">繼續使用目前瀏覽器</button>
+      </div>
+      <div id="browserCompatManual" class="browserCompatManual" hidden><label for="browserCompatAddress">網站網址（可點選後長按複製）</label><input id="browserCompatAddress" type="url" readonly value="https://tantan-lily-photo-groups-2026.onrender.com/" autocomplete="off" autocapitalize="none" spellcheck="false"></div>
+      <p id="browserCompatStatus" class="browserCompatStatus" role="status" aria-live="polite"></p>
+    </section>
     <form id="lookupForm">
       <label for="name" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">請輸入姓名</label>
       <input id="name" class="field" type="text" placeholder="完整姓名或名字（可省略姓氏）" autocomplete="name" enterkeyhint="search" maxlength="50">

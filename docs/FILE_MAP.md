@@ -2609,3 +2609,5 @@ Android／iOS 各三個既有 PUBLIC 目標；十四個 HOST、Core、Portrait�
 2026-11-22 婚禮追加：photo-groups/control.html、control.js、control.css 為授權控制台；name-lookup.js 為省姓姓名比對；assets/couple-1.jpg～couple-5.jpg 為原PIC逐張抽出。book.js/css 與 tv.html 管理純展示、完整書本邊界、照片輪替及閱讀時間；photo-groups-api/migrations/0002_playback_control.sql、server.js、storage.js 加上耐久播放狀態與指令。
 
 2026-11-22 婚禮永久刪除與優先播放：photo-groups-api/server.js／storage.js／migrations/0004_hard_delete_receipts.sql 提供授權永久刪除、最小收據、持久刪除事件與安全啟動schema；scripts/d1-setup.js的完整資料庫備份保留收據。photo-groups/control.js/html 接永久刪除及舊軟刪篩選；book.js管理僅新ID的優先佇列與舊輪播續點，tv.html僅更新載入版本。相關API測試在photo-groups-api/test，隔離整合與正式唯讀驗證保留於本次工作區outputs，不把測試祝福寫入正式冊。
+
+2026-11-23 婚禮瀏覽器相容：photo-groups/browser-compat.js、browser-compat.css與index.html表單前的hidden卡片，提供Samsung Android→Chrome明示intent、同站fallback、複製失敗手動選取網址、收起聚焦查詢。原mobile-wishes／book／control／API／電子書與照片素材不變。
