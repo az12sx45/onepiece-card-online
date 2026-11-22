@@ -137,3 +137,7 @@ D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不�
 正式部署順序為：先schema probe再套 `0003_avatar_gender.sql`，讀回非破壞ADD COLUMN與既有資料 → API Live／health能力 → 靜態站。`store.migrate()`／`npm run migrate:d1` 已改為探測欄位，存在且相容便跳過0003；不要把所有SQL直接串接重跑。此次真正D1已套用並核對9祝福／3頭像／21事件／原播放資料保持、外鍵正常、舊列預設unspecified。沒有重建表、沒有復原原soft-deleted紀錄。
 
 本機API整套13 PASS、1明示D1 REST token項目SKIP；真正D1遷移使用官方Wrangler另列證。UI整合15項通過，含五張自然比例框、30張雙向階段圖、WebKit圓形拖曳／縮放／取消／EXIF、三種預設、真local SQLite API+SSE→TV、同UUID失去回應再送只有一筆、CSV/JSON與重啟，以及兩項能力／編碼鎖定防護。這不是實體iPhone驗收，正式部署與Live檢查另列。
+
+新版API `5755b731afee9fac450eeff6cc8512573e833a0d`／`dep-dc150f2jnfac73fnfl00` 於台北10:26:36 Live；10:27:39純GET確認health的avatar_gender:true／storage:d1／persistent:true，以及公開id7/8/9（舊紀錄均unspecified）。本輪沒有新增正式測試留言。
+
+翻頁照片解碼加入8秒期限與一致fallback：新圖失敗時，紙葉背面及落頁都保留實際已載的同一張照片，晚圖不會突然覆蓋；完全沒有可用圖時先不翻，保留待播放順序。定向4/4通過（3秒延遲、HTTP失敗重試、10.5秒晚到、無圖恢復），未重跑無關測試；首次測試器誤等load而被hold圖片阻塞的失敗記錄保留。

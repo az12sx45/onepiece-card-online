@@ -9859,3 +9859,5 @@ QA曾誤用cwd產生兩個暫存檔；測試工具已改絕對基準。自動核
 手機鼓勵今天的漂亮帥氣照片及祝福／短經文，仍30graphemes；圓形取景可拖曳／縮放／重設／取消／確認，修EXIF後先縮來源最長邊1600於記憶體，確認才出480JPEG、重勾公開同意，TV圓框與手機同範圍。兩款SVG男／女無五官頭肩空輪廓、標示尚未上傳；avatar_gender選填三值，自拍優先、不依名字推測，未選用中性。API/SSE/CSV/JSON還原及控制台接上欄位；unspecified沿用v2 request hash與pending UUID相容，health宣告能力防靜態先接舊API。
 
 0003以欄位probe後ADD COLUMN DEFAULT unspecified+CHECK enum，不重建／重寫表；migrate入口可重跑，舊欄型態不相容時拒絕。真正D1前後9wishes/3avatars/21events/1playback_state/5commands之既有欄值摘要全同，外鍵正常；舊列預設unspecified，不復原6筆既有soft-delete。API本機13PASS／1明示直接D1 token測試SKIP；UI整合15PASS/0FAIL，30雙向frames與真local SQLite/SSE/重啟、圓形裁切pixels、EXIF、預設回復、同UUID失去回應重試只有一筆、30/31字、CSV/backup、能力與編碼鎖定都有實跑。首次QA啟動錯誤保留；WebKit模擬不冒稱真機。正式API先、靜態後，Live紀錄另列。
+
+第四輪API 5755b731／dep-dc150f2jnfac73fnfl00於台北10:26:36 Live；10:27:39 health200／avatar_gender:true／storage:d1／persistent:true／writable:true、GET公開7/8/9均unspecified，無正式送出。靜態發布前另修慢圖一致性：8秒解碼期限，target不可用時back/落頁同用實際可見舊照，失敗Map下回重試；全圖不可用先不翻並保留pending。4項定向PASS涵蓋3秒慢圖、HTTPfail、timeout/10.5秒late不覆蓋、無圖恢復；首次goto預設load被刻意hold圖片擋住的harness失敗保留，修等domcontentloaded/真ready後通過。API可執行程式與5755不變。

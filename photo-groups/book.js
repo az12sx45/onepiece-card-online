@@ -69,11 +69,16 @@
     updateStatus();
   }
   function schedule() { clearTimeout(timer); if(!paused&&!busy&&wishes.size) timer=setTimeout(()=>navigate(1),dwellFor(current?.message)); }
+  async function decodePhoto(img){
+    let timeout;
+    try{await Promise.race([img.decode().catch(()=>{}),new Promise(resolve=>{timeout=setTimeout(resolve,8000)})]);}
+    finally{clearTimeout(timeout);}
+    return img.naturalWidth&&img.complete?img:null;
+  }
   async function preparePhoto(index){
     let img=photoImages.get(index);
-    if(!img){img=new Image();img.src=PHOTO_FILES[index];img.id='couplePhoto';img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';img.dataset.photoIndex=String(index);photoImages.set(index,img);}
-    await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
-    return img.naturalWidth?img:null;
+    if(!img||(img.complete&&!img.naturalWidth)){img=new Image();img.src=PHOTO_FILES[index];img.id='couplePhoto';img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';img.dataset.photoIndex=String(index);photoImages.set(index,img);}
+    return decodePhoto(img);
   }
   function layoutPhoto(printed,img,index){
     const ratio=img.naturalWidth/img.naturalHeight;
@@ -101,8 +106,8 @@
     const img=printed.querySelector('.couple-photo img');
     img.src=PHOTO_FILES[index];img.dataset.photoIndex=String(index);
     img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';
-    await img.decode().catch(()=>{});
-    if(img.naturalWidth)layoutPhoto(printed,img,index);
+    if(!await decodePhoto(img))return null;
+    layoutPhoto(printed,img,index);
     return printed;
   }
   async function preload(preparedPage) {
@@ -114,10 +119,20 @@
     if(busy || !next) { schedule(); return; }
     busy=true; clearTimeout(timer); updateStatus();
     const nextPage=page(next);
-    const targetPhoto=forcedPhoto??((photoIndex+(direction<0?-1:1)+5)%5);
-    const [,preparedPhoto,reversePage]=await Promise.all([preload(nextPage),preparePhoto(targetPhoto),prepareReverse(direction===1?targetPhoto:photoIndex)]);
+    let targetPhoto=forcedPhoto??((photoIndex+(direction<0?-1:1)+5)%5);
+    let [,preparedPhoto,reversePage]=await Promise.all([preload(nextPage),preparePhoto(targetPhoto),prepareReverse(direction===1?targetPhoto:photoIndex)]);
     // A moderated item can disappear while its image is loading.
     if(!wishes.has(next.id)) { busy=false; updateStatus(); schedule();flushControls();return; }
+    // A slow or unavailable picture must never leave a newly printed reverse
+    // landing on an older photograph. Keep both sides on the loaded picture.
+    if(!preparedPhoto||!reversePage){
+      preparedPhoto=$('couplePhoto');targetPhoto=Number(preparedPhoto?.dataset.photoIndex??photoIndex);
+      reversePage=preparedPhoto?.naturalWidth&&preparedPhoto.complete?await prepareReverse(targetPhoto):null;
+      if(!reversePage){
+        if(direction>0&&next.id!==current?.id&&!pending.includes(next.id))pending.unshift(next.id);
+        busy=false;updateStatus();schedule();flushControls();return;
+      }
+    }
     // Move the decoded DOM image with its paper instead of creating a second
     // no-store avatar request during the turn or at the resting-page commit.
     const currentPage=right.firstElementChild;
