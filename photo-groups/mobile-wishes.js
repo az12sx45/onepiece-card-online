@@ -5,7 +5,7 @@ window.createWeddingComposer=function createWeddingComposer(){
  const DRAFT_KEY='renjun-hengru-pending-wish-v2';
  const RECEIPT_KEY='renjun-hengru-wish-receipt-v2';
  const $=id=>document.getElementById(id);
- const author=$('wishAuthor'),message=$('wishMessage'),preview=$('wishPreview');
+ const author=$('wishAuthor'),message=$('wishMessage');
  const status=$('wishStatus'),send=$('wishSend'),consent=$('wishConsent'),gender=$('avatarGender')||{value:'',focus(){}};
  const camera=$('cameraInput'),gallery=$('galleryInput'),photo=$('avatarPreview'),photoStatus=$('selfieStatus');
  const take=$('takeSelfie'),choose=$('choosePhoto'),remove=$('removePhoto'),adjust=$('adjustCrop')||document.createElement('button');
@@ -44,14 +44,9 @@ window.createWeddingComposer=function createWeddingComposer(){
    avatar=value||'';photo.src=avatar||defaultAvatar();
    photo.alt=avatar?'即將公開展示的自拍預覽':defaultAvatarAlt();
    remove.hidden=!avatar;adjust.hidden=!avatar;take.textContent=avatar?'重拍自拍':'拍一張自拍';choose.textContent=avatar?'更換照片':'從相簿選擇';
-   updatePreview();
+   updateCharacterCount();
  }
- function updatePreview(){
-   const frame=document.createElement('div');frame.className='wishFrame style-1';
-   const head=document.createElement('img');head.className='previewAvatar';head.src=avatar||defaultAvatar();head.alt=avatar?'祝福自拍預覽':defaultAvatarAlt();
-   const body=document.createElement('div');body.className='wishBody';body.textContent=normalize(message.value)||'幸福每一天，甜蜜直到永遠 ♡';
-   const signature=document.createElement('div');signature.className='wishSignature';signature.textContent='第 '+(group||'?')+' 組 · '+(normalize(author.value)||'來賓');
-   frame.append(head,body,signature);preview.replaceChildren(frame);
+ function updateCharacterCount(){
    const length=count(normalize(message.value));$('wishLength').textContent=(Number.isFinite(length)?length:'—')+' / 30 字';
    $('wishLength').classList.toggle('overLimit',length>30);
  }
@@ -157,7 +152,7 @@ window.createWeddingComposer=function createWeddingComposer(){
    finally{if(version===photoVersion&&!cropDialog.open){processing=false;disableFields(false)}}
  };
  gender.onchange=()=>{gender.removeAttribute?.('aria-invalid');setAvatar(avatar);consent.checked=false;photoStatus.textContent=avatar?'自拍會優先展示；移除照片後將使用對應輪廓頭像。':'已更新預設頭像；你也可以隨時上傳今天的照片。'};
- author.addEventListener('input',updatePreview);message.addEventListener('input',updatePreview);
+ message.addEventListener('input',updateCharacterCount);
  async function fingerprint(payload){
    // Kept compatible with older pending submissions while new forms require male/female.
    const signed={...payload};if(signed.avatar_gender==='unspecified')delete signed.avatar_gender;
@@ -241,8 +236,8 @@ window.createWeddingComposer=function createWeddingComposer(){
  }
  gender.value='';setAvatar('');verifyStorage().catch(()=>{});
  return {
-   setGroup(name,value){group=value;author.value=slice(normalize(name),20);status.textContent='';restoreDraft();updatePreview();verifyStorage().catch(()=>{})},
-   reset(){group=0;photoVersion++;if(cropDialog.open)closeCrop();if(cropSource){cropSource.width=1;cropSource.height=1;}cropSource=null;cropState=null;processing=false;disableFields(sending);gender.value='';gender.removeAttribute?.('aria-invalid');setAvatar('');author.value='';message.value='';consent.checked=false;photoStatus.textContent='';status.textContent='';restored=false;updatePreview()},
+   setGroup(name,value){group=value;author.value=slice(normalize(name),20);status.textContent='';restoreDraft();updateCharacterCount();verifyStorage().catch(()=>{})},
+   reset(){group=0;photoVersion++;if(cropDialog.open)closeCrop();if(cropSource){cropSource.width=1;cropSource.height=1;}cropSource=null;cropState=null;processing=false;disableFields(sending);gender.value='';gender.removeAttribute?.('aria-invalid');setAvatar('');author.value='';message.value='';consent.checked=false;photoStatus.textContent='';status.textContent='';restored=false;updateCharacterCount()},
    countText:count
  };
 };

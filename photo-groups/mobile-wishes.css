@@ -19,9 +19,7 @@
 .wishConsent{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:14px;line-height:1.8;color:#735e67;padding:14px 12px;margin:17px 0 0;background:#fff8f2;border:1px solid #ecdfd3;border-radius:12px;cursor:pointer}
 .wishConsent input{flex:none;width:20px;height:20px;margin:3px 0 0;accent-color:#ad6474}
 .wishCount.overLimit{color:#b2354d;font-weight:800}
-.previewAvatar{width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 0 0 1px #cbb78e;z-index:1}
 .selfieActions button:focus-visible{outline:3px solid #b8667b;outline-offset:3px}
-.wishPreview .wishFrame{min-height:230px}
 .visuallyHiddenInput{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;pointer-events:none}
 .cropDialog{box-sizing:border-box;width:min(430px,calc(100vw - 24px));max-height:calc(100dvh - 28px);padding:20px;border:1px solid #d2b88f;border-radius:22px;background:#fffaf4;color:#66505b;box-shadow:0 22px 80px #2e17274d;overflow-y:auto;font-family:inherit}
 .cropDialog::backdrop{background:#34272e9e;backdrop-filter:blur(3px)}

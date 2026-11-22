@@ -45,7 +45,7 @@
     if (w) p.dataset.wishId = w.id;
     p.append(element('h2','chapter','幸福祝福冊'),element('div','chapter-caption','A NOTE FOR THE NEWLYWEDS'),element('div','chapter-rule'));
     const mount = element('div','avatar-mount'); mount.append(avatar(w)); p.append(mount);
-    p.append(element('h3','guest-name',w?w.author:'等候第一份祝福'),element('div','guest-group',w?'第 '+w.group+' 組 · 謝謝你的祝福':'YOUR WORDS, OUR TREASURE'));
+    p.append(element('h3','guest-name',w?w.author:'等候第一份祝福'));
     const quote=element('div','blessing-frame'); quote.append(element('p','guest-message',w?w.message:'掃描左頁 QR Code\n讓你的笑容與祝福，留在這一頁。')); p.append(quote);
     const foot=element('div','page-foot'); foot.append(element('span','','仁鈞 ♡ 姮儒 · 珍藏每一份心意'),element('em','',w?String(ordered().findIndex(v=>v.id===w.id)+1).padStart(2,'0'):'♡')); p.append(foot);
     return p;
