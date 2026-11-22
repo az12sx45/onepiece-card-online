@@ -13,7 +13,7 @@
   const $ = id => document.getElementById(id);
   const right = $('rightPage'), sheet = $('turningSheet'), front = $('sheetFront'), back = $('sheetBack'), shadow = $('pageTurnShadow');
   const wishes = new Map(), known = new Set();
-  let pending = [], current = null, paused = false, busy = false, timer, activeAnimation, animations = [];
+  let pending = [], historyResume = null, urgentInFlight = null, current = null, paused = false, busy = false, timer, activeAnimation, animations = [];
   let cursor = 0, stream, syncing = null, resync = false, initial = true, duringSync = [], connected = false;
   let photoIndex=4,controlCursor=0,controlVersion=-1,controlReady=false,controlFlight=false;
   const controlQueue=[];
@@ -23,6 +23,17 @@
 
   function element(tag, cls, text) { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function ordered() { return [...wishes.values()].sort((a,b) => a.at - b.at || Number(a.id) - Number(b.id)); }
+  function pruneUrgent(){pending=pending.filter(id=>wishes.has(id));}
+  function rememberHistory(){
+    const old=ordered().filter(w=>!pending.includes(w.id)),index=old.findIndex(w=>w.id===current?.id);
+    historyResume={ids:old.map(w=>w.id),nextIndex:index<0?0:(index+1)%old.length};
+  }
+  function resumeTarget(){
+    if(!historyResume)return null;const {ids,nextIndex}=historyResume;
+    for(let i=0;i<ids.length;i++){const wish=wishes.get(ids[(nextIndex+i)%ids.length]);if(wish)return wish;}
+    return ordered().find(w=>!pending.includes(w.id))||null;
+  }
+  function restingFallback(){return wishes.get(current?.id)||ordered().find(w=>!pending.includes(w.id))||null;}
   function normalize(w) {
     if (!w || w.id == null || typeof (w.message ?? w.blessing_text) !== 'string') return null;
     if (w.moderation_status && w.moderation_status !== 'approved') return null;
@@ -65,7 +76,7 @@
   function render(w, preparedPage) {
     current=w||null; right.replaceChildren(preparedPage||page(current));
     fitPrintedText(right);
-    if(current) { pending=pending.filter(id=>id!==current.id); try{localStorage.setItem('renjun_hengru_book_current_v2',current.id);}catch{} }
+    if(current) { try{localStorage.setItem('renjun_hengru_book_current_v2',current.id);}catch{} }
     updateStatus();
   }
   function schedule() { clearTimeout(timer); if(!paused&&!busy&&wishes.size) timer=setTimeout(()=>navigate(1),dwellFor(current?.message)); }
@@ -115,23 +126,28 @@
     await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
     if(!img.naturalWidth){img.onerror=null;img.src=img.dataset.defaultAvatar||DEFAULT_AVATAR;await img.decode().catch(()=>{});}
   }
-  async function turnTo(next, direction=1, forcedPhoto) {
+  async function turnTo(next, direction=1, forcedPhoto, intent='history') {
     if(busy || !next) { schedule(); return; }
-    busy=true; clearTimeout(timer); updateStatus();
+    busy=true; urgentInFlight=intent==='urgent'?next.id:null; clearTimeout(timer); updateStatus();
     const nextPage=page(next);
     let targetPhoto=forcedPhoto??((photoIndex+(direction<0?-1:1)+5)%5);
     let [,preparedPhoto,reversePage]=await Promise.all([preload(nextPage),preparePhoto(targetPhoto),prepareReverse(direction===1?targetPhoto:photoIndex)]);
     // A moderated item can disappear while its image is loading.
-    if(!wishes.has(next.id)) { busy=false; updateStatus(); schedule();flushControls();return; }
+    if(!wishes.has(next.id)) { urgentInFlight=null;busy=false; updateStatus(); schedule();flushControls();return; }
     // A slow or unavailable picture must never leave a newly printed reverse
     // landing on an older photograph. Keep both sides on the loaded picture.
     if(!preparedPhoto||!reversePage){
       preparedPhoto=$('couplePhoto');targetPhoto=Number(preparedPhoto?.dataset.photoIndex??photoIndex);
       reversePage=preparedPhoto?.naturalWidth&&preparedPhoto.complete?await prepareReverse(targetPhoto):null;
       if(!reversePage){
-        if(direction>0&&next.id!==current?.id&&!pending.includes(next.id))pending.unshift(next.id);
-        busy=false;updateStatus();schedule();flushControls();return;
+        urgentInFlight=null;busy=false;updateStatus();schedule();flushControls();return;
       }
+    }
+    // Preparation is not a physical turn yet. A new blessing that arrived
+    // while an old page's images loaded must own this next leaf instead.
+    pruneUrgent();
+    if(direction>0&&(intent==='history'||intent==='resume')&&pending.length){
+      urgentInFlight=null;busy=false;updateStatus();navigate(1);return;
     }
     // Move the decoded DOM image with its paper instead of creating a second
     // no-store avatar request during the turn or at the resting-page commit.
@@ -159,31 +175,35 @@
     // A pause received mid-turn stops the next dwell, not this physical leaf.
     try { await activeAnimation.finished; } catch {}
     const kept=wishes.get(next.id);
-    render(kept||ordered()[0]||null,kept?nextPage:undefined);
+    if(kept&&intent==='urgent')pending=pending.filter(id=>id!==kept.id);
+    if(kept&&intent==='resume')historyResume=null;
+    render(kept||restingFallback(),kept?nextPage:undefined);
     applyPhoto(targetPhoto,preparedPhoto);
     // Commit the resting page before removing the leaf: no blank frame.
     sheet.hidden=true; animations.forEach(a=>a.cancel()); animations=[]; activeAnimation=null;
-    front.replaceChildren();back.replaceChildren();busy=false;
+    front.replaceChildren();back.replaceChildren();urgentInFlight=null;busy=false;
     updateStatus(); schedule();flushControls();
   }
   function navigate(direction) {
     if(busy) return;
     const list=ordered(); if(!list.length)return;
-    let target;
+    pruneUrgent();let target,intent='history';
     if(direction>0) {
-      while(pending.length && (!wishes.has(pending[0])||pending[0]===current?.id))pending.shift();
-      if(pending.length)target=wishes.get(pending.shift());
+      if(pending.length){if(!historyResume)rememberHistory();target=wishes.get(pending[0]);intent='urgent';}
+      else if(historyResume){target=resumeTarget();intent='resume';if(!target)historyResume=null;}
     }
-    const index=list.findIndex(w=>w.id===current?.id);
-    target ||= list[(index+direction+list.length)%list.length];
-    void turnTo(target,direction);
+    // Looking backwards never consumes an unseen new blessing.
+    const history=direction<0?list.filter(w=>!pending.includes(w.id)):list;
+    if(!target&&history.length){let index=history.findIndex(w=>w.id===current?.id);if(index<0&&direction<0){const before=history.filter(w=>w.at<(current?.at??Infinity)||(w.at===current?.at&&Number(w.id)<Number(current?.id)));target=before.at(-1)||history.at(-1);}else target=history[(index+direction+history.length)%history.length];}
+    if(target)void turnTo(target,direction,undefined,intent);
   }
   function enqueue(w) {
     const n=normalize(w); if(!n)return;
     const isNew=!known.has(n.id); known.add(n.id); wishes.set(n.id,n);
-    if(isNew && n.id!==current?.id && !pending.includes(n.id)) pending.push(n.id);
+    // Initial snapshot and initial SSE replay are history, not urgent work.
+    if(isNew && !initial && !pending.includes(n.id)) pending.push(n.id);
     pending.sort((a,b)=>(wishes.get(a)?.at||0)-(wishes.get(b)?.at||0)||Number(a)-Number(b));
-    if(!initial && !current && !busy){render(n);schedule();}
+    if(!initial && !current && !busy && !paused)navigate(1);
     updateStatus();
   }
   async function snapshot() {
@@ -208,10 +228,10 @@
         for(const w of data.all){const n=normalize(w);if(n){ids.add(n.id);enqueue(n);}}
         for(const event of duringSync){if(event.type==='wish'){const n=normalize(event.w);if(n){ids.add(n.id);enqueue(n);}}else ids.delete(String(event.id));}
         for(const id of wishes.keys())if(!ids.has(id))wishes.delete(id);
-        pending=pending.filter(id=>wishes.has(id));
+        pruneUrgent();
         cursor=Math.max(cursor,data.cursor);
         if(initial){initial=false;render(wishes.get(resumeId)||ordered()[0]||null);schedule();}
-        else if(current&&!wishes.has(current.id)&&!busy){render(ordered()[0]||null);schedule();}
+        else if(current&&!wishes.has(current.id)&&!busy){render(restingFallback());schedule();}
         else if(current&&!busy){current=wishes.get(current.id)||null;}
         updateStatus();flushControls();
         if(!connected){$('linkStatus').textContent=data.persistent?'已同步 · 重新連接即時訊息中':'舊版服務 · 永久儲存待啟用';}
@@ -225,7 +245,7 @@
     stream=new EventSource(API+'/api/stream?cursor='+cursor);
     stream.addEventListener('open',()=>{connected=true;$('indicator').classList.add('live');$('linkStatus').textContent='LIVE · 即時收錄祝福';});
     stream.addEventListener('wish',e=>{try { const w=JSON.parse(e.data);if(syncing)duringSync.push({type:'wish',w});enqueue(w);cursor=Math.max(cursor,Number(e.lastEventId)||0); }catch{} });
-    stream.addEventListener('reset',e=>{try{const d=JSON.parse(e.data);if(d.id){wishes.delete(String(d.id));pending=pending.filter(id=>id!==String(d.id));if(syncing)duringSync.push({type:'remove',id:d.id});if(current?.id===String(d.id)&&!busy)render(ordered()[0]||null);}cursor=Math.max(cursor,Number(e.lastEventId)||0);}catch{} void sync();});
+    stream.addEventListener('reset',e=>{try{const d=JSON.parse(e.data);if(d.id){wishes.delete(String(d.id));pruneUrgent();if(syncing)duringSync.push({type:'remove',id:d.id});if(current?.id===String(d.id)&&!busy){render(restingFallback());schedule();}}cursor=Math.max(cursor,Number(e.lastEventId)||0);}catch{} void sync();});
     stream.addEventListener('error',()=>{connected=false;$('indicator').classList.remove('live');$('linkStatus').textContent='重新連線中 · 祝福繼續播放';});
   }
   function resize(){const v=document.querySelector('.book-viewport');$('bookScale').style.setProperty('--book-scale',Math.max(.05,Math.min((v.clientWidth-24)/1660,(v.clientHeight-24)/950)));fitPrintedText(right);if(!sheet.hidden)fitPrintedText(front);}
@@ -238,8 +258,8 @@
   }
   function replay(){
     if(busy)return;
-    pending=ordered().map(w=>w.id);const first=wishes.get(pending.shift());
-    if(first)void turnTo(first,1,4);
+    pruneUrgent();historyResume=null;const first=ordered().find(w=>!pending.includes(w.id));
+    if(first)void turnTo(first,1,4,'replay');else navigate(1);
   }
   function flushControls(){
     if(initial||busy||!controlQueue.length)return;
@@ -269,6 +289,6 @@
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)void sync();});
   window.addEventListener('beforeunload',()=>stream?.close());
   // Read-only diagnostics permit frame-by-frame verification without a fake production input.
-  window.bookPlayback=Object.freeze({get state(){return {currentId:current?.id,pending:[...pending],ids:ordered().map(w=>w.id),busy,paused,cursor,photoIndex,dwellMs:dwellFor(current?.message),controlCursor,controlReady,queuedControls:controlQueue.length};},get animation(){return activeAnimation;},get animations(){return [...animations];},sync});
+  window.bookPlayback=Object.freeze({get state(){return {currentId:current?.id,pending:[...pending],urgent:[...pending],urgentInFlight,historyResume:historyResume?{ids:[...historyResume.ids],nextIndex:historyResume.nextIndex,nextId:resumeTarget()?.id}:null,ids:ordered().map(w=>w.id),busy,paused,cursor,photoIndex,dwellMs:dwellFor(current?.message),controlCursor,controlReady,queuedControls:controlQueue.length};},get animation(){return activeAnimation;},get animations(){return [...animations];},sync});
   resize();render(null);const firstPhotoIndex=photoIndex;preparePhoto(firstPhotoIndex).then(img=>{if(photoIndex===firstPhotoIndex&&!busy)applyPhoto(firstPhotoIndex,img);});for(let i=0;i<5;i++)void preparePhoto(i);pollPlayback().then(()=>sync().then(connect));setInterval(pollPlayback,2000);setInterval(()=>{if(!connected)void sync();},10000);setInterval(()=>{if(connected)void sync();},60000);
 })();

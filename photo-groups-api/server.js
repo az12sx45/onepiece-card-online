@@ -2,7 +2,7 @@
 const http=require('node:http');
 const crypto=require('node:crypto');
 const sharp=require('sharp');
-const {createStore}=require('./storage');
+const {createStore,ensureDeletionSchema}=require('./storage');
 const segmenter=new Intl.Segmenter('zh-TW',{granularity:'grapheme'});
 const countText=value=>[...segmenter.segment(value)].length;
 const hash=value=>crypto.createHash('sha256').update(value).digest('hex');
@@ -51,6 +51,9 @@ async function normalizeWish(input,{importing=false}={}){
 async function createApp(env=process.env){
   const store=await createStore(env);
   if(env.D1_AUTO_MIGRATE==='true'&&store.mode==='d1')await store.migrate();
+  // This additive capability does not depend on a deployment env-var change.
+  // It never rewrites or purges existing wishes, including legacy soft deletes.
+  const deletionReady=await ensureDeletionSchema(store);
   // Refuse to listen if credentials or schema are unusable, even when Render's
   // service still has its default TCP readiness check.
   await store.query('SELECT id,avatar_gender FROM wishes LIMIT 0');
@@ -71,11 +74,11 @@ async function createApp(env=process.env){
     res.setHeader('Vary','Origin');res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('X-Frame-Options','DENY');res.setHeader('Referrer-Policy','no-referrer');
     if(origin&&!origins.has(origin))throw new ApiError(403,'來源不允許');
     if(origin)res.setHeader('Access-Control-Allow-Origin',origin);
-    res.setHeader('Access-Control-Allow-Methods','GET, POST, PATCH, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization, Idempotency-Key, Last-Event-ID');
     res.setHeader('Access-Control-Expose-Headers','Retry-After, Content-Disposition');
   }
-  async function meta(){return await one(store,'SELECT (SELECT COALESCE(MAX(id),0) FROM wishes) AS latest,(SELECT COALESCE(MAX(seq),0) FROM wish_events) AS cursor');}
+  async function meta(){return await one(store,'SELECT MAX((SELECT COALESCE(MAX(id),0) FROM wishes),(SELECT COALESCE(MAX(wish_id),0) FROM deleted_receipts)) AS latest,MAX((SELECT COALESCE(MAX(seq),0) FROM wish_events),(SELECT COALESCE(MAX(event_seq),0) FROM deleted_receipts)) AS cursor');}
   async function playbackSnapshot(after,limit=100){
     const state=await one(store,'SELECT paused,latest_id,updated_at FROM playback_state WHERE id=1');
     if(!state)throw new Error('Playback state migration is missing.');
@@ -109,10 +112,12 @@ async function createApp(env=process.env){
     return {wishes:result.slice(0,limit).map(present),...info,hasMore:result.length>limit,persistent:true,storage:store.mode};
   }
   async function insert(input,req,{importing=false}={}){
-    const wish=await normalizeWish(input,{importing});
-    if(req?.headers['idempotency-key'])wish.key=String(req.headers['idempotency-key']);
-    if(!/^[A-Za-z0-9_-]{12,100}$/.test(wish.key))throw new ApiError(400,'送出識別碼不正確');
+    const suppliedKey=String(req?.headers['idempotency-key']??input.idempotencyKey??input.submission_key??'');
+    if(suppliedKey&&!/^[A-Za-z0-9_-]{12,100}$/.test(suppliedKey))throw new ApiError(400,'送出識別碼不正確');
     return serialize(async()=>{
+      if(suppliedKey&&await one(store,'SELECT wish_id FROM deleted_receipts WHERE submission_key=?',[suppliedKey]))throw new ApiError(410,'這則祝福已由管理員永久刪除，原送出編號不能再次使用。','WISH_DELETED');
+      const wish=await normalizeWish(input,{importing});
+      if(suppliedKey)wish.key=suppliedKey;
       const existing=await one(store,'SELECT * FROM wishes WHERE submission_key=?',[wish.key]);
       if(existing){if(existing.request_hash!==wish.requestHash)throw new ApiError(409,'這次送出識別碼已用於其他內容，請重新送出');return {ok:true,id:existing.id,wish:present(existing),duplicate:true,persistent:true};}
       // Keep exact retries of old receipts valid; only new public submissions
@@ -126,12 +131,33 @@ async function createApp(env=process.env){
         if(recent.length>=12||(recent[0]&&now-recent[0].created_at<Number(env.RATE_COOLDOWN_MS??15000)))throw new ApiError(429,'祝福已收到，請稍後再送另一則');
       }
       const status=importing?(['approved','pending','hidden','deleted'].includes(input.moderation_status)?input.moderation_status:'approved'):(env.MODERATION_REQUIRED==='true'?'pending':'approved'),statements=[];
-      if(wish.image)statements.push({sql:'INSERT OR IGNORE INTO avatars(id,image_base64,mime_type,byte_size,width,height,created_at) VALUES(?,?,?,?,480,480,?)',params:[wish.image.id,wish.image.base64,'image/jpeg',wish.image.bytes,now]});
-      statements.push({sql:'INSERT OR IGNORE INTO wishes(guest_name,group_number,blessing_text,blessing_grapheme_count,avatar_id,avatar_gender,style_id,moderation_status,created_at,updated_at,submission_key,request_hash,client_hash) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)',params:[wish.author,wish.group,wish.message,wish.graphemes,wish.image?.id||null,wish.avatarGender,wish.style,status,now,now,wish.key,wish.requestHash,clientHash]});
+      if(wish.image)statements.push({sql:'INSERT OR IGNORE INTO avatars(id,image_base64,mime_type,byte_size,width,height,created_at) SELECT ?,?,?,?,480,480,? WHERE NOT EXISTS(SELECT 1 FROM deleted_receipts WHERE submission_key=?)',params:[wish.image.id,wish.image.base64,'image/jpeg',wish.image.bytes,now,wish.key]});
+      statements.push({sql:'INSERT OR IGNORE INTO wishes(guest_name,group_number,blessing_text,blessing_grapheme_count,avatar_id,avatar_gender,style_id,moderation_status,created_at,updated_at,submission_key,request_hash,client_hash) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,? WHERE NOT EXISTS(SELECT 1 FROM deleted_receipts WHERE submission_key=?)',params:[wish.author,wish.group,wish.message,wish.graphemes,wish.image?.id||null,wish.avatarGender,wish.style,status,now,now,wish.key,wish.requestHash,clientHash,wish.key]});
       await store.batch(statements);
       const saved=await one(store,'SELECT * FROM wishes WHERE submission_key=?',[wish.key]);
+      if(!saved&&await one(store,'SELECT wish_id FROM deleted_receipts WHERE submission_key=?',[wish.key]))throw new ApiError(410,'這則祝福已由管理員永久刪除，原送出編號不能再次使用。','WISH_DELETED');
       if(!saved||saved.request_hash!==wish.requestHash)throw new ApiError(409,'送出資料衝突，請重新確認');
       pollSubscribers().catch(()=>{});return {ok:true,id:saved.id,wish:present(saved),duplicate:false,persistent:true};
+    });
+  }
+  async function hardDelete(id){
+    return serialize(async()=>{
+      const old=await one(store,'SELECT id,avatar_id FROM wishes WHERE id=?',[id]);
+      if(!old){const receipt=await one(store,'SELECT event_seq FROM deleted_receipts WHERE wish_id=?',[id]);if(!receipt)throw new ApiError(404,'找不到祝福');return {ok:true,id,deleted:true,duplicate:true,persistent:true,cursor:receipt.event_seq};}
+      const now=Date.now();
+      // The FK event row first reserves the shared AUTOINCREMENT cursor. Keep its
+      // minimal tombstone, remove FK children, then delete the wish and any image
+      // that has no remaining reference (including hidden/legacy-deleted wishes).
+      await store.batch([
+        {sql:"INSERT INTO wish_events(wish_id,event_type,created_at) SELECT id,'reset',? FROM wishes WHERE id=?",params:[now,id]},
+        {sql:'INSERT OR IGNORE INTO deleted_receipts(wish_id,submission_key,deleted_at,event_seq) SELECT id,submission_key,?,(SELECT MAX(seq) FROM wish_events WHERE wish_id=wishes.id) FROM wishes WHERE id=?',params:[now,id]},
+        {sql:'DELETE FROM wish_events WHERE wish_id=?',params:[id]},
+        {sql:'DELETE FROM wishes WHERE id=?',params:[id]},
+        {sql:'DELETE FROM avatars WHERE id=? AND NOT EXISTS(SELECT 1 FROM wishes WHERE avatar_id=avatars.id)',params:[old.avatar_id]}
+      ]);
+      const receipt=await one(store,'SELECT event_seq FROM deleted_receipts WHERE wish_id=?',[id]);
+      if(!receipt)throw new Error('Deletion receipt read-back incomplete.');
+      return {ok:true,id,deleted:true,duplicate:false,persistent:true,cursor:receipt.event_seq};
     });
   }
   function sendEvent(sub,type,data,seq){
@@ -140,8 +166,8 @@ async function createApp(env=process.env){
     sub.res.write(`id: ${seq}\nevent: ${type}\ndata: ${JSON.stringify(data)}\n\n`);sub.cursor=seq;
   }
   async function replay(sub){
-    const events=await rows(store,'SELECT e.seq,e.event_type,w.* FROM wish_events e JOIN wishes w ON w.id=e.wish_id WHERE e.seq>? ORDER BY e.seq ASC LIMIT 200',[sub.cursor]);
-    for(const e of events){if(e.event_type==='wish'&&e.moderation_status==='approved')sendEvent(sub,'wish',present(e),e.seq);else sendEvent(sub,'reset',{reason:'moderation',id:e.id,status:e.moderation_status,cursor:e.seq},e.seq);}
+    const events=await rows(store,"WITH events AS (SELECT seq,wish_id,event_type FROM wish_events WHERE seq>? UNION ALL SELECT event_seq AS seq,wish_id,'deleted' AS event_type FROM deleted_receipts WHERE event_seq>? ORDER BY seq ASC LIMIT 200) SELECT e.seq,e.event_type,e.wish_id AS event_wish_id,w.* FROM events e LEFT JOIN wishes w ON w.id=e.wish_id ORDER BY e.seq ASC",[sub.cursor,sub.cursor]);
+    for(const e of events){if(e.event_type==='deleted'||!e.id)sendEvent(sub,'reset',{reason:'deleted',id:e.event_wish_id,status:'deleted',cursor:e.seq},e.seq);else if(e.event_type==='wish'&&e.moderation_status==='approved')sendEvent(sub,'wish',present(e),e.seq);else sendEvent(sub,'reset',{reason:'moderation',id:e.id,status:e.moderation_status,cursor:e.seq},e.seq);}
     return events.length;
   }
   async function pollSubscribers(){
@@ -152,7 +178,7 @@ async function createApp(env=process.env){
     try{
       cors(req,res);if(req.method==='OPTIONS'){res.writeHead(204);res.end();return;}
       const url=new URL(req.url,'http://localhost');
-      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,playback:true,avatar_gender:true,avatar_gender_required:true,storage:store.mode,...await meta()});return;}
+      if(req.method==='GET'&&url.pathname==='/health'){json(res,200,{ok:true,version:2,persistent:true,writable:true,playback:true,avatar_gender:true,avatar_gender_required:true,hard_delete:deletionReady,storage:store.mode,...await meta()});return;}
       if(req.method==='GET'&&url.pathname==='/api/playback'){
         const after=url.searchParams.has('after')?integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER):undefined;
         json(res,200,await playbackSnapshot(after,integer(url.searchParams.get('limit'),1,100,100)));return;
@@ -166,7 +192,7 @@ async function createApp(env=process.env){
       }
       if(req.method==='GET'&&url.pathname==='/api/stream'){
         let cursor=integer(req.headers['last-event-id']??url.searchParams.get('cursor'),0,Number.MAX_SAFE_INTEGER,0);
-        if(!url.searchParams.has('cursor')&&!req.headers['last-event-id']&&url.searchParams.has('after'))cursor=(await one(store,'SELECT COALESCE(MAX(seq),0) AS cursor FROM wish_events WHERE wish_id<=?',[integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER,0)])).cursor;
+        if(!url.searchParams.has('cursor')&&!req.headers['last-event-id']&&url.searchParams.has('after')){const after=integer(url.searchParams.get('after'),0,Number.MAX_SAFE_INTEGER,0);cursor=(await one(store,'SELECT MAX((SELECT COALESCE(MAX(seq),0) FROM wish_events WHERE wish_id<=?),(SELECT COALESCE(MAX(event_seq),0) FROM deleted_receipts WHERE wish_id<=?)) AS cursor',[after,after])).cursor;}
         const info=await meta();if(cursor>info.cursor)cursor=0;
         res.writeHead(200,{'Content-Type':'text/event-stream; charset=utf-8','Connection':'keep-alive','Cache-Control':'no-cache, no-transform','X-Accel-Buffering':'no'});
         res.write(`retry: 4000\nevent: ready\ndata: ${JSON.stringify({...info,persistent:true})}\n\n`);
@@ -180,9 +206,11 @@ async function createApp(env=process.env){
         if(req.method==='GET'&&adminAvatar){const image=await one(store,'SELECT a.image_base64,a.mime_type FROM avatars a JOIN wishes w ON w.avatar_id=a.id WHERE w.id=?',[Number(adminAvatar[1])]);if(!image)throw new ApiError(404,'找不到照片');res.writeHead(200,{'Content-Type':image.mime_type});res.end(Buffer.from(image.image_base64,'base64'));return;}
         if(req.method==='GET'&&url.pathname==='/api/admin/wishes'){json(res,200,await list(url,true));return;}
         const match=url.pathname.match(/^\/api\/admin\/wishes\/(\d+)$/);
+        if(req.method==='DELETE'&&match){const result=await hardDelete(integer(match[1],1,Number.MAX_SAFE_INTEGER));json(res,200,result);pollSubscribers().catch(()=>{});return;}
         if(req.method==='PATCH'&&match){
           requireJson(req);const input=await readJson(req),status=input.moderation_status;
           if(!['approved','hidden','pending','deleted'].includes(status))throw new ApiError(400,'審核狀態不正確');
+          if(status==='deleted'){const result=await hardDelete(integer(match[1],1,Number.MAX_SAFE_INTEGER));json(res,200,result);pollSubscribers().catch(()=>{});return;}
           const result=await serialize(async()=>{const old=await one(store,'SELECT * FROM wishes WHERE id=?',[Number(match[1])]);if(!old)throw new ApiError(404,'找不到祝福');if(old.moderation_status===status)return old;const now=Date.now();await store.query('UPDATE wishes SET moderation_status=?,updated_at=? WHERE id=?',[status,now,old.id]);return {...old,moderation_status:status};});
           json(res,200,{ok:true,wish:present(result)});pollSubscribers().catch(()=>{});return;
         }

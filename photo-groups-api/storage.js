@@ -3,6 +3,27 @@ const fs = require('node:fs');
 const path = require('node:path');
 const initSqlJs = require('sql.js');
 const MIGRATIONS = fs.readdirSync(path.join(__dirname,'migrations')).filter(name=>/^\d+_.*\.sql$/.test(name)).sort().map(name=>({name,sql:fs.readFileSync(path.join(__dirname,'migrations',name),'utf8')}));
+async function deletionSchemaReady(store){
+  const columns=(await store.query('PRAGMA table_info(deleted_receipts)'))[0]?.results||[];
+  if(!columns.length)return false;
+  const expected={wish_id:'INTEGER',submission_key:'TEXT',deleted_at:'INTEGER',event_seq:'INTEGER'};
+  if(columns.length!==4||Object.entries(expected).some(([name,type])=>!columns.some(c=>c.name===name&&String(c.type).toUpperCase()===type&&(name==='wish_id'?c.pk===1:c.notnull===1))))throw new Error('Existing deletion receipt schema is incompatible; no guest records were changed.');
+  const table=(await store.query("SELECT sql FROM sqlite_master WHERE type='table' AND name='deleted_receipts'"))[0]?.results?.[0]?.sql||'';
+  if(!/submission_key\s+TEXT\s+NOT\s+NULL\s+UNIQUE/i.test(table)||!/event_seq\s+INTEGER\s+NOT\s+NULL\s+UNIQUE/i.test(table))throw new Error('Deletion receipts require unique nonces and cursors; no guest records were changed.');
+  const trigger=(await store.query("SELECT sql FROM sqlite_master WHERE type='trigger' AND name='wishes_reject_deleted_submission'"))[0]?.results?.[0]?.sql;
+  if(!trigger)return false;
+  if(!/BEFORE\s+INSERT\s+ON\s+wishes/i.test(trigger)||!/RAISE\s*\(\s*ABORT\s*,\s*'WISH_DELETED'\s*\)/i.test(trigger)||!/submission_key\s*=\s*NEW\.submission_key/i.test(trigger))throw new Error('Deletion replay guard is incompatible; no guest records were changed.');
+  return true;
+}
+async function ensureDeletionSchema(store){
+  if(await deletionSchemaReady(store))return true;
+  const migration=MIGRATIONS.find(m=>m.name==='0004_hard_delete_receipts.sql');
+  if(!migration)throw new Error('Deletion receipt migration is missing.');
+  // Safe on an existing live schema: CREATE IF NOT EXISTS only, never a purge.
+  await store.executeSchema(migration.sql);
+  if(!await deletionSchemaReady(store))throw new Error('Deletion receipt migration read-back incomplete.');
+  return true;
+}
 async function avatarGenderSchemaReady(store){
   const columns=(await store.query('PRAGMA table_info(wishes)'))[0]?.results||[];
   const column=columns.find(c=>c.name==='avatar_gender');
@@ -20,7 +41,8 @@ async function migrateStore(store){
       try{await store.executeSchema(migration.sql);}
       catch(error){if(!await avatarGenderSchemaReady(store))throw error;}
       if(!await avatarGenderSchemaReady(store))throw new Error('Avatar gender migration read-back incomplete.');
-    }else await store.executeSchema(migration.sql);
+    }else if(migration.name==='0004_hard_delete_receipts.sql')await ensureDeletionSchema(store);
+    else await store.executeSchema(migration.sql);
   }
 }
 
@@ -89,4 +111,4 @@ async function createStore(env=process.env){
   db.run('PRAGMA foreign_keys=ON');
   const store=new LocalStore(db,file);await store.migrate();return store;
 }
-module.exports={createStore,D1Store,MIGRATIONS};
+module.exports={createStore,D1Store,MIGRATIONS,ensureDeletionSchema,deletionSchemaReady};

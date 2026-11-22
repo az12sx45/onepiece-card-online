@@ -2,7 +2,7 @@
   'use strict';
   const API='https://renjun-hengru-wishes-live-2026.onrender.com',DEFAULT='./assets/default-avatar.svg';
   const defaultAvatar=gender=>gender==='male'?'./assets/default-avatar-male.svg':gender==='female'?'./assets/default-avatar-female.svg':DEFAULT;
-  const $=id=>document.getElementById(id),labels={approved:'公開中',pending:'待審核',hidden:'已隱藏',deleted:'已刪除'},actionLabels={pause:'暫停',resume:'繼續播放',next:'下一頁',prev:'上一頁',replay:'重新播放'};
+  const $=id=>document.getElementById(id),labels={approved:'公開中',pending:'待審核',hidden:'已隱藏',deleted:'舊刪除紀錄'},actionLabels={pause:'暫停',resume:'繼續播放',next:'下一頁',prev:'上一頁',replay:'重新播放'};
   let token='',records=[],posting=false,pendingCommand=null,statePoll=null,polling=false,loadGeneration=0;
   let albumTask=null,albumURL=null,albumGeneration=0,authGeneration=0;
   const images=new Set();let observer;
@@ -49,18 +49,20 @@
     revokeImages();loadGeneration++;const generation=loadGeneration;
     if(typeof IntersectionObserver==='function')observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){observer.unobserve(entry.target);void loadAvatar(entry.target,entry.target.dataset.avatarId,Number(entry.target.dataset.generation));}},{rootMargin:'180px'});
     const query=$('wishSearch').value.trim().toLocaleLowerCase('zh-TW'),filter=$('statusFilter').value;
-    const shown=records.filter(w=>(filter==='all'||w.moderation_status===filter)&&(!query||(String(w.author)+' '+w.message).toLocaleLowerCase('zh-TW').includes(query)));
-    $('adminList').replaceChildren();$('recordSummary').textContent='顯示 '+shown.length+' / '+records.length+' 則紀錄（包含隱藏與軟刪除）';$('approvedCount').textContent=records.filter(w=>w.moderation_status==='approved').length+' 則公開祝福';
+    const shown=records.filter(w=>(filter==='all'?w.moderation_status!=='deleted':w.moderation_status===filter)&&(!query||(String(w.author)+' '+w.message).toLocaleLowerCase('zh-TW').includes(query)));
+    const legacyCount=records.filter(w=>w.moderation_status==='deleted').length;
+    $('adminList').replaceChildren();$('recordSummary').textContent=filter==='deleted'?'顯示 '+shown.length+' / '+legacyCount+' 則舊刪除紀錄（尚未永久移除）':'顯示 '+shown.length+' / '+(records.length-legacyCount)+' 則紀錄'+(legacyCount?'；另有 '+legacyCount+' 則舊刪除紀錄可由篩選查看':'');$('approvedCount').textContent=records.filter(w=>w.moderation_status==='approved').length+' 則公開祝福';
     if(!shown.length){$('adminList').append(text('p','empty-records','這個篩選條件目前沒有祝福紀錄。'));return;}
     for(const w of shown.slice().reverse()){
       const row=text('article','admin-entry');row.dataset.wishId=String(w.id);const img=document.createElement('img');img.src=defaultAvatar(w.avatar_gender);img.alt=String(w.author)+' 的頭像';img.width=62;img.height=62;
       const body=text('div'),name=text('div','entry-name',w.author);name.append(text('span','status-badge '+w.moderation_status,labels[w.moderation_status]||w.moderation_status));
       body.append(name,text('p','entry-meta','第 '+w.group+' 組 · '+new Date(w.at||w.created_at).toLocaleString('zh-TW')),text('p','entry-message',w.message));
       const buttons=text('div','entry-buttons');
-      for(const [label,value] of [['公開','approved'],['隱藏','hidden'],['刪除','deleted']]){
-        const button=text('button',value==='deleted'?'danger':'',label);button.type='button';button.disabled=w.moderation_status===value;
+      for(const [label,value] of [['公開','approved'],['隱藏','hidden']]){
+        const button=text('button','',label);button.type='button';button.disabled=w.moderation_status===value;
         button.onclick=()=>moderate(w.id,value,button);buttons.append(button);
       }
+      const remove=text('button','danger','永久刪除');remove.type='button';remove.dataset.deleteId=String(w.id);remove.onclick=()=>hardDelete(w.id,remove);buttons.append(remove);
       body.append(buttons);row.append(img,body);$('adminList').append(row);if(w.avatar_path)queueAvatar(img,w.id,generation);
     }
   }
@@ -73,6 +75,21 @@
     button.disabled=true;
     try{await request('/api/admin/wishes/'+id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({moderation_status:value})});const item=records.find(w=>w.id===id);if(item)item.moderation_status=value;renderRecords();status('已將這則祝福設為「'+labels[value]+'」。');}
     catch(error){button.disabled=false;if(error.status===401)lock('需要有效的管理金鑰');else status(error.message);}
+  }
+  async function hardDelete(id,button){
+    if(!token||button.disabled)return;const generation=authGeneration;button.disabled=true;
+    try{
+      status('正在確認永久刪除功能…');const health=await request('/health'),capability=await health.json().catch(()=>({}));
+      if(!token||generation!==authGeneration)return;
+      if(capability.hard_delete!==true)throw new Error('永久刪除功能尚未就緒，資料已保留；請稍後重整控制台再試。');
+      if(!window.confirm('確定永久刪除這則祝福及所附照片？\n刪除後無法復原。')){status('已取消永久刪除，資料未變更。');return;}
+      albumTask?.controller.abort();status('正在永久刪除這則祝福…');
+      const response=await request('/api/admin/wishes/'+encodeURIComponent(id),{method:'DELETE'}),result=await response.json().catch(()=>({}));
+      if(!token||generation!==authGeneration)return;
+      if(result.ok!==true||result.deleted!==true||result.persistent!==true||String(result.id)!==String(id))throw new Error('尚未確認永久刪除成功，清單已保留；請重新載入後確認。');
+      records=records.filter(w=>String(w.id)!==String(id));clearAlbumDownload();renderRecords();status('已永久刪除這則祝福，清單已更新。');
+    }catch(error){if(token&&generation===authGeneration){if(error.status===401)lock('需要有效的管理金鑰');else status(error.message||'永久刪除尚未完成，請稍後重試。');}}
+    finally{if(button.isConnected&&generation===authGeneration)button.disabled=false;}
   }
   async function download(path,name){
     const generation=authGeneration;

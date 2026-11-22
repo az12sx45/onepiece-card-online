@@ -12,7 +12,7 @@
 
 第二次正式驗收於台北 03:11 完成：正式靜態檔逐一比對 Git 相同、1920×1080 整本書與 QR 解碼、真正控制台送出暫停／下一頁／上一頁／重播／繼續均通過；換頁同步輪替原照，依字數自動播放，保存翻頁 0/25/50/75/100% 畫面。另用一位現有公開署名與原雜湊映射核對，省略姓氏的正式手機查詢成功；這不是逐人名單驗收。過程沒有新增或修改祝福，公開既有 id 7/8/9 皆保留，測試結束恢復自動播放。
 
-管理：開啟 [control.html](https://tantan-lily-photo-groups-2026.onrender.com/control.html)，輸入 Render 婚禮 API → Environment → ADMIN_TOKEN 的既有值。可暫停／繼續、前後頁、重播、公開／隱藏／軟刪除留言、匯出 CSV 與完整 JSON。金鑰僅保留在當前分頁記憶體；重新整理須再登入。電視 [tv.html](https://tantan-lily-photo-groups-2026.onrender.com/tv.html) 沒有可見控制鈕，雙擊書本或 F11 全螢幕。每頁停留 6 秒＋祝福 grapheme 字數×0.3 秒、最多 15 秒，翻頁 1.1 秒；每次完成翻頁輪替原五張新人照片。會場開始前先開啟電視頁，讓免費 API 完成閒置喚醒並持續接收。
+管理：開啟 [control.html](https://tantan-lily-photo-groups-2026.onrender.com/control.html)，輸入 Render 婚禮 API → Environment → ADMIN_TOKEN 的既有值。可暫停／繼續、前後頁、重播、公開／隱藏／永久刪除留言、匯出 CSV 與完整 JSON。金鑰僅保留在當前分頁記憶體；重新整理須再登入。電視 [tv.html](https://tantan-lily-photo-groups-2026.onrender.com/tv.html) 沒有可見控制鈕，雙擊書本或 F11 全螢幕。每頁停留 6 秒＋祝福 grapheme 字數×0.3 秒、最多 15 秒，翻頁 1.1 秒；每次完成翻頁輪替原五張新人照片。會場開始前先開啟電視頁，讓免費 API 完成閒置喚醒並持續接收。
 
 仍待實體 iPhone 相機／相簿與現場電視確認；Playwright WebKit 模擬不等於真機驗收。原先 10 款 AI PNG 不在此分支或提供的本機素材目錄，需使用者重新提供才能接入；目前沿用十種 CSS 樣式及新增 SVG 花卉。原 15 組查詢映射與五張新人照片逐字保留；因原始明文邀請名單不在 repo，沒有重新統計或宣稱逐人核對 80 筆／169 人。
 
@@ -86,18 +86,19 @@ SQLite 檔案在每次交易成功時原子寫入；此模式在 `RENDER` 或 `N
 | --- | --- |
 | `GET /api/admin/wishes?after=0&limit=200` | 所有審核狀態，分頁格式同公開清單 |
 | `GET /api/admin/avatars/<wishId>` | 管理員檢查 pending/hidden 頭像 |
-| `PATCH /api/admin/wishes/<wishId>` | JSON `{moderation_status:"approved"或"hidden"或"pending"或"deleted"}` |
+| `PATCH /api/admin/wishes/<wishId>` | JSON `{moderation_status:"approved"或"hidden"或"pending"}`；舊客戶端的 deleted 也轉永久刪除 |
+| `DELETE /api/admin/wishes/<wishId>` | 永久移除祝福及無其他引用的頭像，重試冪等，需管理金鑰 |
 | `GET /api/admin/export.csv` | 全部祝福文字、頭像路徑、時間與狀態，UTF-8 BOM，CSV 公式字元轉義 |
 | `GET /api/admin/export.json` | 包含所有壓縮頭像及 submission_key 的完整應用層備份 |
 | `POST /api/admin/import` | `{wishes:[...備份紀錄]}`，以 submission_key 去重，保留原時間與狀態 |
 
-刪除為 soft delete，避免誤刪永久資料；管理員可重新 approved 復原。照片及文字不因審核而物理刪除。請在活動後依新人及賓客授權決定保留期限。
+「隱藏」仍可重新公開；「永久刪除」會真正移除祝福內容及不再共用的頭像，無法由控制台復原。舊版 soft-deleted 不自動清空，移到「舊刪除紀錄」篩選，可再逐筆永久刪除。刪除成功才從管理清單移除，並通知電視清除當前／待播紀錄。已下載的舊JSON／電子書是快照，若要反映刪除需重新匯出。
 
 每次請求上限 240 KB。含頭像的 JSON 匯回請拆成「一筆祝福／一個請求」；純文字最多 200 筆／批。匯出沒有刪除或修改來源資料。
 
 ## 備份
 
-D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不能代替婚禮紀念冊的長期副本。婚禮前、活動結束後下載 CSV + 完整 JSON 到新人保管的位置。也可用 `npm run backup:d1 -- C:\private-backups\wedding.json` 備份三張資料表；此檔包含頭像與個資，勿加入 Git。該 CLI 原始表備份用於人工災難復原，網站 `/api/admin/import` 使用的格式是 `/api/admin/export.json`。
+D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不能代替婚禮紀念冊的長期副本。婚禮前、活動結束後下載 CSV + 完整 JSON 到新人保管的位置。也可用 `npm run backup:d1 -- C:\private-backups\wedding.json` 備份目前六張應用資料表（含不含內容的刪除收據）與sqlite_sequence序列；此檔包含頭像與個資，勿加入 Git。該 CLI 原始表備份用於人工災難復原，網站 `/api/admin/import` 使用的格式是 `/api/admin/export.json`。
 
 [D1 Time Travel 官方說明](https://developers.cloudflare.com/d1/reference/time-travel/)。還原 Time Travel 會覆寫資料庫，不屬於日常匯出操作，執行前須另行確認。
 
@@ -192,3 +193,21 @@ HTML為單一自含檔案，內嵌資料／CSS／JS及所有圖片，CSP禁止�
 Windows Playwright WebKit對複雜family ZWJ Emoji的字形有不完整或相鄰文字重疊限制，原字串仍完整保留；Chromium HTML與影像PDF顯示完整，平板建議使用PDF。沒有實體iPad／iPhone或Apple Books的硬體驗收，也沒有拿正式祝福灌入測試資料。
 
 另以同最終HTML SHA做受控解碼定向1項：封底圖片刻意延後500ms以上時保留最後賓客、尚不啟動動畫；解碼放行後依950ms設定翻至完整封底（觀測961ms）。封面版本因此另有5個必要component證據，與前15項分開記錄。
+
+## 第九次永久刪除與新祝福優先（2026-11-22）
+
+控制台「永久刪除」確認後呼叫授權DELETE；先檢查health的hard_delete能力，避免靜態先接上舊API而誤報成功。刪除採一個批次：新增reset游標／最小收據、刪除該祝福舊事件、移除祝福本身，最後僅清除沒有任何其他祝福引用的頭像。不存在的ID或重複刪除不產生額外事件。資料庫deleted_receipts只保留wish_id、隨機submission_key、刪除時間與事件seq，不保留署名、祝福、組別、頭像；舊UUID重試回410 WISH_DELETED，資料庫trigger也防止舊instance或競態重新插入。原CSV／JSON不會再包含真正刪除的祝福，原始DB備份v3保留最小收據以防還原後重送復活，並保存sqlite_sequence，避免全刪後還原重用舊id／游標。
+
+0004_hard_delete_receipts.sql僅附加CREATE IF NOT EXISTS表／唯一索引／trigger，API啟動時安全ensure與readback後才宣告hard_delete:true。既有wishes、avatars、事件及舊soft-deleted不在遷移時改寫／清除。原wish_events的FK不重建；刪除receipt保留已配發的seq，SSE讀取UNION與原事件併按seq排序，meta對兩來源取MAX，確保游標不倒退及斷線能重播刪除通知。
+
+TV初始歷史只加入輪播，不放新祝福優先佇列。新ID依created_at／id排序，當前頁仍依原字數停留，已開始的3D翻頁照常落頁；下一次向前翻先播新祝福。只有真正落頁才消耗新訊息，全部播完回原本下一個舊頁；原續點被刪則沿原舊環找下一筆。向後看、重播不誤丟尚未播的新祝福，同ID的SSE重連／輪詢同步不重入。舊輪播之後仍會包含已播放的新祝福。
+
+本輪沒有新增付費資源、不修改遊戲main、原15組映射／手機／自拍／30字驗證／電子書匯出與照片素材。實際測試和Live部署讀回完成後另列收據；此節說明實作，不替代驗收。
+
+v9本機實測：後端25項為24 PASS／0 FAIL／1 SKIP（直接正式D1整合沒有提供開關／憑證，未冒稱執行）；原17項保留，新8項涵蓋永久刪除授權、空DELETE、冪等、共享頭像、SSE即時／重播／legacy after、重啟／游標／原UUID410、交易rollback、DBguard競態、完整備份及schema相容。D1 REST啟動相容測試是mock，不是對正式D1刪除。
+
+隔離SQLite＋Playwright核心9／9通過：真自動停留觸發舊3→新6至10→舊4、新來不插斷目前頁、urgent中繼續加入與真SSE斷線重連去重、暫停前後頁，控制台實際永久刪除目前／待播／翻頁中項目、重啟後仍刪除、舊UUID410，共用頭像不傷其他祝福，以及401／舊cap／取消確認／503時不誤移除。1920翻頁前／50%／落頁三幀已目視，紙葉透視、完整新人背面、相框／QR與文字方向保留。0正式請求、0JS錯誤；手機、書本CSS與電子書三模組hash維持。額外邊界與正式Live收據另列，沒有宣稱核心9項代替所有情境。
+
+本機獨立npm start檢查被自動核准審查以blocked by policy拒絕，沒有提供詳細原因，程序未啟動，未列通過且沒有切殼重試。上述隔離createApp整合是另行實際成功執行的HTTP API／SSE／瀏覽器驗證，不冒稱該npm指令已執行。
+
+v9補驗：相同前版book SHA4391dd…完成額外4／4（舊last→新A/B→舊first、原續點被刪略過、replay保新佇列、舊刪除filter可真刪）。最後review發現舊頁預載時收到新祝福仍可能先翻舊頁，因此只在實體葉啟動前增加history/resume→urgent的交接，replay以明確intent保原行為；最終book SHAad9cfa27…另做1項真local API/SSE定向PASS：舊2頭像hold83ms、新6入列時原1不變／無紙葉，release後實體target順序[6,2]，落頁才consume。前9＋4與後1分版本記錄，不宣稱整套在最終SHA全重跑；其他產品SHA不變。初次undefined/null的測試器斷言失敗保留，不改產品湊結果。全程0正式請求。

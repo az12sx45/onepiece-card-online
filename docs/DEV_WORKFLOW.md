@@ -9863,3 +9863,21 @@ QA曾誤用cwd產生兩個暫存檔；測試工具已改絕對基準。自動核
 第四輪API 5755b731／dep-dc150f2jnfac73fnfl00於台北10:26:36 Live；10:27:39 health200／avatar_gender:true／storage:d1／persistent:true／writable:true、GET公開7/8/9均unspecified，無正式送出。靜態發布前另修慢圖一致性：8秒解碼期限，target不可用時back/落頁同用實際可見舊照，失敗Map下回重試；全圖不可用先不翻並保留pending。4項定向PASS涵蓋3秒慢圖、HTTPfail、timeout/10.5秒late不覆蓋、無圖恢復；首次goto預設load被刻意hold圖片擋住的harness失敗保留，修等domcontentloaded/真ready後通過。API可執行程式與5755不變。
 
 第四輪靜態f49c05e／dep-dc158nrl550s73df6hqg於台北10:34:07 Live，API仍5755，兩者API執行碼一致。10:35:33正式唯讀7/7 PASS：16檔/SVG exact、五張原照（本次HTTP亦byte exact）、三種16:9雙向30frames/back與落頁一致、QR、memory真公開署名對原PAYLOAD查組、WebKit三fallback/自選圓形拖曳縮放/確認/移除。19張PNG、61GET／0POST／0JS errors／0blocked，公開IDs7/8/9與共享播放摘要前後同。完整送出寫入及SSE/重啟在真localAPI隔離DB已測，正式本輪沒有新增留言或更新既有資料，不冒稱LivePOST或真機。main及遊戲部署保留cf296d／dep-dc00b40u01pc73b83jt0，所有工作僅婚禮分支。
+
+## 2026-11-22：婚禮永久刪除與新祝福優先播放
+
+使用者要求控制台刪除改成真正刪除，以及新祝福在目前頁播完後優先排隊。工作只在 photo-groups-2026，沿用原兩個婚禮服務；遊戲 main、PostgreSQL 與遊戲程式不改。
+
+API新增授權永久刪除，原子移除祝福、其舊事件與不再共用的頭像，保留不含署名／內容／照片的最小刪除收據，防止舊手機識別碼重試復活。新增0004為附加表／索引與防復活trigger，不重建既有表、不自動清除舊軟刪內容。刪除通知與原事件游標一起持久化；無法在舊wish事件INNER JOIN消失後漏掉刪除。控制台先確認新服務能力，真成功才移除畫面，原soft-deleted移到獨立舊刪除篩選且可再永久刪除。
+
+電視把初始歷史和新ID的優先佇列分開：不打斷目前停留／已開始的紙葉，下一頁優先新訊息，依時間／id排隊，播完回原舊輪播續點。去重、暫停、反向閱覽、重播、慢圖與刪除同步須按實際測試另列；書本造型、QR、五張照片、手機及電子書匯出維持。
+
+當輪正式前基準純GET：公開id9/11、latest11/cursor26；這是即時讀回，不沿用v8歷史id7/8/9/10。沒有取得管理金鑰或對正式資料做測試刪除。實測與Live收據於完成後另列，不以此設計記錄冒稱通過。當輪可用工具未提供LATTICE API，無法查寫task／project／graph狀態，繼續定向原始碼與真實測試；不捏造持久任務身分。
+
+v9本機實測：後端25項為24 PASS／0 FAIL／1 SKIP（直接正式D1整合沒有提供開關／憑證，未冒稱執行）；原17項保留，新8項涵蓋永久刪除授權、空DELETE、冪等、共享頭像、SSE即時／重播／legacy after、重啟／游標／原UUID410、交易rollback、DBguard競態、完整備份及schema相容。D1 REST啟動相容測試是mock，不是對正式D1刪除。
+
+隔離SQLite＋Playwright核心9／9通過：真自動停留觸發舊3→新6至10→舊4、新來不插斷目前頁、urgent中繼續加入與真SSE斷線重連去重、暫停前後頁，控制台實際永久刪除目前／待播／翻頁中項目、重啟後仍刪除、舊UUID410，共用頭像不傷其他祝福，以及401／舊cap／取消確認／503時不誤移除。1920翻頁前／50%／落頁三幀已目視，紙葉透視、完整新人背面、相框／QR與文字方向保留。0正式請求、0JS錯誤；手機、書本CSS與電子書三模組hash維持。額外邊界與正式Live收據另列，沒有宣稱核心9項代替所有情境。
+
+本機獨立npm start檢查被自動核准審查以blocked by policy拒絕，沒有提供詳細原因，程序未啟動，未列通過且沒有切殼重試。上述隔離createApp整合是另行實際成功執行的HTTP API／SSE／瀏覽器驗證，不冒稱該npm指令已執行。
+
+v9補驗：相同前版book SHA4391dd…完成額外4／4（舊last→新A/B→舊first、原續點被刪略過、replay保新佇列、舊刪除filter可真刪）。最後review發現舊頁預載時收到新祝福仍可能先翻舊頁，因此只在實體葉啟動前增加history/resume→urgent的交接，replay以明確intent保原行為；最終book SHAad9cfa27…另做1項真local API/SSE定向PASS：舊2頭像hold83ms、新6入列時原1不變／無紙葉，release後實體target順序[6,2]，落頁才consume。前9＋4與後1分版本記錄，不宣稱整套在最終SHA全重跑；其他產品SHA不變。初次undefined/null的測試器斷言失敗保留，不改產品湊結果。全程0正式請求。
