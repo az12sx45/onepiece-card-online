@@ -6,7 +6,7 @@
 
 ## 目前正式狀態（2026-11-22 台北時間）
 
-婚禮靜態站版本 `7442db78a160d5c556cb5647fa3949633ee8079b` 與 API 版本 `ee5ccbd00525172034c706c6da79422304cf5ee8` 已在原網址 Live；兩版的 API 程式與 migration 完全一致。API `/health` 實際回傳 `version:2`、`persistent:true`、`storage:"d1"`、`playback:true`。已設定受限 D1 長期權杖與獨立 ADMIN_TOKEN，兩個婚禮服務均維持免費，沒有開通 R2 或新增付費方案。
+婚禮靜態站版本 `542ab393f9de740d5682fd14d8a8b7473e617c47` 與 API 版本 `ee5ccbd00525172034c706c6da79422304cf5ee8` 已在原網址 Live；兩版的 API 程式與 migration 完全一致。最新靜態部署 `dep-dc1488rl550s73dc3flg` 於台北09:24:53完成。API `/health` 實際回傳 `version:2`、`persistent:true`、`storage:"d1"`、`playback:true`。已設定受限 D1 長期權杖與獨立 ADMIN_TOKEN，兩個婚禮服務均維持免費，沒有開通 R2 或新增付費方案。
 
 已在正式網址以 5 筆明確標記的系統祝福驗證 SSE 排隊、單人翻頁與五個進度截圖；另以 WebKit 手機模擬完成自拍圖片→API→D1→SSE→電視。管理介面授權與隱藏、CSV／含頭像 JSON 匯出通過；共 6 筆系統測試紀錄已隱藏，沒有刪除資料。2026-11-22 02:20:02 執行 Render Restart service，02:20:56 重新讀回全部 6 筆與 480×480 JPEG 頭像，維持隱藏。正式公開頁目前沒有系統測試留言。
 
@@ -117,3 +117,11 @@ D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不�
 電視以常見16:9畫面為基準，書頁基底改1600×860，縮放按完整封面、緞帶及立起紙葉的範圍計算，減少螢幕四周空隙。新人照片為520×390的4:3區域、object-fit:cover，移除相框、膠帶、白色padding與旋轉；五張原圖未重畫、未修改，逐張用object-position保留人臉，不能將裁切誤稱為拉伸。
 
 紙張背面改印完整新人左頁（包含照片、姓名與同一個正式QR），取代原本只有R&H裝飾字的紙面。向前翻時背面已是下一張合照，底下右頁已印好下一位祝福；落頁前先提交相同的新合照，再移除紙葉。向後翻時背面保留當前合照、底下準備上一張，讓兩個方向都接續完整畫面。反面移除重複DOM id、圖片解碼後才起翻，紙頁正反文字保持正常方向。原本依字數停留、獨立控制台與資料庫均沿用。
+
+本次正式驗收初期，婚禮API曾GET逾時；獨立Chromium直接導航回503「Render - Application loading」，不是成功讀回祝福。已用原服務的Restart service重啟，等待期間另直接D1唯讀核對9筆祝福、3張頭像、外鍵無異常；原id1～6為使用者既有軟刪狀態、7～9公開，完全保留。台北09:41:06重新GET `/health` 與 `/api/wishes` 均200、storage:d1／persistent:true、公開id7/8/9讀回。曾啟動相同API程式的備援部署 `dep-dc14ebou01pc738o4fog`，但舊服務先恢復，因此09:41:55取消仍在建置的備援，API正式版本維持ee5ccbd；沒有未完成的API部署。此事件與失敗報告保留，不能用靜態站Live取代真正API驗收。
+
+現場應提早開啟電視，確認祝福已載入後保持開啟；Free服務本次有較長啟動等待。沒有升級付費方案。官方限制參考：[Render Free啟動與閒置說明](https://render.com/docs/free#spinning-down-on-idle)。
+
+第三次正式Playwright驗收於台北09:45完成11/11通過：靜態三檔逐位元對應542ab39；1280/1920/2560/3840四種16:9完整書本、正反翻起紙葉無越界，最小封面寬占93.98%（1080p約95.1%），雙向五階段截圖、無框cover、完整新人反面、五照片輪替及QR解碼正常。原公開id7/8/9前後一致，24次瀏覽器請求全GET、0寫入。實體電視與現場掃描仍須現場確認。
+
+圖片核驗區分原始檔與CDN傳輸：Git/PIC五張原bytes完全一致；正式HTTP有cf-polished:ok與正確orig_size，會自動重壓縮。將原檔與HTTP回應同方向解碼為sRGB RGB後，PSNR40.57～45.08dB、MAE0.82～1.35，尺寸一致；不宣稱HTTP位元組或像素完全相同。第二輪嚴格HTTP hash比對失敗報告保留；改用原檔SHA加上明確CDN標頭／解碼品質核對，沒有修改產品圖片來湊測試。官方背景：[Cloudflare Polish](https://developers.cloudflare.com/images/polish/)。
