@@ -1,6 +1,22 @@
 .selfieArea{margin:20px 0;padding:18px 14px;border:1px solid #eaded5;background:#fffcf7;border-radius:18px;text-align:center}
 .wishStorageStatus{padding:10px 12px;margin:0 0 14px;text-align:center;color:#687653;background:#f4f6ec;border-radius:10px;font-size:13px;line-height:1.7}
 .wishStorageStatus.unavailable{background:#fff2e8;color:#995a61}
+.wishStatus{scroll-margin-block:24px;overflow-wrap:anywhere}
+.wishStatus.waiting{margin-top:16px;padding:12px;border:1px solid #e6cfb8;border-radius:12px;background:#fff8eb;color:#865967;font-variant-numeric:tabular-nums}
+.wishSend[aria-busy=true]{cursor:progress}
+.wishCancel{display:block;width:100%;min-height:46px;margin:10px 0 0;border:1px solid #c995a0;border-radius:13px;background:#fffdf9;color:#925f6e;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer}
+.wishCancel[hidden]{display:none}
+.wishCancel:focus-visible{outline:3px solid #d8af73;outline-offset:3px}
+.wishSuccess{box-sizing:border-box;width:min(390px,calc(100vw - 36px));padding:30px 25px 25px;border:1px solid #cfb58a;border-radius:25px;background:radial-gradient(circle at 50% 0,#fff1f0,#fffaf2 75%);color:#72545e;box-shadow:0 22px 80px #40243147;text-align:center;font-family:inherit}
+.wishSuccess::backdrop{background:#44313a87;backdrop-filter:blur(3px)}
+.wishSuccess[hidden]{display:none}
+.successHeart{font-family:inherit;font-size:64px;line-height:1;color:#be7b8c;margin:0 0 16px}
+.wishSuccess h2{font-size:25px;line-height:1.5;margin:0 0 13px;color:#a15e70}
+.wishSuccess p{font-size:16px;line-height:1.9;margin:0}
+.successSignature{margin:21px 0;color:#b39a70;font-family:inherit;font-size:17px;letter-spacing:.1em}
+.wishSuccess button{width:100%;min-height:48px;border:0;border-radius:13px;background:#ad687a;color:#fff;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer}
+.wishSuccess button:focus-visible{outline:3px solid #d2af74;outline-offset:3px}
+.wishSuccess.fallback{display:block;position:static;width:100%;margin:17px 0 0;box-shadow:none}
 .selfiePhoto{width:160px;height:160px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 14px;border:5px solid #fff;outline:1px solid #d2b985;box-shadow:0 6px 22px #7452461c;background:#f4e9e5}
 .selfieActions{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
 .selfieActions button{min-height:44px;padding:10px 13px;border:1px solid #c99b9d;border-radius:12px;color:#865662;background:#fff;font:700 14px/1.4 inherit}

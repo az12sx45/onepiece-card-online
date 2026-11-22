@@ -4,9 +4,30 @@ window.createWeddingComposer=function createWeddingComposer(){
  const API='https://renjun-hengru-wishes-live-2026.onrender.com';
  const DRAFT_KEY='renjun-hengru-pending-wish-v2';
  const RECEIPT_KEY='renjun-hengru-wish-receipt-v2';
+ const HEALTH_TIMEOUT=75000,READY_TTL=120000,ATTEMPT_TIMEOUT=90000;
  const $=id=>document.getElementById(id);
  const author=$('wishAuthor'),message=$('wishMessage');
  const status=$('wishStatus'),send=$('wishSend'),consent=$('wishConsent'),gender=$('avatarGender')||{value:'',focus(){}};
+ const cancel=$('wishCancel')||document.createElement('button');
+ if(!cancel.isConnected){cancel.id='wishCancel';cancel.className='wishCancel';cancel.type='button';cancel.hidden=true;cancel.textContent='停止等待';send.after(cancel);}
+ const successDialog=document.createElement('dialog');successDialog.id='wishSuccess';successDialog.className='wishSuccess';successDialog.hidden=true;successDialog.setAttribute('aria-labelledby','wishSuccessTitle');successDialog.setAttribute('aria-describedby','wishSuccessBody');
+ successDialog.innerHTML='<div class="successHeart" aria-hidden="true">♡</div><h2 id="wishSuccessTitle"></h2><p id="wishSuccessBody"></p><div class="successSignature">仁鈞 ♡ 姮儒</div><button id="wishSuccessDone" type="button">完成</button>';
+ document.body.append(successDialog);
+ function closeSuccess(){
+   if(successDialog.open&&typeof successDialog.close==='function')successDialog.close();
+   else{successDialog.hidden=true;try{send.focus()}catch{}}
+ }
+ $('wishSuccessDone').onclick=closeSuccess;
+ successDialog.addEventListener('close',()=>{successDialog.hidden=true;try{send.focus()}catch{}});
+ function showSuccess(wish){
+   const prior=wish?.prior_submission_confirmed,pending=wish?.moderation_status==='pending';
+   $('wishSuccessTitle').textContent=prior||pending?'祝福已收到 ♡':'祝福已送出 ♡';
+   $('wishSuccessBody').textContent=prior?'謝謝你的祝福與陪伴。已確認上次的祝福已收到，不會重複送出。':pending?'謝謝你的祝福與陪伴。祝福已收到，通過審核後將展示在幸福祝福冊。':'謝謝你的祝福與陪伴，這份心意我們會好好珍藏。';
+   successDialog.hidden=false;
+   try{if(typeof successDialog.showModal!=='function')throw new Error('Dialog unavailable');successDialog.classList.remove('fallback');successDialog.removeAttribute('role');successDialog.showModal();}
+   catch{successDialog.classList.add('fallback');successDialog.setAttribute('role','status');cancel.after(successDialog);}
+   try{$('wishSuccessDone').focus()}catch{}
+ }
  const camera=$('cameraInput'),gallery=$('galleryInput'),photo=$('avatarPreview'),photoStatus=$('selfieStatus');
  const take=$('takeSelfie'),choose=$('choosePhoto'),remove=$('removePhoto'),adjust=$('adjustCrop')||document.createElement('button');
  const storageStatus=document.createElement('p');storageStatus.id='storageStatus';storageStatus.className='wishStorageStatus';storageStatus.setAttribute('role','status');storageStatus.textContent='正在連接幸福祝福冊…';
@@ -16,27 +37,58 @@ window.createWeddingComposer=function createWeddingComposer(){
  const count=value=>segmenter?Array.from(segmenter.segment(String(value).normalize('NFC'))).length:Infinity;
  const slice=(value,max)=>segmenter?Array.from(segmenter.segment(value),part=>part.segment).slice(0,max).join(''):value;
  let group=0,avatar='',sending=false,processing=false,photoVersion=0,restored=false,healthFlight=null;
+ let readyUntil=0,readyData=null,activeAttempt=null,memoryPending=null,memoryReceipt=null;
  let cropSource=null,cropState=null,editorSource=null,editorState=null,drag=null;
  const validGenders=new Set(['male','female']);
  const selectedGender=()=>validGenders.has(gender.value)?gender.value:'';
  const defaultAvatar=()=>selectedGender()?'./assets/default-avatar-'+selectedGender()+'.svg':'./assets/default-avatar.svg';
  const defaultAvatarAlt=()=>selectedGender()==='male'?'尚未上傳照片的男士輪廓預設頭像':selectedGender()==='female'?'尚未上傳照片的女士輪廓預設頭像':'婚禮愛心預設頭像（尚未上傳照片）';
- function readStore(storage,key){try{return JSON.parse(storage.getItem(key)||'null')}catch{return null}}
- function saveStore(storage,key,value){try{value===null?storage.removeItem(key):storage.setItem(key,JSON.stringify(value));return true}catch{return false}}
+ function readStore(name,key){try{return JSON.parse(window[name].getItem(key)||'null')}catch{return null}}
+ function saveStore(name,key,value){try{const storage=window[name];value===null?storage.removeItem(key):storage.setItem(key,JSON.stringify(value));return true}catch{return false}}
+ function abortError(){const error=new Error('Stopped waiting');error.name='AbortError';return error;}
+ function waitFor(promise,signal){
+   return new Promise((resolve,reject)=>{
+     const source=Promise.resolve(promise);
+     if(signal.aborted){source.catch(()=>{});reject(abortError());return;}
+     const stop=()=>{signal.removeEventListener('abort',stop);reject(abortError());};
+     signal.addEventListener('abort',stop,{once:true});
+     source.then(value=>{signal.removeEventListener('abort',stop);resolve(value)},error=>{signal.removeEventListener('abort',stop);reject(error)});
+   });
+ }
+ function clearReadiness(){readyUntil=0;readyData=null;}
  function verifyStorage(){
+   if(readyData&&Date.now()<readyUntil)return Promise.resolve(readyData);
    if(healthFlight)return healthFlight;
    healthFlight=(async()=>{
-     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),35000);
+     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),HEALTH_TIMEOUT);
+     storageStatus.textContent='正在準備祝福服務…';storageStatus.classList.remove('unavailable');
+     const slow=setTimeout(()=>{storageStatus.textContent='正在等待祝福服務啟動，內容可以先填寫。';},5000);
      try{
-       const response=await fetch(API+'/health',{cache:'no-store',signal:controller.signal});
-       const data=await response.json().catch(()=>({}));
-       if(!response.ok||!(Number(data.version)>=2)||data.persistent!==true||data.writable===false)throw new Error('永久祝福冊尚在啟用中，請稍後再試。');
-       if(data.avatar_gender_required!==true)throw new Error('祝福冊正在更新填寫功能，請稍後再試。');
-       storageStatus.textContent='幸福祝福冊已連線，可以送出你的祝福。';storageStatus.classList.remove('unavailable');return true;
+       while(true){
+         const response=await waitFor(fetch(API+'/health',{cache:'no-store',signal:controller.signal}),controller.signal);
+         if(!response.ok){
+           if([502,503,504].includes(response.status)){
+             // A temporary startup page may be HTML. Discard it without JSON parsing.
+             if(response.body?.cancel)await waitFor(response.body.cancel().catch(()=>{}),controller.signal);
+             let retryTimer;
+             try{await waitFor(new Promise(resolve=>{retryTimer=setTimeout(resolve,3000)}),controller.signal);}finally{clearTimeout(retryTimer)}
+             continue;
+           }
+           throw new Error('祝福服務暫時無法連線，請稍後重試。');
+         }
+         let data;
+         try{data=await waitFor(response.json(),controller.signal);}catch{if(controller.signal.aborted)throw abortError();throw new Error('祝福服務暫時無法連線，請稍後重試。');}
+         if(!(Number(data.version)>=2)||data.persistent!==true||data.writable===false)throw new Error('永久祝福冊尚在啟用中，請稍後再試。');
+         if(data.avatar_gender_required!==true)throw new Error('祝福冊正在更新填寫功能，請稍後再試。');
+         readyData=data;readyUntil=Date.now()+READY_TTL;
+         storageStatus.textContent='幸福祝福冊已連線，可以送出你的祝福。';storageStatus.classList.remove('unavailable');return data;
+       }
      }catch(error){
+       clearReadiness();
        storageStatus.textContent=error.message==='祝福冊正在更新填寫功能，請稍後再試。'?error.message:'永久祝福冊尚在啟用中，請稍後再試。';storageStatus.classList.add('unavailable');
-       throw new Error(error.name==='AbortError'?'祝福冊連線逾時，請稍後重試。':error.message==='Failed to fetch'?'暫時無法連接祝福冊，請稍後重試。':error.message);
-     }finally{clearTimeout(timer)}
+       const friendly=['永久祝福冊尚在啟用中，請稍後再試。','祝福冊正在更新填寫功能，請稍後再試。'];
+       throw new Error(error.name==='AbortError'?'祝福冊連線逾時，請稍後重試。':friendly.includes(error.message)?error.message:'祝福服務暫時無法連線，請稍後重試。');
+     }finally{clearTimeout(timer);clearTimeout(slow)}
    })().finally(()=>{healthFlight=null});
    return healthFlight;
  }
@@ -51,7 +103,8 @@ window.createWeddingComposer=function createWeddingComposer(){
    $('wishLength').classList.toggle('overLimit',length>30);
  }
  function disableFields(disabled){
-   for(const field of document.querySelectorAll('.wishSection input,.wishSection textarea,.wishSection button,.wishSection select'))field.disabled=disabled;
+   for(const field of document.querySelectorAll('.wishSection input,.wishSection textarea,.wishSection button,.wishSection select'))if(field!==cancel&&!successDialog.contains(field))field.disabled=disabled;
+   cancel.disabled=false;
  }
  async function decodeImage(file){
    if(typeof createImageBitmap==='function'){
@@ -160,7 +213,7 @@ window.createWeddingComposer=function createWeddingComposer(){
    return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',encoded)),byte=>byte.toString(16).padStart(2,'0')).join('');
  }
  async function matchesLegacyReceipt(receipt,payload){
-   if(!receipt||receipt.version===5||!/^[a-f0-9]{64}$/i.test(String(receipt.signature||'')))return false;
+   if(!receipt||!receipt.wish?.id||receipt.version===5||!/^[a-f0-9]{64}$/i.test(String(receipt.signature||'')))return false;
    // Older confirmed receipts retained only a digest. Match the unchanged
    // photo/name/message/group against their former style and gender choices.
    for(let style=1;style<=10;style++){
@@ -176,7 +229,47 @@ window.createWeddingComposer=function createWeddingComposer(){
    const hex=Array.from(bytes,x=>x.toString(16).padStart(2,'0')).join('');return hex.slice(0,8)+'-'+hex.slice(8,12)+'-'+hex.slice(12,16)+'-'+hex.slice(16,20)+'-'+hex.slice(20);
  }
  function sameSubmissionCore(a,b){return JSON.stringify([a?.author,a?.message,Number(a?.group),a?.avatar||'',a?.consent===true])===JSON.stringify([b.author,b.message,Number(b.group),b.avatar||'',b.consent===true]);}
- function sayReceived(wish){status.textContent=wish?.prior_submission_confirmed?'♡ 已確認上次的祝福已收到，不會重複送出。':wish?.moderation_status==='pending'?'♡ 已收到你的祝福，通過審核後會翻進幸福祝福冊。':'♡ 送出成功！你的祝福已排入幸福祝福冊，將依序翻頁展示。'}
+ function priorSubmissionBodies(pending,current){
+   const key=body=>JSON.stringify([body.author,body.message,Number(body.style),Number(body.group),body.avatar||'',body.avatar_gender||'unspecified',body.consent===true]);
+   const seen=new Set([key(current)]),bodies=[];
+   for(const body of [pending?.payload,...(Array.isArray(pending?.priorPayloads)?pending.priorPayloads:[]),pending?.priorPayload]){
+     if(!body||!sameSubmissionCore(body,current)||seen.has(key(body)))continue;
+     seen.add(key(body));bodies.push(body);
+   }
+   // Retain the newest bodies and one legacy style/unspecified body, at most four.
+   const result=bodies.slice(0,4),legacy=bodies.find(body=>Number(body.style)!==1||!validGenders.has(body.avatar_gender));
+   if(legacy&&!result.includes(legacy))result[3]=legacy;
+   return result;
+ }
+ function sayReceived(wish){status.textContent=wish?.prior_submission_confirmed?'♡ 已確認上次的祝福已收到，不會重複送出。':wish?.moderation_status==='pending'?'♡ 已收到你的祝福，通過審核後會翻進幸福祝福冊。':'♡ 送出成功！你的祝福已排入幸福祝福冊，將依序翻頁展示。';showSuccess(wish);}
+ function savePending(pending){memoryPending=pending;return saveStore('sessionStorage',DRAFT_KEY,pending);}
+ function rememberReceipt(receipt,pending){
+   memoryReceipt=receipt;
+   const stored=saveStore('localStorage',RECEIPT_KEY,receipt);
+   if(stored){
+     const confirmedKey=receipt.idempotencyKey;
+     if(confirmedKey&&memoryPending?.idempotencyKey===confirmedKey)memoryPending=null;
+     const saved=readStore('sessionStorage',DRAFT_KEY);
+     if(confirmedKey&&saved?.idempotencyKey===confirmedKey)saveStore('sessionStorage',DRAFT_KEY,null);
+   }
+   else if(pending)savePending(pending);
+   return stored;
+ }
+ function showAttempt(attempt){
+   if(activeAttempt!==attempt||attempt.completed)return;
+   const seconds=Math.floor((Date.now()-attempt.startedAt)/1000),suffix=' · '+seconds+' 秒';
+   const stages={local:['正在確認紀錄','正在核對這則祝福的送出紀錄。'],connecting:['正在連接祝福冊','正在等待祝福服務準備好，內容已保留，這次尚未開始傳送。'],transmitting:['正在傳送祝福','正在傳送這則祝福。'],confirming:['正在確認儲存','正在確認祝福的儲存回覆。'],legacy:['正在核對上次紀錄','正在核對上次送出紀錄，會沿用同一編號。']};
+   const [label,text]=stages[attempt.stage];send.textContent=label+suffix;status.textContent=text+' 已等候 '+seconds+' 秒。';
+   status.dataset.stage=attempt.stage;
+ }
+ function setStage(attempt,stage){attempt.stage=stage;showAttempt(attempt);}
+ function completeReceipt(attempt,receipt,pending){
+   if(activeAttempt!==attempt||attempt.controller.signal.aborted)return;
+   const stored=rememberReceipt(receipt,pending);attempt.completed=true;sayReceived(receipt.wish);
+   if(!stored&&!readStore('sessionStorage',DRAFT_KEY))status.textContent+=' 此分頁會保留編號；瀏覽器無法儲存紀錄，請先不要重新整理。';
+   status.dataset.stage='received';
+ }
+ cancel.onclick=()=>{if(activeAttempt){activeAttempt.cancelled=true;activeAttempt.controller.abort();}};
  send.onclick=async()=>{
    if(sending||processing)return;
    if(!group){status.textContent='請先查詢你的組別。';return}
@@ -187,57 +280,85 @@ window.createWeddingComposer=function createWeddingComposer(){
    if(count(blessing)<1||count(blessing)>30){status.textContent='請填寫 1～30 字的祝福；中文字與完整 Emoji 都各算一字。';message.focus();return}
    if(!consent.checked){status.textContent='請先確認照片與文字，並勾選公開展示同意。';consent.focus();return}
    const payload={author:guest,message:blessing,style:1,group,avatar,avatar_gender:selectedGender(),consent:true};
-   sending=true;disableFields(true);send.textContent='正在送出祝福…';status.textContent='首次連線可能需要稍等，請不要關閉頁面。';
-   let timer;
+   const attempt={controller:new AbortController(),startedAt:Date.now(),stage:'local',postStarted:false,previousPostStarted:false,completed:false,cancelled:false,timedOut:false,draftSaved:false};
+   activeAttempt=attempt;sending=true;disableFields(true);cancel.hidden=false;send.setAttribute('aria-busy','true');status.classList.add('waiting');showAttempt(attempt);
+   try{status.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}catch{}
+   const deadline=setTimeout(()=>{attempt.timedOut=true;attempt.controller.abort();},ATTEMPT_TIMEOUT),ticker=setInterval(()=>showAttempt(attempt),1000);
+   const signal=attempt.controller.signal;
    try{
-     await verifyStorage();
-     const signature=await fingerprint(payload),receipt=readStore(localStorage,RECEIPT_KEY);
-     if(receipt?.version===5&&receipt.signature===signature){sayReceived(receipt.wish);return}
-     if(await matchesLegacyReceipt(receipt,payload)){
+     // Local confirmed receipts do not need a server wake-up or network request.
+     const signature=await waitFor(fingerprint(payload),signal),receipt=memoryReceipt||readStore('localStorage',RECEIPT_KEY);
+     if(receipt?.version===5&&receipt.wish?.id&&receipt.signature===signature){completeReceipt(attempt,receipt,memoryPending||readStore('sessionStorage',DRAFT_KEY));return}
+     if(await waitFor(matchesLegacyReceipt(receipt,payload),signal)){
        const upgraded={...receipt,version:5,style:1,signature,wish:{...receipt.wish,prior_submission_confirmed:true}};
-       saveStore(localStorage,RECEIPT_KEY,upgraded);sayReceived(upgraded.wish);return;
+       completeReceipt(attempt,upgraded,memoryPending||readStore('sessionStorage',DRAFT_KEY));return;
      }
-     let pending=readStore(sessionStorage,DRAFT_KEY);
+     let pending=memoryPending||readStore('sessionStorage',DRAFT_KEY);
      if(pending?.signature!==signature){
-       // A v4 request may already have been stored while its reply was lost.
-       // Keep its UUID when only the removed style / newly required gender changed.
-       const legacy=pending&&pending.version!==5&&sameSubmissionCore(pending.payload,payload)&&/^[A-Za-z0-9_-]{12,100}$/.test(String(pending.idempotencyKey||''));
-       pending={version:5,style:1,signature,payload,idempotencyKey:legacy?pending.idempotencyKey:uuid(),createdAt:Date.now(),...(legacy?{priorPayload:pending.priorPayload||pending.payload}:{})};
+       // A changed gender/style is still the same blessing, including v5 retries.
+       // Keep its UUID and candidate bodies until its persisted receipt is known.
+       const same=pending&&sameSubmissionCore(pending.payload,payload)&&/^[A-Za-z0-9_-]{12,100}$/.test(String(pending.idempotencyKey||''));
+       const candidates=same?priorSubmissionBodies(pending,payload):[];
+       pending={version:5,style:1,signature,payload,idempotencyKey:same?pending.idempotencyKey:uuid(),createdAt:Date.now(),phase:same?(pending.phase||'awaiting-response'):'prepared',...(same&&pending.postStartedAt?{postStartedAt:pending.postStartedAt}:{}),...(candidates.length?{priorPayloads:candidates,priorPayload:candidates[0]}:{})};
      }else pending={...pending,version:5,style:1,payload};
-     saveStore(sessionStorage,DRAFT_KEY,pending);
+     attempt.previousPostStarted=pending.phase!=='prepared';
+     // Capture the exact payload and UUID before waiting for the service.
+     attempt.draftSaved=savePending(pending);
+     setStage(attempt,'connecting');await waitFor(verifyStorage(),signal);
      const post=async body=>{
-       clearTimeout(timer);const controller=new AbortController();timer=setTimeout(()=>controller.abort(),70000);
-       const response=await fetch(API+'/api/wishes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,idempotencyKey:pending.idempotencyKey}),signal:controller.signal});
-       return {response,data:await response.json().catch(()=>({}))};
+       if(signal.aborted)throw abortError();
+       attempt.postStarted=true;pending.phase='awaiting-response';pending.postStartedAt??=Date.now();attempt.draftSaved=savePending(pending)||attempt.draftSaved;
+       setStage(attempt,body===payload?'transmitting':'legacy');
+       let response;
+       try{response=await waitFor(fetch(API+'/api/wishes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...body,idempotencyKey:pending.idempotencyKey}),signal}),signal);}
+       catch(error){clearReadiness();throw error;}
+       if(response.status>=500)clearReadiness();
+       setStage(attempt,body===payload?'confirming':'legacy');
+       let data;
+       try{data=await waitFor(response.json(),signal);}catch(error){clearReadiness();throw error;}
+       return {response,data};
      };
      let {response,data}=await post(payload),priorConfirmed=false;
-     if(response.status===409&&pending.priorPayload){
-       // 409 proves that UUID already exists; this original-payload retry can
-       // confirm its receipt without creating a second record or editing it.
-       const prior=await post(pending.priorPayload);
-       if(!prior.response.ok||prior.data.duplicate!==true||prior.data.persistent!==true)throw new Error('上次送出狀態尚無法確認，請稍後重試。系統不會另建重複祝福。');
-       response=prior.response;data=prior.data;priorConfirmed=true;
+     if(response.status===409){
+       // All candidates share this UUID and the original attempt's deadline.
+       for(const body of priorSubmissionBodies(pending,payload)){
+         const prior=await post(body);
+         if(prior.response.ok&&prior.data.duplicate===true&&prior.data.persistent===true&&prior.data.ok&&prior.data.id){response=prior.response;data=prior.data;priorConfirmed=true;break;}
+         if(prior.response.status!==409)break;
+       }
+       if(!priorConfirmed)throw new Error('上次送出狀態尚無法確認，請稍後重試。系統不會另建重複祝福。');
      }
-     if(!response.ok)throw new Error(data.error||'連線失敗，請稍後再試。');
+     if(!response.ok){const error=new Error(data.error||'連線失敗，請稍後再試。');error.definite=response.status>=400&&response.status<500&&response.status!==409;throw error;}
      if(!data.ok||!data.id||data.persistent!==true)throw new Error('尚未確認永久儲存，請稍後按同一按鈕重試。');
      const received={version:5,style:1,signature,idempotencyKey:pending.idempotencyKey,wish:{id:data.id,moderation_status:data.wish?.moderation_status,prior_submission_confirmed:priorConfirmed},createdAt:Date.now()};
-     saveStore(localStorage,RECEIPT_KEY,received);saveStore(sessionStorage,DRAFT_KEY,null);sayReceived(received.wish);
-   }catch(error){status.textContent=error.name==='AbortError'?'連線逾時。請按送出重試，系統會沿用同一筆編號，避免重複送出。':'送出失敗：'+(error.message||'請稍後再試。')}
-   finally{clearTimeout(timer);sending=false;disableFields(false);send.textContent='送出祝福 ♡'}
+     completeReceipt(attempt,received,pending);
+   }catch(error){
+     if(activeAttempt===attempt){
+       attempt.uncertain=(attempt.postStarted||attempt.previousPostStarted)&&!error.definite;
+       if(attempt.uncertain){status.textContent='送出結果尚未確認，請按「重新確認這則祝福」；會沿用同一編號。';status.dataset.stage='unconfirmed';}
+       else if(error.definite){status.textContent=(error.message||'請檢查填寫內容')+' 內容已保留，請確認後再試。';status.dataset.stage='rejected';}
+       else{status.textContent='內容已保留，尚未送出。'+(attempt.cancelled?'已停止這次等待，可稍後重試。':attempt.timedOut?'等待服務較久，請稍後重試。':error.message||'請稍後重試。');status.dataset.stage='prepared';}
+       if(!attempt.draftSaved)status.textContent+=' 瀏覽器無法儲存草稿，此分頁仍保留內容與編號；請先不要重新整理。';
+     }
+   }finally{
+     clearTimeout(deadline);clearInterval(ticker);
+     if(activeAttempt===attempt){activeAttempt=null;sending=false;disableFields(false);cancel.hidden=true;send.setAttribute('aria-busy','false');status.classList.remove('waiting');send.textContent=attempt.uncertain?'重新確認這則祝福':'送出祝福 ♡';}
+   }
  };
  function restoreDraft(){
    if(restored)return;
-   const draft=readStore(sessionStorage,DRAFT_KEY);if(draft?.payload?.group!==group)return;
+   const draft=memoryPending||readStore('sessionStorage',DRAFT_KEY);if(draft?.payload?.group!==group)return;
    const saved=draft.payload;
    if(typeof saved.author!=='string'||typeof saved.message!=='string'||!(saved.style>=1&&saved.style<=10))return;
    restored=true;author.value=saved.author;message.value=saved.message;gender.value=validGenders.has(saved.avatar_gender)?saved.avatar_gender:'';setAvatar('');
    if(typeof saved.avatar==='string'&&/^data:image\/jpeg;base64,/.test(saved.avatar))setAvatar(saved.avatar);
    status.textContent=selectedGender()?'已還原上次尚未確認的祝福。確認後再按送出，將沿用原編號。':'已還原上次尚未確認的祝福。請先選擇性別，再確認送出；系統會核對原編號，避免重複。';
+   send.textContent=draft.phase==='prepared'?'送出祝福 ♡':'重新確認這則祝福';
  }
  gender.value='';setAvatar('');verifyStorage().catch(()=>{});
  return {
    setGroup(name,value){group=value;author.value=slice(normalize(name),20);status.textContent='';restoreDraft();updateCharacterCount();verifyStorage().catch(()=>{})},
-   reset(){group=0;photoVersion++;if(cropDialog.open)closeCrop();if(cropSource){cropSource.width=1;cropSource.height=1;}cropSource=null;cropState=null;processing=false;disableFields(sending);gender.value='';gender.removeAttribute?.('aria-invalid');setAvatar('');author.value='';message.value='';consent.checked=false;photoStatus.textContent='';status.textContent='';restored=false;updateCharacterCount()},
+   reset(){if(activeAttempt){const previous=activeAttempt;activeAttempt=null;previous.controller.abort();sending=false;cancel.hidden=true;send.setAttribute('aria-busy','false');status.classList.remove('waiting');}if(!successDialog.hidden)closeSuccess();group=0;photoVersion++;if(cropDialog.open)closeCrop();if(cropSource){cropSource.width=1;cropSource.height=1;}cropSource=null;cropState=null;processing=false;disableFields(sending);gender.value='';gender.removeAttribute?.('aria-invalid');setAvatar('');author.value='';message.value='';consent.checked=false;photoStatus.textContent='';status.textContent='';send.textContent='送出祝福 ♡';restored=false;updateCharacterCount()},
    countText:count
  };
 };
