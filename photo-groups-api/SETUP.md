@@ -153,3 +153,7 @@ D1 Free 的 Time Travel 自動保留最近 7 天，無須手動開通；這不�
 未確認的舊草稿只因新規則改變風格或性別時，沿用原UUID先送新的有效內容；若409代表原UUID已有舊內容，再用原payload確認舊收據，不另建第二筆。已確認的舊收據也以相同內容的舊風格／性別簽章核對，並明示上次已收到；不把新選擇假稱已寫回舊紀錄。性別必填先於所有收據捷徑。
 
 本機整合10／10通過；後端以 `node --test test/*.test.js` 完整17項為16 PASS、0 FAIL、1 SKIP（未提供直接D1 REST整合憑證）。另有同UUID查詢後競爭寫入的實際注入測試，回409且只保留贏家一筆。初次後端HTTP連線失敗原始TAP保留，3項定向診斷重跑通過但底層原因未再現；fixture明確使用Connection:close後完成上述整套驗證。不能把本機驗證稱為正式POST或實體iPhone驗收。
+
+第五輪API第一次部署 `dep-dc1650qfngtc73ensmg0` 的checkout與Live雖對應fef22cd，正式Node及獨立無快取Chromium仍只回舊能力，故不列為功能上線。一次Dashboard重啟有真實事件與成功toast，但後續GET仍缺必填旗標；其後出現埠偵測逾時，根因未確認，沒有據此猜測或改寫D1。保留上述失敗證據後，清除建置快取重新部署同一提交 `fef22cdcb84ebfb09b16d553dca826542cbadff3`，`dep-dc16d2jl550s73dio2d0` 於台北12:00:41 Live，12:00:58真GET讀回 `avatar_gender_required:true`、`persistent:true`、`storage:d1`、latest10／cursor22才繼續發布手機頁。本輪沒有新增正式測試留言；期間觀測到的id10保留，不歸因於本輪GET驗證。
+
+靜態 `dep-dc16i0ec6qcc73cnrlk0` 同提交於台北12:02:41 Live，12:03:56正式唯讀5／5通過：六個HTML／JS／CSS／SVG與提交一致，真公開署名查組、風格DOM移除、性別空值必填（含已裁自拍）、男女輪廓預覽正常。11次Node GET與9次瀏覽器GET，0 POST、0 JS錯誤；公開id7/8/9/10及共用播放狀態前後一致。遊戲main及其Render部署仍為cf296d0／dep-dc00b40u01pc73b83jt0。實際寫入與拒絕規則的完整測試使用上述獨立本機資料庫，未宣稱本輪做過正式POST或實體iPhone相機驗收。
