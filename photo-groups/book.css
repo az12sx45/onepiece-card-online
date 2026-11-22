@@ -11,8 +11,19 @@
 .admin-dialog{width:min(780px,92vw);max-height:85vh;border:1px solid #d7bdae;background:#fffaf3;color:var(--ink);border-radius:15px;padding:24px;box-shadow:0 20px 100px #38271b55}.admin-dialog::backdrop{background:#34271e77;backdrop-filter:blur(4px)}.dialog-heading{display:flex;align-items:center;justify-content:space-between}.dialog-heading h2{font:500 25px var(--serif);margin:0 0 15px}.dialog-heading button{font-size:28px;background:transparent;border:0;color:#93736e}.admin-login{display:grid;gap:12px}.admin-login input{padding:13px;border:1px solid #d8bdae;border-radius:6px;background:white}.admin-dialog button:not(.dialog-heading button){padding:9px 14px;border:1px solid #d4b7ab;border-radius:6px;background:#fbefea;color:#805d5c;font-size:14px}.admin-login p,.admin-help{font-size:12px;line-height:1.7;color:#9b8379}.admin-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.admin-entry{display:grid;grid-template-columns:50px 1fr;gap:13px;padding:16px 0;border-top:1px solid #eadbd0}.admin-entry img{width:50px;height:50px;border-radius:50%;object-fit:cover}.admin-entry p{margin:4px 0 8px;overflow-wrap:anywhere}.admin-entry small{color:#a5897d}.entry-buttons{display:flex;gap:8px;margin-top:10px}.admin-entry .entry-buttons button{font-size:12px;padding:5px 10px}#adminStatus{font-size:14px;color:#a26169;line-height:1.6}
 @media(max-width:1200px){.masthead-title{font-size:15px}.connection{font-size:11px}.controls button{padding:8px;font-size:11px}.toolbar{left:3%;right:3%}.playback-info{font-size:11px;gap:8px}.live-label{font-size:13px}.total{padding-left:8px}.wordmark{font-size:24px}}@media(max-width:800px){.masthead-title{display:none}.toolbar{height:13%;align-items:center;justify-content:center;flex-wrap:wrap;align-content:center;gap:7px}.controls{gap:2px}.controls button{padding:7px;font-size:10px}.book-viewport{height:72%;top:12%}.playback-info{width:100%;justify-content:center}.wordmark{font-size:20px}.masthead{height:10%}.controls #pause{min-width:68px}.control-divider{margin:0 1px}.connection{font-size:10px}}
 
-/* Television presentation reserves the raised leaf, cover and ribbon envelope. */
+/* Fit a complete spread to standard 16:9 television frames, including the leaf. */
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
 .display-only .book-viewport{inset:0;width:100%;height:100%}
-.display-only .book-scale{perspective:none}
+.display-only .book-scale{height:860px;perspective:none}
+.display-only .book{height:860px;perspective:10000px}
+.display-only .ribbon{bottom:-36px;height:42px}
+.couple-photo{width:520px;height:390px;margin:16px auto 0;padding:0;border:0;background:none;box-shadow:none;transform:none}
+.couple-photo:before,.couple-photo:after{display:none}
+.couple-photo img{object-fit:cover;object-position:50% 50%;background:none}
+.couple-photo img[data-photo-index="0"]{object-position:55% 50%}
+.couple-photo img[data-photo-index="1"]{object-position:50% 30%}
+.couple-photo img[data-photo-index="2"]{object-position:50% 70%}
+.left-page h1{margin-top:20px}
+.couple-note{margin-bottom:18px}
+.sheet-back>.turning-couple-page{inset:0;width:100%;height:100%}
 .display-only .toast{bottom:24px}

@@ -9,7 +9,7 @@
   const PHOTO_FILES=Array.from({length:5},(_,i)=>'./assets/couple-'+(i+1)+'.jpg');
   const photoImages=new Map();
   const $ = id => document.getElementById(id);
-  const right = $('rightPage'), sheet = $('turningSheet'), front = $('sheetFront'), shadow = $('pageTurnShadow');
+  const right = $('rightPage'), sheet = $('turningSheet'), front = $('sheetFront'), back = $('sheetBack'), shadow = $('pageTurnShadow');
   const wishes = new Map(), known = new Set();
   let pending = [], current = null, paused = false, busy = false, timer, activeAnimation, animations = [];
   let cursor = 0, stream, syncing = null, resync = false, initial = true, duringSync = [], connected = false;
@@ -68,14 +68,31 @@
   function schedule() { clearTimeout(timer); if(!paused&&!busy&&wishes.size) timer=setTimeout(()=>navigate(1),dwellFor(current?.message)); }
   async function preparePhoto(index){
     let img=photoImages.get(index);
-    if(!img){img=new Image();img.src=PHOTO_FILES[index];img.id='couplePhoto';img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';photoImages.set(index,img);}
+    if(!img){img=new Image();img.src=PHOTO_FILES[index];img.id='couplePhoto';img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';img.dataset.photoIndex=String(index);photoImages.set(index,img);}
     await Promise.race([img.decode().catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);
     return img.naturalWidth?img:null;
   }
+  function mountPhoto(index,img){
+    if(img){$('couplePhotoMount').replaceChildren(img);$('leftPage').dataset.photoIndex=String(index);}
+  }
   function applyPhoto(index,img){
     if(!img)return;
-    photoIndex=index;$('couplePhotoMount').replaceChildren(img);$('leftPage').dataset.photoIndex=String(index);
+    photoIndex=index;mountPhoto(index,img);
     try{localStorage.setItem('renjun_hengru_book_photo_v3',String(index));}catch{}
+  }
+  async function prepareReverse(index){
+    // The reverse of a right-hand leaf lands on the left: print the actual
+    // couple page there, so it already matches the spread when the leaf settles.
+    const printed=$('leftPage').cloneNode(true);
+    printed.removeAttribute('id');
+    printed.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
+    printed.classList.add('turning-couple-page');
+    printed.dataset.photoIndex=String(index);
+    const img=printed.querySelector('.couple-photo img');
+    img.src=PHOTO_FILES[index];img.dataset.photoIndex=String(index);
+    img.alt='仁鈞與姮儒的真實合照，第 '+(index+1)+' 張';
+    await img.decode().catch(()=>{});
+    return printed;
   }
   async function preload(preparedPage) {
     const img=preparedPage.querySelector('.guest-avatar');
@@ -87,15 +104,19 @@
     busy=true; clearTimeout(timer); updateStatus();
     const nextPage=page(next);
     const targetPhoto=forcedPhoto??((photoIndex+(direction<0?-1:1)+5)%5);
-    const [,preparedPhoto]=await Promise.all([preload(nextPage),preparePhoto(targetPhoto)]);
+    const [,preparedPhoto,reversePage]=await Promise.all([preload(nextPage),preparePhoto(targetPhoto),prepareReverse(direction===1?targetPhoto:photoIndex)]);
     // A moderated item can disappear while its image is loading.
     if(!wishes.has(next.id)) { busy=false; updateStatus(); schedule();flushControls();return; }
     // Move the decoded DOM image with its paper instead of creating a second
     // no-store avatar request during the turn or at the resting-page commit.
     const currentPage=right.firstElementChild;
     front.replaceChildren(direction===1?currentPage:nextPage);
+    back.replaceChildren(reversePage);
     if(direction===1)right.replaceChildren(nextPage);
     sheet.hidden=false;
+    // On a backwards turn the current left page is on the raised reverse;
+    // reveal the already decoded previous photograph underneath it.
+    if(direction<0)mountPhoto(targetPhoto,preparedPhoto);
     fitPrintedText(front);fitPrintedText(right);
     const forward = [
       {transform:'rotateY(0deg) rotateZ(0deg)',boxShadow:'0px 1px 1px #57402d00',offset:0},
@@ -109,13 +130,14 @@
     const shade=shadow.animate([{opacity:0},{opacity:.65,offset:.4},{opacity:.32,offset:.8},{opacity:0}],{duration:TURN,fill:'both'});
     const curve=front.animate([{borderRadius:'0 7px 9px 0'},{borderRadius:'0 70px 80px 0',offset:.4},{borderRadius:'0 7px 9px 0'}],{duration:TURN,fill:'both'});
     animations=[activeAnimation,shade,curve];
-    // Pause freezes the physical leaf as well as the dwell timer.
+    // A pause received mid-turn stops the next dwell, not this physical leaf.
     try { await activeAnimation.finished; } catch {}
     const kept=wishes.get(next.id);
     render(kept||ordered()[0]||null,kept?nextPage:undefined);
     applyPhoto(targetPhoto,preparedPhoto);
     // Commit the resting page before removing the leaf: no blank frame.
-    sheet.hidden=true; animations.forEach(a=>a.cancel()); animations=[]; activeAnimation=null; busy=false;
+    sheet.hidden=true; animations.forEach(a=>a.cancel()); animations=[]; activeAnimation=null;
+    front.replaceChildren();back.replaceChildren();busy=false;
     updateStatus(); schedule();flushControls();
   }
   function navigate(direction) {
@@ -180,7 +202,7 @@
     stream.addEventListener('reset',e=>{try{const d=JSON.parse(e.data);if(d.id){wishes.delete(String(d.id));pending=pending.filter(id=>id!==String(d.id));if(syncing)duringSync.push({type:'remove',id:d.id});if(current?.id===String(d.id)&&!busy)render(ordered()[0]||null);}cursor=Math.max(cursor,Number(e.lastEventId)||0);}catch{} void sync();});
     stream.addEventListener('error',()=>{connected=false;$('indicator').classList.remove('live');$('linkStatus').textContent='重新連線中 · 祝福繼續播放';});
   }
-  function resize(){const v=document.querySelector('.book-viewport');$('bookScale').style.setProperty('--book-scale',Math.max(.05,Math.min((v.clientWidth-100)/1740,(v.clientHeight-70)/1040)));fitPrintedText(right);if(!sheet.hidden)fitPrintedText(front);}
+  function resize(){const v=document.querySelector('.book-viewport');$('bookScale').style.setProperty('--book-scale',Math.max(.05,Math.min((v.clientWidth-24)/1660,(v.clientHeight-24)/950)));fitPrintedText(right);if(!sheet.hidden)fitPrintedText(front);}
   function toast(text){$('toast').textContent=text;$('toast').hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').hidden=true,4500);}
   function setPaused(value){
     value=Boolean(value);if(paused===value)return;
