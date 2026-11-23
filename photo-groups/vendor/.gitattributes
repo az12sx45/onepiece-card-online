@@ -1,0 +1,3 @@
+# Keep vendored distributions, profiles and provenance bytes reproducible.
+lcms/** -text
+icc/** -text
