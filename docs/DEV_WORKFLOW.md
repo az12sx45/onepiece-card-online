@@ -9895,3 +9895,15 @@ Chrome官方格式參考：https://developer.chrome.com/docs/android/intents 。
 v11驗證：本機UI前5項通過後，真點readonly網址造成原生caret蓋過全選，已保留失敗報告；僅把該明示click的select延到下一繪製幀（保留長按、不自動導航），最終JS51761e50…另完成剩餘3項定向，合計8個component分版本記錄，不冒稱全部在新SHA重跑。涵蓋Samsung Android UA／UAData、一般Chrome/iOS/桌機隱藏、fallback跨UA不自跳、intent固定URL／不攜帶資料、clipboard成功／拒絕／不存在與手動全選、Continue與晚回應、原查詢／裁切／30字smoke。Root已目視手機390px一般及fallback，QA另目視360／1280／1920；無橫向溢出。PAYLOAD/PIC／15組五照及原手機核心不變。
 
 獨立source review另有9項靜態核對（不是runtime測試），無blocking finding；確認原inline查詢bootstrap／CSS與資料literal只按CRLF→LF後精確相同，其他保護範圍diff為空。測試攔截原手機初始化既有health GET而非擴改舊流程，0正式API傳輸、0POST、0外部App啟動；Samsung真機→Chrome、未安裝與原生相片介面未驗。正式靜態Live／公開讀回收據另列，不以UA模擬冒稱真機。
+
+## 2026-11-23：祝福書等待逾時、翻頁復原與照片流量
+
+接續電視停翻、留言未載入及控制台無回應的回報。正式health／playback／wishes的公開GET曾全數等待75秒逾時；Render仍為not_suspended，後續日誌記錄API重新啟動並連上D1。沒有手動重啟、重部署API或改付費方案，約台北10:31恢復200。現讀到4則approved紀錄、persistent/writable/d1、paused=false；35秒Playwright正式觀察依序9→11→12→13，重新整理仍4則、控制頁登入表單可開，未授權API回401。未取得真管理金鑰登入、未新增／刪除／復原正式祝福，不能將公開4則解讀為所有隱藏紀錄已驗證，也不以本機故障重現宣稱正式事故唯一根因。
+
+book.js修復五項本機已重現的防護缺口：頭像及性別預設圖等待有期限，兩者都不可用時以同風格內嵌輪廓降級；turnTo外層finally清理紙葉／動畫並釋放busy，動畫建立拋錯保留完整舊頁與未播佇列，finished最長3100ms後完成落頁。正常1100ms的3D keyframes／陰影／照片輪替及urgent/historyResume語意保留。snapshot含fetch、body及分頁共限75秒並中止；HTTP200的資料結構無效則不替換既有祝福。首次失敗可重試並建立SSE，歷史重播不誤入新祝福優先列。tv.html只更新book.js載入版本。
+
+使用者另問閒置或忘記關閉頁面是否耗流量。來源核對：客人頁沒有常駐輪詢；登入控制台每2.5秒查播放狀態，鎖定／關閉會停止；電視每2秒查控制、連線時每分鐘同步祝福，SSE有18秒心跳。API在沒有訂閱者時不輪詢D1事件。沒有使用者存取時基本上不持續傳送書頁；電視持續開著仍有必要即時流量，不能承諾零流量。正式4張公開自拍各17～40KB、每完整輪合計131339 bytes，原no-store頭像會反覆下載。因此僅在電視單分頁記憶體加入有上限的成功JPEG Blob URL快取，不改API的no-store、資料庫／手機／組別／照片原檔，不把頭像放localStorage或離線檔。隱藏／刪除與有效快照會清除對應快取，失敗不留快取，晚回應不得復活已移除資料。實際有界、流量及原翻頁回歸依最終來源hash分別記錄，不用前版測試冒稱最終版通過。
+
+本機驗證分版本保留：防卡初版39a21891…完成9項故障／排隊回歸，五進度截圖首次75／100%因QA時鐘讓watchdog先落頁，已標記superseded並只重截該項；修正時鐘後的0／25／50／75／100%真紙葉、matrix3d、正反面與陰影已目視。加入Blob路徑的d726cdaf…再跑原9項全部通過，另目視中段／落頁；最終1bcf4266aecd2caee36a2471b11678f1456aafdf32b935402a4daf077dfe57d8僅移除卸載的冗餘全域旗標，另完成快取9項：首次真480JPEG、12翻且兩次重訪同自拍的真local HTTP只有1次頭像GET；503／HTML／壞JPEG／body無回應不快取且下輪能重試；無效快照不清空、有效省略才prune/revoke；隱藏／刪除加晚回有效JPEG不復活；合成beforeunload清理／晚回丟棄／同頁可再取。後一項不是實體BFCache驗收。256筆／32MiB為壓縮Blob上限的來源核對，未做257張容量壓測，也不是整個瀏覽器解碼／GPU記憶體上限。兩版keyframes逐字相同、語法／diff／保護範圍檢查通過，手機／CSS／素材／API／控制台／匯出與遊戲無改動。本機測試正式HTTP及正式mutation皆0、JS錯誤0；正式部署與讀回依當輪收據另列。
+
+最終來源另經獨立7項靜態審查，無blocking finding；這是原始碼與scope核對，不是額外runtime測試。body以同一2秒deadline及Content-Length／完成後150KiB檢查控制，未另作stream逐塊byte上限；正式API既有480×480／150KiB約束未變。所有觀測、故障初敗／重驗、版本差異及限制保留於本工作區驗收證據_v12，不公開帳戶用量或賓客私密資料。
