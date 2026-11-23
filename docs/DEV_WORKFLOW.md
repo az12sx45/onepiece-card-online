@@ -9907,3 +9907,17 @@ book.js修復五項本機已重現的防護缺口：頭像及性別預設圖等�
 本機驗證分版本保留：防卡初版39a21891…完成9項故障／排隊回歸，五進度截圖首次75／100%因QA時鐘讓watchdog先落頁，已標記superseded並只重截該項；修正時鐘後的0／25／50／75／100%真紙葉、matrix3d、正反面與陰影已目視。加入Blob路徑的d726cdaf…再跑原9項全部通過，另目視中段／落頁；最終1bcf4266aecd2caee36a2471b11678f1456aafdf32b935402a4daf077dfe57d8僅移除卸載的冗餘全域旗標，另完成快取9項：首次真480JPEG、12翻且兩次重訪同自拍的真local HTTP只有1次頭像GET；503／HTML／壞JPEG／body無回應不快取且下輪能重試；無效快照不清空、有效省略才prune/revoke；隱藏／刪除加晚回有效JPEG不復活；合成beforeunload清理／晚回丟棄／同頁可再取。後一項不是實體BFCache驗收。256筆／32MiB為壓縮Blob上限的來源核對，未做257張容量壓測，也不是整個瀏覽器解碼／GPU記憶體上限。兩版keyframes逐字相同、語法／diff／保護範圍檢查通過，手機／CSS／素材／API／控制台／匯出與遊戲無改動。本機測試正式HTTP及正式mutation皆0、JS錯誤0；正式部署與讀回依當輪收據另列。
 
 最終來源另經獨立7項靜態審查，無blocking finding；這是原始碼與scope核對，不是額外runtime測試。body以同一2秒deadline及Content-Length／完成後150KiB檢查控制，未另作stream逐塊byte上限；正式API既有480×480／150KiB約束未變。所有觀測、故障初敗／重驗、版本差異及限制保留於本工作區驗收證據_v12，不公開帳戶用量或賓客私密資料。
+
+## 2026-11-23：19×26公分精裝印刷PDF匯出
+
+使用者選定直式190×260mm精裝，要求控制台輸出印刷檔，電子PDF／HTML保留。新增獨立album-print-pdf.js與控制台印刷區；沿用原管理授權、每次重取approved紀錄、送出時間／id排序、自拍／性別預設、製作取消及登出generation護欄，不改API／資料庫／手機／TV／遊戲。印刷收集僅略過兩張電子版AI封面PNG，原電子匯出仍取原8素材，模組及素材bytes不變。
+
+印刷版以目前瀏覽器製作ZIP，含內頁PDF、封面PDF、封底PDF與UTF-8印刷說明。內頁含扉頁＋每則公開祝福一頁＋謝詞，總頁數若奇數補一頁留白；不是擅自假定印廠須4／8／16倍配頁。三PDF均196×266mm含各邊3mm出血，TrimBox為offset(3,3)及190×260mm；每頁2315×3142px約300dpi、DeviceCMYK8bit、嵌入ICC OutputIntent。字與Emoji在原生Canvas繪製後平面化，不含外連圖片／未嵌字型；不可搜尋文字，不宣稱向量外框或PDF/X認證。
+
+封面封底以既有向量花卉重新排，奶油白／玫瑰粉／香檳金風格不變；不用低解析AI封面放大冒稱印刷畫質。原1000×750新人合照以80×60mm保留全比例，頭像直徑38mm、原480×480照片足300dpi；重要內容避開裝訂側15mm及紙邊7mm。封面與封底設計已完成，但沒有假造書背／灰板／包邊寬度；印刷說明與UI要求印廠依最終紙張、頁數及精裝模板套版。既有網站／QR網址不改。
+
+色彩採原版lcms-wasm1.0.5／LittleCMS2.16及官方ICC registry的Coated_Fogra39L_VIGC_300；sRGB RGB3分64列經relative-colorimetric+BPC真正轉CMYK4，未用簡單減法假裝色彩管理。8個色樣32bytes與原生LittleCMS2.19同profile輸出完全相同；2315×3142合成整頁真browser轉換431ms。WASM315910bytes／JS67586bytes／ICC8652444bytes本機vendor、固定npm integrity與各檔SHA，保留MIT／第三方與ICC允許使用嵌入分享但不得修改售賣profile的原授權；不使用限制散布的ECI profile。大依賴只在明示印刷匯出時載入，不增付費轉檔服務、不把賓客資料送第三方。這是通用FOGRA39 300%輸出條件，仍由店家作印前色彩預檢／打樣。
+
+最終module SHA256 6bbb6ca936b45c594af35418fdc5bb37fffab61c78b056db7433355aecf9a469，本機8項實測全通過：登入保護、真控制台讀最新分頁／只公開排序／真下載ZIP，三PDF以pypdf逐頁核尺寸box／DeviceCMYK／300dpi／OutputIntent、ICC bytes精確匹配6df43849a84d2632e7900a125f657bd09364ed56775bc4740c1e39a5492d47e3，Pillow/ImageCms可讀；38mm頭像drawtrace、20字長署名／30grapheme中文及複合Emoji、Poppler封面／封底／長頁渲染目視；真renderer首完成頁後abort可1ms終止，UI取消／登出晚回0下載；原電子PDF與8素材HTML各真下載通過。4則合成公開祝福產6頁內頁＋兩封面，ZIP28962529bytes。root另目視同三張渲染，無截字／黑方塊／變形或遮臉。
+
+另在同一module hash真Chromium做169則合成480×480 JPEG負載，完整300dpi／CMYK輸出125.230秒，ZIP68933600bytes、內頁172頁＋封面1＋封底1；CRC／strict pypdf／ICC解析通過、Poppler首位與第169位目視完整。169筆複用同一張合成JPEG，未假稱169種照片複雜度或實體打樣；JS heap採樣不代表瀏覽器總RAM。首次負載測試器因報告物件共用引用漏掉末筆自拍，已明確以QA_FIXTURE_ERROR中止，修clone並assert169自拍後才重測，原失敗保留。兩套測試0正式API傳輸／0正式mutation／0JS錯誤，沒有把合成祝福寫入D1。獨立來源審查無blocking，屬靜態核對，不代替runtime。正式Live與公開資源實際匯出另存當輪收據。

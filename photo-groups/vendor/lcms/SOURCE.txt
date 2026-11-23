@@ -1,0 +1,41 @@
+lcms-wasm browser distribution provenance
+
+Unmodified npm package: lcms-wasm@1.0.5
+https://registry.npmjs.org/lcms-wasm/1.0.5
+https://registry.npmjs.org/lcms-wasm/-/lcms-wasm-1.0.5.tgz
+npm integrity (verified against downloaded tarball):
+sha512-bQpBF4BvoHY//Gq7k67VD9l+BEk6dmaROAB+ci83ZajOurOUPAcwfi3z5VzzAf27qccIE867kYc+jk6/wPelcA==
+Package gitHead: 762214c66e907674c8a5538223c624291f5039dd
+https://github.com/mattdesl/lcms-wasm
+The published package is 1.0.5 even though the upstream main branch's
+package.json observed on retrieval still says 1.0.4.
+
+Copied dist/lcms.js and dist/lcms.wasm, byte-for-byte.
+Wrapper: MIT, Matt DesLauriers 2024; see LICENSE.md.
+Original wrapper: MIT, yoya 2018; see lcms.js-LICENSE.txt.
+LittleCMS: MIT, Marti Maria Saguer 2023; see LittleCMS-LICENSE.txt.
+LittleCMS submodule commit: c2a54017d73080f97c5cd34a78ff2fb51564aade
+https://github.com/mm2/Little-CMS/tree/c2a54017d73080f97c5cd34a78ff2fb51564aade
+Built module LCMS_VERSION: 2160 (2.16).
+
+Emscripten and musl notices are additionally preserved from their official
+repositories. Exact compiler toolchain version was not recorded by the
+published package and is not inferred here. These notices do not claim a
+specific toolchain version:
+lcms.js-LICENSE.txt: https://raw.githubusercontent.com/yoya/lcms.js/master/LICENSE
+Emscripten-LICENSE.txt: https://raw.githubusercontent.com/emscripten-core/emscripten/main/LICENSE
+musl-COPYRIGHT.txt: https://raw.githubusercontent.com/emscripten-core/emscripten/main/system/lib/libc/musl/COPYRIGHT
+
+The browser ES module needs only these local JS/WASM files. No npm install,
+tape package, CDN, external font, or remote color-conversion service is used.
+The npm package's development/test dependencies are not bundled separately.
+
+Import named instantiate and rendering-intent/flag constants from lcms.js.
+Use instantiate({locateFile: () => localWasmURL}). Create sRGB/ICC profiles,
+create an RGB8-to-CMYK8 transform, close profiles, transform RGB3 strips, and
+delete the transform in finally. Do not send RGBA input to the CMYK4 path.
+The cmsDoTransform wrapper has an input-extra-channel sizing issue; packing
+RGB3 explicitly avoids it. WASM heap growth is allowed; strip conversion
+reduces temporary allocation, while the PDF still retains full-page data.
+
+Retrieved and verified 2026-11-23. See manifest.json for byte sizes/hashes.

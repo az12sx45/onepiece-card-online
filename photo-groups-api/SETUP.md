@@ -223,3 +223,17 @@ v9補驗：相同前版book SHA4391dd…完成額外4／4（舊last→新A/B→�
 v11驗證：本機UI前5項通過後，真點readonly網址造成原生caret蓋過全選，已保留失敗報告；僅把該明示click的select延到下一繪製幀（保留長按、不自動導航），最終JS51761e50…另完成剩餘3項定向，合計8個component分版本記錄，不冒稱全部在新SHA重跑。涵蓋Samsung Android UA／UAData、一般Chrome/iOS/桌機隱藏、fallback跨UA不自跳、intent固定URL／不攜帶資料、clipboard成功／拒絕／不存在與手動全選、Continue與晚回應、原查詢／裁切／30字smoke。Root已目視手機390px一般及fallback，QA另目視360／1280／1920；無橫向溢出。PAYLOAD/PIC／15組五照及原手機核心不變。
 
 獨立source review另有9項靜態核對（不是runtime測試），無blocking finding；確認原inline查詢bootstrap／CSS與資料literal只按CRLF→LF後精確相同，其他保護範圍diff為空。測試攔截原手機初始化既有health GET而非擴改舊流程，0正式API傳輸、0POST、0外部App啟動；Samsung真機→Chrome、未安裝與原生相片介面未驗。正式靜態Live／公開讀回收據另列，不以UA模擬冒稱真機。
+
+## 第十三次19×26公分精裝印刷匯出（2026-11-23）
+
+在原控制台 `https://tantan-lily-photo-groups-2026.onrender.com/control.html` 登入既有管理金鑰，找到「精裝印刷祝福書」，按「匯出 19×26 精裝印刷檔 ZIP」。製作期間會顯示進度，可取消；若瀏覽器未自動下載，按保留的下載連結。鎖定控制台會中止製作、清除下載連結，不會把管理金鑰寫進檔案。大量頁數建議在電腦瀏覽器製作。原電子祝福書 PDF、離線 HTML、CSV 和完整 JSON 備份都保留。
+
+ZIP 內有 `01_內頁_19x26cm.pdf`、`02_封面_19x26cm.pdf`、`03_封底_19x26cm.pdf` 與 `04_印刷說明.txt`。只收錄匯出時最新的公開祝福，依送出時間排序；每則一頁、含自拍或性別預設，沒有組別。內頁另有扉頁、謝詞，必要時補末尾留白至偶數頁。封面／封底已完整設計；精裝書背、書溝、灰板、包邊與蝴蝶頁，必須讓印廠依最終頁數、紙張與裝訂模板製作，不把一般3mm出血誤當成精裝包邊。交印廠時請一起提供三份PDF與印刷說明，並請其預檢／打樣。
+
+成品190×260mm；含各邊3mm出血的PDF頁196×266mm，TrimBox距頁邊3mm，BleedBox覆蓋整頁。圖文以2315×3142px、約300dpi的CMYK平面影像嵌入，沒有外連圖片或未嵌字型；文字不可選取或搜尋，不宣稱PDF/X認證或向量外框。人物頭像38mm，原480×480自拍可保留300dpi以上；新人合照使用原圖、寬80mm而不硬放大。花卉由既有SVG高解析繪製，電子版AI封面PNG沒有被放大當作印刷素材。
+
+色彩由瀏覽器內LittleCMS真正從sRGB轉為官方 `Coated_Fogra39L_VIGC_300` ICC，採FOGRA39／300%總墨量輸出條件，三PDF均嵌入OutputIntent。印廠若有指定紙張／機器描述檔，應由印廠依其規格再作色彩處理。`vendor/lcms`、`vendor/icc` 保存固定版本、原始描述檔及完整授權，首次明示匯出才載入大依賴，不使用第三方轉檔站、不新增付費服務。印刷費由店家另外報價，網站匯出不代訂單或付款。
+
+店家規格：[經典數位印刷相片書](https://www.jdprinting.com.tw/front/Service/Detail?idx=1121)。ICC來源及授權：[ICC Profile Registry](https://registry.color.org/profile-registry/Coated_Fogra39L_VIGC_300)。實際本機檢查、頁數負載與正式Live讀回依本輪證據另列，不能以本段說明取代驗收。
+
+本機驗收：最終6bbb6ca9…模組8項控制／印刷／取消及電子書保留測試通過，真ZIP解壓後以pypdf／ImageCms驗證、Poppler渲染三頁並目視。另169則合成自拍的真匯出通過，約125秒、68.9MB、172頁內頁加兩封面；這是桌面Chromium本機結果，169筆共用同一合成JPEG，非所有手機或實體紙樣驗收。製作高解析檔案時應保持頁面開啟並預留下載空間，實際時間與大小取決於裝置及照片內容。正式Live讀回收據另列，沒有測試寫入正式名單。

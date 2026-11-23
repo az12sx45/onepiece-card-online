@@ -9,10 +9,11 @@
   function text(tag,cls,value){const node=document.createElement(tag);if(cls)node.className=cls;if(value!=null)node.textContent=value;return node;}
   function status(message){$('controlStatus').textContent=message;}
   function revokeImages(){observer?.disconnect();for(const url of images)URL.revokeObjectURL(url);images.clear();}
-  function clearAlbumDownload(){if(albumURL)URL.revokeObjectURL(albumURL);albumURL=null;$('albumDownload').hidden=true;$('albumDownload').removeAttribute('href');$('albumDownloadHelp').hidden=true;}
-  function albumBusy(busy){$('albumPDF').disabled=busy;$('albumHTML').disabled=busy;$('albumCancel').hidden=!busy;}
+  const albumField=(kind,suffix)=>$(kind==='print'?'albumPrint'+suffix:'album'+suffix);
+  function clearAlbumDownload(){if(albumURL)URL.revokeObjectURL(albumURL);albumURL=null;for(const kind of ['pdf','print']){albumField(kind,'Download').hidden=true;albumField(kind,'Download').removeAttribute('href');albumField(kind,'DownloadHelp').hidden=true;}}
+  function albumBusy(busy){$('albumPDF').disabled=busy;$('albumHTML').disabled=busy;$('albumPrintPDF').disabled=busy;$('albumCancel').hidden=!busy||albumTask?.kind==='print';$('albumPrintCancel').hidden=!busy||albumTask?.kind!=='print';}
   function lock(message='已鎖定控制台'){
-    authGeneration++;albumGeneration++;albumTask?.controller.abort();albumTask=null;albumBusy(false);clearAlbumDownload();$('albumProgress').textContent='登入後即可製作。';
+    authGeneration++;albumGeneration++;albumTask?.controller.abort();albumTask=null;albumBusy(false);clearAlbumDownload();$('albumProgress').textContent='登入後即可製作。';$('albumPrintProgress').textContent='登入後即可製作。';
     token='';pendingCommand=null;records=[];loadGeneration++;clearInterval(statePoll);statePoll=null;revokeImages();$('adminList').replaceChildren();$('controlPanel').hidden=true;$('loginPanel').hidden=false;$('connectionDot').classList.remove('connected');status(message);
   }
   async function request(path,options={}){
@@ -98,7 +99,7 @@
   }
   function cancelled(){const error=new Error('已停止製作');error.name='AbortError';return error;}
   function activeAlbum(task){if(albumTask!==task||!token||task.controller.signal.aborted)throw cancelled();}
-  function albumProgress(task,message){if(albumTask===task&&token&&!task.controller.signal.aborted)$('albumProgress').textContent=message;}
+  function albumProgress(task,message){if(albumTask===task&&token&&!task.controller.signal.aborted)albumField(task.kind,'Progress').textContent=message;}
   function abortable(promise,signal){return new Promise((resolve,reject)=>{const source=Promise.resolve(promise);if(signal.aborted){source.catch(()=>{});reject(cancelled());return;}const stop=()=>{signal.removeEventListener('abort',stop);reject(cancelled());};signal.addEventListener('abort',stop,{once:true});source.then(value=>{signal.removeEventListener('abort',stop);resolve(value)},error=>{signal.removeEventListener('abort',stop);reject(error)});});}
   async function albumRead(task,url,kind='json',authorized=true,mime){
     activeAlbum(task);const controller=new AbortController(),parent=task.controller.signal,stop=()=>controller.abort();parent.addEventListener('abort',stop,{once:true});const timer=setTimeout(()=>controller.abort(),75000);
@@ -126,7 +127,7 @@
     }
     const seen=new Set(),approved=all.filter(w=>{if(w.moderation_status!=='approved'||seen.has(String(w.id)))return false;seen.add(String(w.id));return true;}).map(w=>({...w,albumTime:albumDate(w.created_at??w.at)})).sort((a,b)=>Date.parse(a.albumTime)-Date.parse(b.albumTime)||Number(a.id)-Number(b.id));
     const wishes=approved.map(w=>({id:String(w.id),guestName:String(w.guest_name??w.author??''),blessingText:String(w.blessing_text??w.message??''),createdAt:w.albumTime,avatarGender:['male','female'].includes(w.avatar_gender)?w.avatar_gender:'unspecified',avatar:''}));
-    const assetFiles={couple:['couple-5.jpg','image/jpeg'],botanical:['botanical.svg','image/svg+xml'],paperGrain:['paper-grain.svg','image/svg+xml'],defaultMale:['default-avatar-male.svg','image/svg+xml'],defaultFemale:['default-avatar-female.svg','image/svg+xml'],defaultNeutral:['default-avatar.svg','image/svg+xml'],frontCover:['album-cover-front.png','image/png'],backCover:['album-cover-back.png','image/png']},assets={},assetTotal=Object.keys(assetFiles).length;let assetCount=0;
+    const assetFiles={couple:['couple-5.jpg','image/jpeg'],botanical:['botanical.svg','image/svg+xml'],paperGrain:['paper-grain.svg','image/svg+xml'],defaultMale:['default-avatar-male.svg','image/svg+xml'],defaultFemale:['default-avatar-female.svg','image/svg+xml'],defaultNeutral:['default-avatar.svg','image/svg+xml'],...(task.kind==='print'?{}:{frontCover:['album-cover-front.png','image/png'],backCover:['album-cover-back.png','image/png']})},assets={},assetTotal=Object.keys(assetFiles).length;let assetCount=0;
     await Promise.all(Object.entries(assetFiles).map(async([key,[file,mime]])=>{const blob=await albumRead(task,new URL('./assets/'+file,location.href).href,'blob',false,mime);assets[key]=await asDataURI(blob,task.controller.signal);albumProgress(task,'正在準備書頁與花卉素材 '+(++assetCount)+' / '+assetTotal+'…');}));
     let next=0,complete=0;
     await Promise.all(Array.from({length:Math.min(4,approved.length)},async()=>{while(next<approved.length){const index=next++,wish=approved[index];activeAlbum(task);if(wish.avatar_path){if(!/^\d+$/.test(String(wish.id)))throw new Error('頭像識別碼不完整');try{const blob=await albumRead(task,API+'/api/admin/avatars/'+wish.id,'blob',true,'image/jpeg');if(blob.size>153600)throw new Error('頭像檔案過大');wishes[index].avatar=await asDataURI(blob,task.controller.signal);}catch(error){if(error.name==='AbortError'||error.status===401)throw error;throw new Error('第 '+wish.id+' 則祝福的照片下載失敗，尚未製作檔案；請重試。');}}albumProgress(task,'正在整理公開祝福與頭像 '+(++complete)+' / '+approved.length+'…');}}));
@@ -137,9 +138,10 @@
     try{
       const data=await collectAlbum(task);activeAlbum(task);let blob;
       if(kind==='pdf'){if(!window.WeddingAlbumPDF?.create)throw new Error('PDF 製作工具尚未載入，請重整控制台後再試');albumProgress(task,'正在製作 PDF，請保持此頁開啟…');blob=await abortable(window.WeddingAlbumPDF.create(data,{signal:task.controller.signal,onProgress:progress=>albumProgress(task,'正在製作 PDF '+progress.current+' / '+progress.total+' 頁（'+data.wishes.length+' 則公開祝福）…')}),task.controller.signal);}
+      else if(kind==='print'){if(!window.WeddingPrintPDF?.create)throw new Error('印刷檔製作工具尚未載入，請重整控制台後再試');albumProgress(task,'正在製作精裝印刷檔，請保持此頁開啟…');blob=await abortable(window.WeddingPrintPDF.create(data,{signal:task.controller.signal,onProgress:progress=>albumProgress(task,progress.message||'正在製作印刷檔 '+progress.current+' / '+progress.total+' 頁（'+data.wishes.length+' 則公開祝福）…')}),task.controller.signal);}
       else{if(!window.WeddingAlbumHTML?.create)throw new Error('翻頁書工具尚未載入，請重整控制台後再試');albumProgress(task,'正在製作 '+data.wishes.length+' 則祝福的離線翻頁書…');blob=new Blob([window.WeddingAlbumHTML.create(data)],{type:'text/html;charset=utf-8'});}
-      activeAlbum(task);const stamp=new Date().toISOString().slice(0,16).replace(/[-:T]/g,''),name='仁鈞姮儒_幸福祝福書_'+stamp+'.'+(kind==='pdf'?'pdf':'html');albumURL=URL.createObjectURL(blob);const link=$('albumDownload');link.href=albumURL;link.download=name;link.textContent='下載 '+name;link.hidden=false;$('albumDownloadHelp').hidden=false;albumProgress(task,'製作完成：'+data.wishes.length+' 則公開祝福，檔名 '+name+'。');link.click();
-    }catch(error){if(albumTask===task&&token){task.controller.abort();if(error.status===401)lock('管理金鑰已失效，請重新登入');else $('albumProgress').textContent=error.name==='AbortError'?'已取消製作，沒有建立下載檔案。可重新選擇格式製作。':'製作失敗：'+(error.message||'請稍後重試');}}
+      activeAlbum(task);const stamp=new Date().toISOString().slice(0,16).replace(/[-:T]/g,''),name='仁鈞姮儒_幸福祝福書_'+stamp+(kind==='print'?'_19x26精裝印刷檔.zip':'.'+(kind==='pdf'?'pdf':'html'));albumURL=URL.createObjectURL(blob);const link=albumField(kind,'Download');link.href=albumURL;link.download=name;link.textContent='下載 '+name;link.hidden=false;albumField(kind,'DownloadHelp').hidden=false;albumProgress(task,'製作完成：'+data.wishes.length+' 則公開祝福，檔名 '+name+'。');link.click();
+    }catch(error){if(albumTask===task&&token){task.controller.abort();if(error.status===401)lock('管理金鑰已失效，請重新登入');else albumField(kind,'Progress').textContent=error.name==='AbortError'?'已取消製作，沒有建立下載檔案。可重新選擇格式製作。':'製作失敗：'+(error.message||'請稍後重試');}}
     finally{if(albumTask===task){albumTask=null;albumBusy(false);}}
   }
   $('controlLogin').onsubmit=async event=>{
@@ -151,7 +153,7 @@
   for(const button of document.querySelectorAll('[data-action]'))button.onclick=()=>sendAction(button.dataset.action);
   $('controlLogout').onclick=()=>lock();$('adminRefresh').onclick=()=>loadRecords().then(()=>status('祝福清單已更新')).catch(error=>status(error.message));
   $('adminCSV').onclick=()=>download('/api/admin/export.csv','仁鈞姮儒_祝福紀錄.csv');$('adminBackup').onclick=()=>download('/api/admin/export.json','仁鈞姮儒_祝福完整備份.json');
-  $('albumPDF').onclick=()=>exportAlbum('pdf');$('albumHTML').onclick=()=>exportAlbum('html');$('albumCancel').onclick=()=>albumTask?.controller.abort();
+  $('albumPDF').onclick=()=>exportAlbum('pdf');$('albumHTML').onclick=()=>exportAlbum('html');$('albumPrintPDF').onclick=()=>exportAlbum('print');$('albumCancel').onclick=()=>albumTask?.controller.abort();$('albumPrintCancel').onclick=()=>albumTask?.controller.abort();
   $('statusFilter').onchange=renderRecords;$('wishSearch').oninput=renderRecords;
   window.addEventListener('beforeunload',()=>{token='';albumTask?.controller.abort();clearAlbumDownload();revokeImages();clearInterval(statePoll);});
 })();

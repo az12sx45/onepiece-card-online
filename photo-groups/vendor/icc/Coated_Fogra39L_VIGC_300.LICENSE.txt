@@ -1,0 +1,24 @@
+Coated_Fogra39L_VIGC_300.icc - official distribution permission
+
+Copyright: X-Rite, Inc.
+Provider: VIGC
+Official ICC Profile Registry page:
+https://registry.color.org/profile-registry/Coated_Fogra39L_VIGC_300
+Official unmodified binary:
+https://registry.color.org/profile-registry/profiles/Coated_Fogra39L_VIGC_300.icc
+
+Verbatim registry permission, retrieved 2026-11-23:
+"This profile is made available by VIGC, with permission of X-rite, and may be used, embedded, exchanged, and shared without restriction. It may not be altered or sold without written permission of VIGC"
+
+This permission belongs to the profile and is separate from the MIT licenses
+of the LittleCMS conversion software. The original ICC binary is unmodified.
+The wedding site uses and embeds the profile; it does not sell the profile.
+
+Registry characterization: FOGRA39; ISO 12647-2:2004/Amd 1, coated paper type
+1 or 2, TAC 300%, maximum GCR, maximum black 100%.
+This is a generic coated-paper exchange condition. It is not an assurance of
+a specific printing shop's press, paper, or proof match. Confirm acceptance
+with the print provider before production.
+
+Original bytes: 8652444
+SHA-256: 6df43849a84d2632e7900a125f657bd09364ed56775bc4740c1e39a5492d47e3

@@ -2613,3 +2613,5 @@ Android／iOS 各三個既有 PUBLIC 目標；十四個 HOST、Core、Portrait�
 2026-11-23 婚禮瀏覽器相容：photo-groups/browser-compat.js、browser-compat.css與index.html表單前的hidden卡片，提供Samsung Android→Chrome明示intent、同站fallback、複製失敗手動選取網址、收起聚焦查詢。原mobile-wishes／book／control／API／電子書與照片素材不變。
 
 2026-11-23 婚禮播放與流量：photo-groups/book.js 管理圖片／動畫／同步的逾時復原，以及僅分頁記憶體的有界自拍Blob URL快取和刪除清理；tv.html更新載入版號。不改API的公開頭像授權與no-store、手機查組／送出、電子書或遊戲。故障注入與正式唯讀觀察證據留在當次工作區outputs，正式資料不作測試寫入。
+
+2026-11-23 婚禮精裝印刷：photo-groups/album-print-pdf.js為獨立19×26cm／CMYK／300dpi／3mm出血PDF與ZIP製作器；control.html/js/css新增授權匯出入口、進度／取消／下載，不改既有album-pdf.js與album-html.js。vendor/lcms及vendor/icc保存本機色彩轉換與官方描述檔、完整來源授權及hash；vendor/README詳述懶載與印刷限制。SETUP新增操作與交付格式，測試ZIP／PDF與渲染證據留本工作區outputs。
