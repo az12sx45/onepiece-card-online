@@ -9923,3 +9923,11 @@ book.js修復五項本機已重現的防護缺口：頭像及性別預設圖等�
 另在同一module hash真Chromium做169則合成480×480 JPEG負載，完整300dpi／CMYK輸出125.230秒，ZIP68933600bytes、內頁172頁＋封面1＋封底1；CRC／strict pypdf／ICC解析通過、Poppler首位與第169位目視完整。169筆複用同一張合成JPEG，未假稱169種照片複雜度或實體打樣；JS heap採樣不代表瀏覽器總RAM。首次負載測試器因報告物件共用引用漏掉末筆自拍，已明確以QA_FIXTURE_ERROR中止，修clone並assert169自拍後才重測，原失敗保留。兩套測試0正式API傳輸／0正式mutation／0JS錯誤，沒有把合成祝福寫入D1。獨立來源審查無blocking，屬靜態核對，不代替runtime。正式Live與公開資源實際匯出另存當輪收據。
 
 提交讀回另發現Windows Git文字正規化改變兩個來源／授權說明檔的CRLF bytes，已在婚禮vendor局部.gitattributes對lcms/icc指定-text，僅重新加入這兩檔以保留原始位元組，10個vendor檔由Git index讀回與manifest精確一致。原版依賴／授權中的上游尾端空白不擅改；專案自有修改範圍的diff whitespace與語法檢查通過。未改印刷module／控制功能或重跑已通過的產品測試，並不把文檔換行修正冒稱為新功能驗收。
+
+## 2026-11-27：電視全螢幕隱藏滑鼠游標
+
+依使用者要求，僅book.css新增全螢幕cursor:none規則及tv.html樣式版號。Fullscreen API使用:fullscreen，Safari舊前綴另列獨立規則，瀏覽器內建全螢幕以display-mode:fullscreen處理；只匹配電視display-only頁面與其子元素，QR連結亦隱藏。退出全螢幕回復原cascade，不加永久狀態或改JS控制。手機／控制台／播放／印刷及API／資料庫均不變。
+
+真TV檔案於獨立Chrome158本機驗證：一般模式body auto／QR pointer；真雙擊進Fullscreen API後body／QR／書頁及三個實際hit-test點cursor皆none，退出恢復；CDP切瀏覽器window-only fullscreen時document.fullscreenElement仍null但display-mode為true，同樣隱藏，返回normal恢復。這是瀏覽器視窗模式驗證，不宣稱實體F11鍵／Safari／實體電視硬體測試。所有婚禮API請求僅在瀏覽器測試層回覆空合成快照，正式API傳輸及mutation皆0、JS錯誤0。證據位於outputs/驗收證據_v14_cursor，部署另以Live讀回為準。
+
+當次可用工具未提供LATTICE Runtime/task/graph或running_summary API，無法查寫其狀態；延續既有婚禮分支並核對真實Git及Render，不捏造任務身分或已更新摘要。

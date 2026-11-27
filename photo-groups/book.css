@@ -37,3 +37,8 @@
 .left-page[data-photo-orientation="portrait"] .tiny-heart{margin-top:8px}
 .sheet-back>.turning-couple-page{inset:0;width:100%;height:100%}
 .display-only .toast{bottom:24px}
+
+/* Hide the pointer only while the TV is fullscreen, including over its QR link. */
+:fullscreen .display-only,:fullscreen .display-only *{cursor:none!important}
+:-webkit-full-screen .display-only,:-webkit-full-screen .display-only *{cursor:none!important}
+@media(display-mode:fullscreen){body.display-only,body.display-only *{cursor:none!important}}

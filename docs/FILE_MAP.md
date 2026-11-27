@@ -2615,3 +2615,5 @@ Android／iOS 各三個既有 PUBLIC 目標；十四個 HOST、Core、Portrait�
 2026-11-23 婚禮播放與流量：photo-groups/book.js 管理圖片／動畫／同步的逾時復原，以及僅分頁記憶體的有界自拍Blob URL快取和刪除清理；tv.html更新載入版號。不改API的公開頭像授權與no-store、手機查組／送出、電子書或遊戲。故障注入與正式唯讀觀察證據留在當次工作區outputs，正式資料不作測試寫入。
 
 2026-11-23 婚禮精裝印刷：photo-groups/album-print-pdf.js為獨立19×26cm／CMYK／300dpi／3mm出血PDF與ZIP製作器；control.html/js/css新增授權匯出入口、進度／取消／下載，不改既有album-pdf.js與album-html.js。vendor/lcms及vendor/icc保存本機色彩轉換與官方描述檔、完整來源授權及hash；vendor/README詳述懶載與印刷限制。SETUP新增操作與交付格式，測試ZIP／PDF與渲染證據留本工作區outputs。
+
+2026-11-27 婚禮全螢幕游標：photo-groups/book.css新增僅display-only的標準／WebKit全螢幕及display-mode游標規則，tv.html更新CSS版號；book.js與其他手機／控制／印刷及API執行碼無改動。
